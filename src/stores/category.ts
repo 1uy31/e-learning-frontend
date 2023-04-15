@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { Category } from "@appTypes/dataModels";
 import { createCategoryService } from "@services/category";
+import { validateError } from "@src/utils";
 
 type CategoryStateType = {
 	categories: Array<Category>;
@@ -20,11 +21,8 @@ export const useCategoryStore = defineStore("categoryStore", {
 				const result = await categoryService.getAll();
 				this.categories = result.categories;
 			} catch (error) {
-				if (error instanceof Error) {
-					this.categoriesLoadingError = error;
-				} else {
-					throw error;
-				}
+				const validatedError = validateError(error);
+				this.categoriesLoadingError = validatedError;
 			}
 		},
 		async addCategory(name: string, successCreationCallback: () => void, fallbackFunction: (error: Error) => void) {
@@ -34,11 +32,8 @@ export const useCategoryStore = defineStore("categoryStore", {
 				this.categories = [...this.categories, category];
 				successCreationCallback();
 			} catch (error) {
-				if (error instanceof Error) {
-					fallbackFunction(error);
-				} else {
-					throw error;
-				}
+				const validatedError = validateError(error);
+				fallbackFunction(validatedError);
 			}
 		},
 	},
