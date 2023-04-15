@@ -8,13 +8,18 @@ import "@nordhealth/components";
 import { createApp, provide, h } from "vue";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { apolloClient } from "@src/apolloClient";
-import "@src/style.css";
 import App from "@src/App.vue";
+import { createPinia } from "pinia";
 
-createApp({
+const pinia = createPinia();
+
+const app = createApp({
 	setup() {
 		provide(DefaultApolloClient, apolloClient);
 	},
 
 	render: () => h(App),
-}).mount("#app");
+});
+
+app.use(pinia);
+app.mount("#app");
