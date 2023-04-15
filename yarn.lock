@@ -288,6 +288,11 @@
   resolved "https://registry.yarnpkg.com/@nordhealth/tokens/-/tokens-6.3.0.tgz#0b71ee80a3c2ec75662518dd708b52d536f40f45"
   integrity sha512-3fUbfeaFrbeuCTv50aAHsJNiqwi5ZDiQSdZKSRfjjQnwmg+byWZpGggcm/S2ZkbwnBZ5pebmzs4aVMk7XdEPCQ==
 
+"@nordhealth/tokens@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@nordhealth/tokens/-/tokens-6.4.0.tgz#e3884b04d9aa36a975a43c193e667531ff93ec23"
+  integrity sha512-PrMf6OhPQ22bcqO75ItMshSFqNxin0A18Kej5/SYjeYi5wFW3uCQ3WmJK3yxWWd3rQzXc9/MeQUJNYer+PwczA==
+
 "@types/clean-css@^4.2.5":
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/@types/clean-css/-/clean-css-4.2.6.tgz#48b427285b2b654751a9bbc6f7d35e6173dec8d2"
