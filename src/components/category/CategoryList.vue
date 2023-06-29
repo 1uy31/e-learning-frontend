@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
+import { onBeforeMount } from "vue";
 
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
-await categoryStore.getCategories();
+
+onBeforeMount(async () => {
+	await categoryStore.getCategories();
+});
 </script>
 
 <template>
