@@ -25,15 +25,15 @@ export const useCategoryStore = defineStore("categoryStore", {
 				this.categoriesLoadingError = validatedError;
 			}
 		},
-		async addCategory(name: string, successCreationCallback: () => void, fallbackFunction: (error: Error) => void) {
+		async addCategory(name: string, successCallback: () => void, failureCallback: (error: Error) => void) {
 			const categoryService = createCategoryService();
 			try {
 				const category = await categoryService.create(name);
 				this.categories = [...this.categories, category];
-				successCreationCallback();
+				successCallback();
 			} catch (error) {
 				const validatedError = validateError(error);
-				fallbackFunction(validatedError);
+				failureCallback(validatedError);
 			}
 		},
 	},

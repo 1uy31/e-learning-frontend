@@ -12,7 +12,7 @@ onMounted(() => {
 		throw Error("Could not load category creation form, please reload.");
 	}
 
-	const successCreationCallback = () => {
+	const successfulCreationCallback = () => {
 		button.disabled = true;
 		input.value = "";
 		input.error = "";
@@ -39,7 +39,7 @@ onMounted(() => {
 			return;
 		}
 		button.loading = true;
-		await categoryStore.addCategory(input.value, successCreationCallback, failedCreationCallback);
+		await categoryStore.addCategory(input.value, successfulCreationCallback, failedCreationCallback);
 		button.loading = false;
 	});
 });
