@@ -18,6 +18,7 @@ export const createCategoryService = (client: ApolloClient<NormalizedCacheObject
 						categories {
 							id
 							name
+							diaryCount
 						}
 					}
 				}

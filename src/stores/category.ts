@@ -6,12 +6,14 @@ import { validateError } from "@src/utils";
 type CategoryStateType = {
 	categories: Array<Category>;
 	categoriesLoadingError: Error | null;
+	selectedCategory?: Category;
 };
 
 export const useCategoryStore = defineStore("categoryStore", {
 	state: (): CategoryStateType => ({
 		categories: [],
 		categoriesLoadingError: null,
+		selectedCategory: undefined,
 	}),
 	getters: {},
 	actions: {
@@ -35,6 +37,9 @@ export const useCategoryStore = defineStore("categoryStore", {
 				const validatedError = validateError(error);
 				failureCallback(validatedError);
 			}
+		},
+		selectCategory(category: Category) {
+			this.selectedCategory = category;
 		},
 	},
 });
