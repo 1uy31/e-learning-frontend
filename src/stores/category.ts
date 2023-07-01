@@ -27,7 +27,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 				this.categoriesLoadingError = validatedError;
 			}
 		},
-		async addCategory(name: string, successCallback: () => void, failureCallback: (error: Error) => void) {
+		async addCategory(successCallback: () => void, failureCallback: (error: Error) => void, name: string) {
 			const categoryService = createCategoryService();
 			try {
 				const category = await categoryService.create(name);

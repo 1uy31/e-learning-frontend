@@ -40,7 +40,7 @@ onMounted(() => {
 			return;
 		}
 		button.loading = true;
-		await categoryStore.addCategory(input.value, successfulCreationCallback, failedCreationCallback);
+		await categoryStore.addCategory(successfulCreationCallback, failedCreationCallback, input.value);
 		button.loading = false;
 	});
 });
