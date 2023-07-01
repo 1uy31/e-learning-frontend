@@ -18,7 +18,12 @@ onMounted(() => {
 		}
 		categoryComponents.forEach((categoryComponent, index) => {
 			categoryComponent.addEventListener("toggle", (event) => {
-				categoryStore.selectCategory(categories.value[index]);
+				if (event.target?.active) {
+					categoryStore.selectCategory(undefined);
+				} else {
+					categoryStore.selectCategory(categories.value[index]);
+				}
+
 				categoryComponent.toggleAttribute("active", !event.target?.active);
 				categoryComponents.forEach((categoryComponentItem) => {
 					if (categoryComponentItem === categoryComponent) {

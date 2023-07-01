@@ -9,7 +9,8 @@ onMounted(() => {
 	const button = document.querySelector("nord-button");
 
 	if (!input || !button) {
-		throw Error("Could not load category creation form, please reload.");
+		window.alert("Could not load category creation form, please reload.");
+		return;
 	}
 
 	const successfulCreationCallback = () => {
@@ -47,11 +48,11 @@ onMounted(() => {
 
 <template>
 	<nord-input slot="end" type="text" label="New category" value="" placeholder="Category name">
-		<nord-button slot="end" aria-describedby="new-category-tooltip" variant="primary">
+		<nord-button slot="end" aria-describedby="id_new_category_tooltip" variant="primary">
 			<nord-icon name="interface-add" size="l"></nord-icon>
 		</nord-button>
 	</nord-input>
-	<nord-tooltip id="new-category-tooltip">Create a new category</nord-tooltip>
+	<nord-tooltip id="id_new_category_tooltip">Create a new category</nord-tooltip>
 </template>
 
 <style scoped></style>
