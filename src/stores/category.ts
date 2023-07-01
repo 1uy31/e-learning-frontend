@@ -38,7 +38,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 				failureCallback(validatedError);
 			}
 		},
-		selectCategory(category: Category) {
+		selectCategory(category?: Category) {
 			this.selectedCategory = category;
 		},
 	},

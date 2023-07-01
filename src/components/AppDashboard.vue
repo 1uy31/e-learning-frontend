@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import CategoryList from "@components/category/CategoryList.vue";
 import CategoryCreation from "@components/category/CategoryCreation.vue";
+import DiaryCreation from "@components/diary/DiaryCreation.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 
 const categoryStore = useCategoryStore();
-const { categoriesLoadingError } = storeToRefs(categoryStore);
+const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 </script>
 
 <template>
@@ -41,13 +42,8 @@ const { categoriesLoadingError } = storeToRefs(categoryStore);
 			<CategoryCreation />
 		</nord-header>
 
-		<nord-stack gap="l">
-			<nord-card>
-				<h2 slot="header">Card heading</h2>
-				<nord-banner variant="success">
-					Your order has been shipped and will arrive on May 27th. <a href="#">Track order</a>.
-				</nord-banner>
-			</nord-card>
+		<nord-stack v-if="!selectedCategory" style="max-width: 480px; margin: var(--n-space-xl) auto">
+			<DiaryCreation />
 		</nord-stack>
 	</nord-layout>
 </template>
