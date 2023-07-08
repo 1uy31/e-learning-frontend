@@ -13,7 +13,6 @@ const DEFAULT_RATE = "3";
 const DEFAULT_CATEGORY_ID = categories.value[0].id;
 
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
-	event.preventDefault();
 	const form = <HTMLFormElement>document.getElementById("id_diary_creation_form");
 	const formBanner = form?.querySelector("nord-banner");
 	const submitButton = form?.querySelector("nord-button");
@@ -88,7 +87,7 @@ onMounted(() => {
 <template>
 	<nord-card padding="l">
 		<h1 slot="header">New diary</h1>
-		<form id="id_diary_creation_form" @submit="submitDiaryCreationForm">
+		<form id="id_diary_creation_form" @submit.prevent="submitDiaryCreationForm">
 			<nord-stack>
 				<nord-banner shadow style="display: none"></nord-banner>
 				<nord-select name="categoryId" label="Category" expand>

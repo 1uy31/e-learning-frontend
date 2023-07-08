@@ -26,12 +26,11 @@ onMounted(() => {
 				}
 
 				categoryComponent.toggleAttribute("active", !event.target?.active);
-				categoryComponents.forEach((categoryComponentItem) => {
-					if (categoryComponentItem === categoryComponent) {
+				categoryComponents.forEach((otherCategoryComponent) => {
+					if (otherCategoryComponent === categoryComponent) {
 						return;
 					}
-					categoryComponentItem.toggleAttribute("active", false);
-					categoryComponentItem.open = false;
+					otherCategoryComponent.toggleAttribute("active", false);
 				});
 			});
 		});
