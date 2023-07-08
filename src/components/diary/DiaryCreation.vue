@@ -3,11 +3,14 @@ import { useCategoryStore } from "@stores/category";
 import { useDiaryStore } from "@stores/diary";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import { MEDIUM_TIMING } from "@src/constants/timing";
 
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
 
 const diaryStore = useDiaryStore();
+const DEFAULT_RATE = "3";
+const DEFAULT_CATEGORY_ID = categories.value[0].id;
 
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	event.preventDefault();
@@ -25,15 +28,15 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 		formBanner.style.display = "block";
 
 		const categorySelection = form.querySelectorAll("nord-select")[0];
-		categorySelection.value = `${categories.value[0].id}`;
+		categorySelection.value = `${DEFAULT_CATEGORY_ID}`;
 		const textInputs = form.querySelectorAll("nord-input");
 		textInputs.forEach((textInput) => (textInput.value = ""));
 		const rate = form.querySelectorAll("nord-range")[0];
-		rate.value = "3";
+		rate.value = DEFAULT_RATE;
 
 		setTimeout(() => {
 			formBanner.style.display = "none";
-		}, 1000);
+		}, MEDIUM_TIMING);
 	};
 
 	const failedCreationCallback = (error: Error) => {
@@ -49,7 +52,7 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	);
 
 	if (!Object.keys(entries).includes("categoryId")) {
-		entries["categoryId"] = categories.value[0].id;
+		entries["categoryId"] = DEFAULT_CATEGORY_ID;
 	}
 
 	submitButton.loading = true;
@@ -117,7 +120,7 @@ onMounted(() => {
 					name="rate"
 					label="Rate"
 					expand
-					value="3"
+					:value="DEFAULT_RATE"
 					min="1"
 					max="5"
 					hint="How good the learning content is, the higher score the better."

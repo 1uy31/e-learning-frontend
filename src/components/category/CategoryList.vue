@@ -2,6 +2,7 @@
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted } from "vue";
+import { VERY_QUICK_TIMING } from "@src/constants/timing";
 
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
@@ -35,7 +36,7 @@ onMounted(() => {
 			});
 		});
 	};
-	setTimeout(registerEventListenerForCategories, 250);
+	setTimeout(registerEventListenerForCategories, VERY_QUICK_TIMING);
 });
 </script>
 
