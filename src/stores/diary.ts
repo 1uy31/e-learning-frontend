@@ -36,7 +36,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 			try {
 				const diary = await diaryService.create(input);
 				if (diary.categoryId && this.diariesByCategory[diary.categoryId]) {
-					this.diariesByCategory[diary.categoryId].push(diary);
+					this.diariesByCategory[diary.categoryId] = [...this.diariesByCategory[diary.categoryId], diary];
 				} else if (diary.categoryId) {
 					this.diariesByCategory[diary.categoryId] = [diary];
 				}

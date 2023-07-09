@@ -25,7 +25,7 @@ onMounted(() => {
 				if (!event.target) {
 					return;
 				}
-				if (event.target?.active) {
+				if (event.target.active) {
 					categoryStore.selectCategory(undefined);
 				} else {
 					const selectedCategory = categories.value[index];
@@ -33,7 +33,7 @@ onMounted(() => {
 					await diaryStore.getByCategorizedTopic(selectedCategory.id);
 				}
 
-				categoryComponent.toggleAttribute("active", !event.target?.active);
+				categoryComponent.toggleAttribute("active", !event.target.active);
 				categoryComponents.forEach((otherCategoryComponent) => {
 					if (otherCategoryComponent === categoryComponent) {
 						return;
