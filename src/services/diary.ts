@@ -4,10 +4,33 @@ import { Diary, DiaryInput } from "@appTypes/dataModels";
 import { NormalizedCacheObject } from "@apollo/client/cache/inmemory/types";
 
 export type DiaryService = {
+	getByCategorizedTopic: (categoryId: number) => Promise<Array<Diary>>;
 	create: (input: DiaryInput) => Promise<Diary>;
 };
 
 export const createDiaryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): DiaryService => {
+	const getByCategorizedTopic = async (categoryId?: number) => {
+		const result = await client.query({
+			query: gql`
+				query Diaries($categoryId: Int) {
+					diaries(categoryId: $categoryId) {
+						id
+						topic
+						sourceUrl
+						rate
+						reviewCount
+						categoryId
+						createdAt
+						updatedAt
+					}
+				}
+			`,
+			variables: { categoryId },
+		});
+		// TODO: type guard
+		return result.data.diaries as Array<Diary>;
+	};
+
 	const create = async (input: DiaryInput) => {
 		const result = await client.mutate({
 			mutation: gql`
@@ -30,6 +53,7 @@ export const createDiaryService = (client: ApolloClient<NormalizedCacheObject> =
 	};
 
 	return {
+		getByCategorizedTopic,
 		create,
 	};
 };

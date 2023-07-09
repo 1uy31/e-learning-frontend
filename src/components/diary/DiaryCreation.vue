@@ -10,7 +10,7 @@ const { categories } = storeToRefs(categoryStore);
 
 const diaryStore = useDiaryStore();
 const DEFAULT_RATE = "3";
-const DEFAULT_CATEGORY_ID = categories.value[0].id;
+const DEFAULT_CATEGORY_ID = categories.value[0]?.id;
 
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	const form = <HTMLFormElement>document.getElementById("id_diary_creation_form");

@@ -3,9 +3,12 @@ import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted } from "vue";
 import { VERY_QUICK_TIMING } from "@src/constants/timing";
+import { useDiaryStore } from "@stores/diary";
 
 const categoryStore = useCategoryStore();
+const diaryStore = useDiaryStore();
 const { categories } = storeToRefs(categoryStore);
+const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
 
 onBeforeMount(async () => {
 	await categoryStore.getCategories();
@@ -18,11 +21,16 @@ onMounted(() => {
 			return;
 		}
 		categoryComponents.forEach((categoryComponent, index) => {
-			categoryComponent.addEventListener("toggle", (event) => {
+			categoryComponent.addEventListener("toggle", async (event) => {
+				if (!event.target) {
+					return;
+				}
 				if (event.target?.active) {
 					categoryStore.selectCategory(undefined);
 				} else {
-					categoryStore.selectCategory(categories.value[index]);
+					const selectedCategory = categories.value[index];
+					categoryStore.selectCategory(selectedCategory);
+					await diaryStore.getByCategorizedTopic(selectedCategory.id);
 				}
 
 				categoryComponent.toggleAttribute("active", !event.target?.active);
@@ -41,6 +49,8 @@ onMounted(() => {
 
 <template>
 	<nord-nav-group slot="header" heading="Category" id="id_category_sidebar">
+		<nord-progress-bar v-if="loadingDiaries" style="margin-top: var(--n-space-s)"></nord-progress-bar>
+
 		<nord-nav-item
 			v-for="category in categories"
 			:key="category.id"
@@ -49,8 +59,9 @@ onMounted(() => {
 			:badge="category.diaryCount.toString()"
 			>{{ category.name }}
 			<nord-nav-group slot="subnav" v-if="category.diaryCount > 0">
-				<nord-nav-item href="#">Payments</nord-nav-item>
-				<nord-nav-item href="#">Disputes</nord-nav-item>
+				<nord-nav-item v-for="diary in diariesByCategory[category.id]" :key="diary.id + 100000" href="#">{{
+					diary.topic
+				}}</nord-nav-item>
 			</nord-nav-group>
 		</nord-nav-item>
 	</nord-nav-group>
