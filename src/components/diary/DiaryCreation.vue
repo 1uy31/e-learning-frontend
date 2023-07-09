@@ -26,7 +26,8 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 		formBanner.style.display = "block";
 
 		const categorySelection = form.querySelectorAll("nord-select")[0];
-		categorySelection.value = `${categories.value[0]?.id}`;
+		categorySelection.value = categories.value.length > 0 ? `${categories.value[0].id}` : "";
+
 		const textInputs = form.querySelectorAll("nord-input");
 		textInputs.forEach((textInput) => (textInput.value = ""));
 		const rate = form.querySelectorAll("nord-range")[0];
