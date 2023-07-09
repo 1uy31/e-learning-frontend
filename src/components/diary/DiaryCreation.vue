@@ -10,7 +10,6 @@ const { categories } = storeToRefs(categoryStore);
 
 const diaryStore = useDiaryStore();
 const DEFAULT_RATE = "3";
-const DEFAULT_CATEGORY_ID = categories.value[0]?.id;
 
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	const form = <HTMLFormElement>document.getElementById("id_diary_creation_form");
@@ -27,7 +26,7 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 		formBanner.style.display = "block";
 
 		const categorySelection = form.querySelectorAll("nord-select")[0];
-		categorySelection.value = `${DEFAULT_CATEGORY_ID}`;
+		categorySelection.value = `${categories.value[0]?.id}`;
 		const textInputs = form.querySelectorAll("nord-input");
 		textInputs.forEach((textInput) => (textInput.value = ""));
 		const rate = form.querySelectorAll("nord-range")[0];
@@ -51,7 +50,7 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	);
 
 	if (!Object.keys(entries).includes("categoryId")) {
-		entries["categoryId"] = DEFAULT_CATEGORY_ID;
+		entries["categoryId"] = categories.value[0]?.id;
 	}
 
 	submitButton.loading = true;

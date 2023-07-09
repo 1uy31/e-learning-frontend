@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
 import { validateError } from "@src/utils";
 import { createDiaryService } from "@services/diary";
+import { useCategoryStore } from "@stores/category";
 
 type DiaryStateType = {
 	diariesByCategory: Record<number, Array<Diary>>;
@@ -38,7 +39,8 @@ export const useDiaryStore = defineStore("diaryStore", {
 				if (diary.categoryId && this.diariesByCategory[diary.categoryId]) {
 					this.diariesByCategory[diary.categoryId] = [...this.diariesByCategory[diary.categoryId], diary];
 				} else if (diary.categoryId) {
-					this.diariesByCategory[diary.categoryId] = [diary];
+					const categoryStore = useCategoryStore();
+					categoryStore.increaseDiaryCountForCategory(diary.categoryId);
 				}
 				successCallback();
 			} catch (error) {

@@ -41,5 +41,20 @@ export const useCategoryStore = defineStore("categoryStore", {
 		selectCategory(category?: Category) {
 			this.selectedCategory = category;
 		},
+		increaseDiaryCountForCategory(categoryId: number) {
+			const categoryIndex = this.categories.findIndex((category) => category.id === categoryId);
+			if (categoryIndex === -1) {
+				return;
+			}
+			const category = this.categories[categoryIndex];
+			const replacingCategory: Category = {
+				...category,
+				diaryCount: category.diaryCount + 1,
+			};
+			const otherCategories = this.categories.filter((category) => category.id !== categoryId);
+			const categoryList = [...otherCategories];
+			categoryList.splice(categoryIndex, 0, replacingCategory);
+			this.categories = categoryList;
+		},
 	},
 });
