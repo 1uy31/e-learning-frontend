@@ -22,6 +22,10 @@ onBeforeMount(async () => {
 onMounted(() => {
 	const registerEventListenerForCategories = () => {
 		const categoryComponents = document.querySelectorAll("#id_category_sidebar > nord-nav-item");
+		if (categoryComponents.length === 0) {
+			return;
+		}
+
 		categoryComponents.forEach((categoryComponent, index) => {
 			categoryComponent.addEventListener("toggle", async (event) => {
 				if (!event.target) {
@@ -42,7 +46,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<nord-nav-group slot="header" heading="Category" id="id_category_sidebar">
+	<nord-nav-group heading="Category" id="id_category_sidebar">
 		<nord-progress-bar v-if="loadingDiaries" style="margin-top: var(--n-space-s)"></nord-progress-bar>
 
 		<nord-nav-item

@@ -168,17 +168,17 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.38.0.tgz#73a8a0d8aa8a8e6fe270431c5e72ae91b5337892"
   integrity sha512-IoD2MfUnOV58ghIHCiil01PcohxjbYR/qCxsoC+xNgUwh1EY8jOOrYmu3d3a71+tJJ23uscEV4X2HJWMsPJu4g==
 
-"@floating-ui/core@^1.0.1":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.2.4.tgz#89e6311b021190c9e121fcf20306e76ac66e4066"
-  integrity sha512-SQOeVbMwb1di+mVWWJLpsUTToKfqVNioXys011beCAhyOIFtS+GQoW4EQSneuxzmQKddExDwQ+X0hLl4lJJaSQ==
+"@floating-ui/core@^1.2.6":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.3.1.tgz#4d795b649cc3b1cbb760d191c80dcb4353c9a366"
+  integrity sha512-Bu+AMaXNjrpjh41znzHqaz3r2Nr8hHuHZT6V2LBKMhyMl0FgKA62PNYbqnfgmzOhoWZj70Zecisbo4H1rotP5g==
 
-"@floating-ui/dom@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.1.tgz#3321d4e799d6ac2503e729131d07ad0e714aabeb"
-  integrity sha512-wBDiLUKWU8QNPNOTAFHiIAkBv1KlHauG2AhqjSeh2H+wR8PX+AArXfz8NkRexH5PgMJMmSOS70YS89AbWYh5dA==
+"@floating-ui/dom@1.2.7":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.2.7.tgz#c123e4db014b07b97e996cd459245fa217049c6b"
+  integrity sha512-DyqylONj1ZaBnzj+uBnVfzdjjCkFCL2aA9ESHLyUOGSqb03RpbLMImP1ekIQXYs4KLk9jAjJfZAU8hXfWSahEg==
   dependencies:
-    "@floating-ui/core" "^1.0.1"
+    "@floating-ui/core" "^1.2.6"
 
 "@graphql-typed-document-node/core@^3.1.1":
   version "3.2.0"
@@ -209,10 +209,22 @@
   resolved "https://registry.yarnpkg.com/@lit-labs/ssr-dom-shim/-/ssr-dom-shim-1.0.0.tgz#427e19a2765681fd83411cd72c55ba80a01e0523"
   integrity sha512-ic93MBXfApIFTrup4a70M/+ddD8xdt2zxxj9sRwHQzhS9ag/syqkD8JPdTXsc1gUy2K8TTirhlCqyTEM/sifNw==
 
-"@lit/reactive-element@^1.3.0", "@lit/reactive-element@^1.4.0":
+"@lit-labs/ssr-dom-shim@^1.1.0":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@lit-labs/ssr-dom-shim/-/ssr-dom-shim-1.1.1.tgz#64df34e2f12e68e78ac57e571d25ec07fa460ca9"
+  integrity sha512-kXOeFbfCm4fFf2A3WwVEeQj55tMZa8c8/f9AKHMobQMkzNUfUj+antR3fRPaZJawsa1aZiP/Da3ndpZrwEe4rQ==
+
+"@lit/reactive-element@^1.3.0":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@lit/reactive-element/-/reactive-element-1.6.1.tgz#0d958b6d479d0e3db5fc1132ecc4fa84be3f0b93"
   integrity sha512-va15kYZr7KZNNPZdxONGQzpUr+4sxVu7V/VG7a8mRfPPXUyhEYj5RzXCQmGrlP3tAh0L3HHm5AjBMFYRqlM9SA==
+  dependencies:
+    "@lit-labs/ssr-dom-shim" "^1.0.0"
+
+"@lit/reactive-element@^1.6.0":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@lit/reactive-element/-/reactive-element-1.6.2.tgz#c256690f82f2d7d0ffb0b1cdf68dcb1ec86cea28"
+  integrity sha512-rDfl+QnCYjuIGf5xI2sVJWdYIi56CTCwWa+nidKYX6oIuBYwUbT/vX4qbUDlHiZKJ/3FRNQ/tWJui44p6/stSA==
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
@@ -242,56 +254,51 @@
   resolved "https://registry.yarnpkg.com/@nordhealth/ag-theme-nord/-/ag-theme-nord-1.0.0.tgz#aff235d25526cdc2d6bee735b047f83c320efcc3"
   integrity sha512-pn/lxzfRqGfn4rxQ8cPZPTZvlT7n1Owk7g2YJln2QKYFpCC5yGXUM0B3LiiTcLyrbSGZniMqKeUYu66QHFO5Kg==
 
-"@nordhealth/color@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@nordhealth/color/-/color-1.0.11.tgz#25977be600c98c86b36b893efd0a2f879552e09f"
-  integrity sha512-cA75ppj+wh0Dldty4pVEADgE7j4WE24y3U71348D5QkH145X1v5zzo2eRTpFmAxvLVQLh1YJNNRms/u9rlu0nw==
+"@nordhealth/color@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@nordhealth/color/-/color-2.0.3.tgz#f865c43c7474a261223eb2e85ad2c12a6f14b550"
+  integrity sha512-W0gKFrDssWA9koL+bZ3w0S0QeZc1GgrQz8Z5DSjXJqy5P1WpERxhqPiURkd4l4mGzvSey1oA9GMBIuhl9WEMFg==
   dependencies:
-    "@nordhealth/tokens" "^6.3.0"
+    "@nordhealth/tokens" "^7.0.1"
     chroma-js "2.4.2"
 
-"@nordhealth/components@^2.16.0":
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/@nordhealth/components/-/components-2.16.0.tgz#646430e2d66e7fa79e9cb5200792f42db5707b17"
-  integrity sha512-+O0RNDb5kmVAg6EMYeah0JHUfxvx3UlOJxeCPUnyrgS32/fnk0vW+xi5Qrhs0sIk9/oj/d0CNeP/Hvq8XIFGqg==
+"@nordhealth/components@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@nordhealth/components/-/components-3.1.2.tgz#6d2814ca2d3ab5ff1fc70b883580b6d5d4551faa"
+  integrity sha512-gfm9vkhUvRqABxWpnq74d6Nik02M6sDlb38TzAcyBaemkUpxSGIJQEzWdzbUtDieRxZX8hh5k+Gp0kRIVWkcng==
   dependencies:
-    "@floating-ui/dom" "1.0.1"
-    "@nordhealth/icons" "^2.0.0"
-    lit "2.3.0"
+    "@floating-ui/dom" "1.2.7"
+    "@nordhealth/icons" "^3.0.1"
+    lit "2.7.4"
     qr-creator "1.0.0"
     tinykeys "1.4.0"
 
-"@nordhealth/css@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/@nordhealth/css/-/css-2.4.1.tgz#874728f7e526751c5360d8d766b3ed5e3e1754b6"
-  integrity sha512-900L4inFCD4XQ+tsxZpx0angZ3OUJ91nIZdUVqxtZ2TYQnA3ICrr6YaACBGHzWmQwF269/Yk7aX+CkoeXimtCw==
+"@nordhealth/css@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@nordhealth/css/-/css-3.1.0.tgz#06ea635abe3a84fcaad0ff49c64832b559d8007d"
+  integrity sha512-Ql4smalzqdPJ/Z4kHYG+MgDAJ3v3/PnsQEA8s9wCsC+KaTPklxnF1Vh2YADd6J81MRYT82yut54iKc+o77XX0g==
   dependencies:
     "@types/clean-css" "^4.2.5"
 
-"@nordhealth/fonts@^2.0.15":
-  version "2.0.15"
-  resolved "https://registry.yarnpkg.com/@nordhealth/fonts/-/fonts-2.0.15.tgz#3dc54a743e16fda233767ff110ed8adfba1e19be"
-  integrity sha512-HFvLJNmycUcfSJCgnCEGVRGjO5b4hBc56HXntls7Q2j8lE27Jen0N/7sEOfwDP1BGguHV6craZiZskHYWsv9yA==
+"@nordhealth/fonts@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@nordhealth/fonts/-/fonts-3.0.0.tgz#02f9b606e1e8053286fbaaf9648c244562d67904"
+  integrity sha512-3GwSpnWbITixYM5YQ1hPh2NIdY8tSlM97nG0trVozVn+/rNDl9cUCWDV6wpss1gm59d4f+hKbE3oL28cYecpJQ==
 
-"@nordhealth/icons@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@nordhealth/icons/-/icons-2.0.0.tgz#c0c1f4a595fc1f2653907b74a24fd0717a196b36"
-  integrity sha512-zpHwpyvedJkYqss0D+UN45KbM2LmdlYG8unwYTerV6CHbhLrWYuiM/g0BQXKKVpnxac02sNm2gG8Cyh/rvyT8A==
+"@nordhealth/icons@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@nordhealth/icons/-/icons-3.0.1.tgz#ddaa533df89cf0e5323aed7c28c5aa5e4c06720b"
+  integrity sha512-3ep9/Y2pYK+NTdqHZ4rI9OYXKjTut+YZfZMPfGc48shapPBtLSq6gVroSMbpLjNrv0apqa5xmw2SZS1k/eBlVg==
 
-"@nordhealth/themes@^7.0.3":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@nordhealth/themes/-/themes-7.0.3.tgz#beea1cea14d44cfc43dafaa7f506331c091ba41c"
-  integrity sha512-7cEW/MNbZ7D3hyuTxm1u9MHPJ/IRGJIOXxIUZ6uNmaryelt3iEHea6Lh8wbY6pdMDUyAOboU4FTn2sIMfmFakA==
+"@nordhealth/themes@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@nordhealth/themes/-/themes-8.0.1.tgz#cad6887662fc9d5f16344f25668744d31c7cc7a8"
+  integrity sha512-EVI5HfgKpMc5X5K1Y5P1AJZ0RjShWyB/RPOj8wAe3d/iqJ4yqM+Ysujtn5UJr18Um/YvRPyo9rq42z+MrpZ2+g==
 
-"@nordhealth/tokens@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@nordhealth/tokens/-/tokens-6.3.0.tgz#0b71ee80a3c2ec75662518dd708b52d536f40f45"
-  integrity sha512-3fUbfeaFrbeuCTv50aAHsJNiqwi5ZDiQSdZKSRfjjQnwmg+byWZpGggcm/S2ZkbwnBZ5pebmzs4aVMk7XdEPCQ==
-
-"@nordhealth/tokens@^6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@nordhealth/tokens/-/tokens-6.4.0.tgz#e3884b04d9aa36a975a43c193e667531ff93ec23"
-  integrity sha512-PrMf6OhPQ22bcqO75ItMshSFqNxin0A18Kej5/SYjeYi5wFW3uCQ3WmJK3yxWWd3rQzXc9/MeQUJNYer+PwczA==
+"@nordhealth/tokens@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@nordhealth/tokens/-/tokens-7.0.1.tgz#6ec3d65f430678c108f96b53b9986f370f6241b5"
+  integrity sha512-iOWyJmYjc2eMVJsQ/8bxXXAE1FslkuwewhNpTOKovimhfd4R23etKhbTXoa+dQSv0iivSLp2fUZc4ejootOA7g==
 
 "@types/clean-css@^4.2.5":
   version "4.2.6"
@@ -1214,29 +1221,30 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-lit-element@^3.2.0:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-3.2.2.tgz#d148ab6bf4c53a33f707a5168e087725499e5f2b"
-  integrity sha512-6ZgxBR9KNroqKb6+htkyBwD90XGRiqKDHVrW/Eh0EZ+l+iC+u+v+w3/BA5NGi4nizAVHGYvQBHUDuSmLjPp7NQ==
+lit-element@^3.3.0:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-3.3.2.tgz#9913bf220b85065f0e5f1bb8878cc44f36b50cfa"
+  integrity sha512-xXAeVWKGr4/njq0rGC9dethMnYCq5hpKYrgQZYTzawt9YQhMiXfD+T1RgrdY3NamOxwq2aXlb0vOI6e29CKgVQ==
   dependencies:
+    "@lit-labs/ssr-dom-shim" "^1.1.0"
     "@lit/reactive-element" "^1.3.0"
-    lit-html "^2.2.0"
+    lit-html "^2.7.0"
 
-lit-html@^2.2.0, lit-html@^2.3.0:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.6.1.tgz#eb29f0b0c2ab54ea77379db11fc011b0c71f1cda"
-  integrity sha512-Z3iw+E+3KKFn9t2YKNjsXNEu/LRLI98mtH/C6lnFg7kvaqPIzPn124Yd4eT/43lyqrejpc5Wb6BHq3fdv4S8Rw==
+lit-html@^2.7.0:
+  version "2.7.5"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-2.7.5.tgz#0c1b9d381abe20c01475ae53ea4b07bf4c923eb8"
+  integrity sha512-YqUzpisJodwKIlbMFCtyrp58oLloKGnnPLMJ1t23cbfIJjg/H9pvLWK4XS69YeubK5HUs1UE4ys9w5dP1zg6IA==
   dependencies:
     "@types/trusted-types" "^2.0.2"
 
-lit@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/lit/-/lit-2.3.0.tgz#611e122cbf9f34f1af0c1f3f791f886453bdcbde"
-  integrity sha512-ynSGsUYKSGN2weFQ1F3SZq0Ihlj+vr/3KAET//Yf8Tz86L7lZizlw9Px+ab5iN8Si4RkVoLqd9YtKQmjdyKHNg==
+lit@2.7.4:
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/lit/-/lit-2.7.4.tgz#ca63d27fda178dbffae0faf2c882b9910e40842c"
+  integrity sha512-cgD7xrZoYr21mbrkZIuIrj98YTMw/snJPg52deWVV4A8icLyNHI3bF70xsJeAgwTuiq5Kkd+ZR8gybSJDCPB7g==
   dependencies:
-    "@lit/reactive-element" "^1.4.0"
-    lit-element "^3.2.0"
-    lit-html "^2.3.0"
+    "@lit/reactive-element" "^1.6.0"
+    lit-element "^3.3.0"
+    lit-html "^2.7.0"
 
 locate-path@^6.0.0:
   version "6.0.0"

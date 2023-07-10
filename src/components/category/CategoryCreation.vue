@@ -47,7 +47,14 @@ onMounted(() => {
 </script>
 
 <template>
-	<nord-input slot="end" type="text" label="New category" value="" placeholder="Category name">
+	<nord-input
+		slot="end"
+		type="text"
+		label="New category"
+		value=""
+		placeholder="Category name"
+		style="padding-bottom: var(--n-space-s) !important"
+	>
 		<nord-button slot="end" aria-describedby="id_new_category_tooltip" variant="primary">
 			<nord-icon name="interface-add" size="l"></nord-icon>
 		</nord-button>
