@@ -12,8 +12,8 @@ export const createCategoryService = (client: ApolloClient<NormalizedCacheObject
 	const getAll = async (name?: string) => {
 		const result = await client.query({
 			query: gql`
-				query Categories($name: String) {
-					categories(name: $name) {
+				query Categories($name: String, $limit: Int) {
+					categories(name: $name, limit: $limit) {
 						total
 						categories {
 							id
@@ -23,7 +23,7 @@ export const createCategoryService = (client: ApolloClient<NormalizedCacheObject
 					}
 				}
 			`,
-			variables: { name },
+			variables: { name, limit: 100 }, // TODO: Temporary until pagination implemented.
 		});
 		return {
 			// TODO: type guard
