@@ -39,7 +39,7 @@ let starIcons = [];
 				margin-bottom: var(--n-space-s);
 			"
 		>
-			<nord-badge variant="info"><a :href="selectedDiary.sourceUrl">Source</a></nord-badge>
+			<nord-badge variant="highlight"><a :href="selectedDiary.sourceUrl">Source</a></nord-badge>
 			<nord-badge variant="highlight">Review times: {{ selectedDiary.reviewCount }}</nord-badge>
 		</div>
 		<nord-divider />

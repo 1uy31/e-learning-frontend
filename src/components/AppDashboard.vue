@@ -46,7 +46,7 @@ const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 			<CategoryCreation />
 		</nord-header>
 
-		<nord-stack v-if="selectedDiary" style="margin: var(--n-space-l) auto">
+		<nord-stack v-if="selectedDiary" style="margin: var(--n-space-s) auto">
 			<DiaryDetail />
 		</nord-stack>
 		<nord-stack v-else-if="!selectedCategory" style="max-width: 480px; margin: var(--n-space-xl) auto">
