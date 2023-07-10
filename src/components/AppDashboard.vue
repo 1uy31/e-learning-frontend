@@ -4,8 +4,12 @@ import CategoryCreation from "@components/category/CategoryCreation.vue";
 import DiaryCreation from "@components/diary/DiaryCreation.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
+import DiaryDetail from "@components/diary/DiaryDetail.vue";
+import { useDiaryStore } from "@stores/diary";
 
 const categoryStore = useCategoryStore();
+const diaryStore = useDiaryStore();
+const { selectedDiary } = storeToRefs(diaryStore);
 const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 </script>
 
@@ -42,7 +46,10 @@ const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 			<CategoryCreation />
 		</nord-header>
 
-		<nord-stack v-if="!selectedCategory" style="max-width: 480px; margin: var(--n-space-xl) auto">
+		<nord-stack v-if="selectedDiary" style="margin: var(--n-space-l) auto">
+			<DiaryDetail />
+		</nord-stack>
+		<nord-stack v-else-if="!selectedCategory" style="max-width: 480px; margin: var(--n-space-xl) auto">
 			<DiaryCreation />
 		</nord-stack>
 	</nord-layout>

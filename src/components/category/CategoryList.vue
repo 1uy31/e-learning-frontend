@@ -4,11 +4,16 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, onMounted } from "vue";
 import { VERY_QUICK_TIMING } from "@src/constants/timing";
 import { useDiaryStore } from "@stores/diary";
+import { Diary } from "@appTypes/dataModels";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
-const { categories } = storeToRefs(categoryStore);
-const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
+const { categories, selectedCategory } = storeToRefs(categoryStore);
+const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
+
+const selectDiary = (diary: Diary) => {
+	diary.id === selectedDiary?.value?.id ? diaryStore.selectDiary(undefined) : diaryStore.selectDiary(diary);
+};
 
 onBeforeMount(async () => {
 	await categoryStore.getCategories();
@@ -17,9 +22,6 @@ onBeforeMount(async () => {
 onMounted(() => {
 	const registerEventListenerForCategories = () => {
 		const categoryComponents = document.querySelectorAll("#id_category_sidebar > nord-nav-item");
-		if (categoryComponents.length === 0) {
-			return;
-		}
 		categoryComponents.forEach((categoryComponent, index) => {
 			categoryComponent.addEventListener("toggle", async (event) => {
 				if (!event.target) {
@@ -32,14 +34,6 @@ onMounted(() => {
 					categoryStore.selectCategory(selectedCategory);
 					await diaryStore.getByCategorizedTopic(selectedCategory.id);
 				}
-
-				categoryComponent.toggleAttribute("active", !event.target.active);
-				categoryComponents.forEach((otherCategoryComponent) => {
-					if (otherCategoryComponent === categoryComponent) {
-						return;
-					}
-					otherCategoryComponent.toggleAttribute("active", false);
-				});
 			});
 		});
 	};
@@ -54,14 +48,19 @@ onMounted(() => {
 		<nord-nav-item
 			v-for="category in categories"
 			:key="category.id"
-			href="#"
 			icon="interface-content-book"
 			:badge="category.diaryCount.toString()"
+			:active="category.id === selectedCategory?.id"
 			>{{ category.name }}
 			<nord-nav-group slot="subnav" v-if="category.diaryCount > 0">
-				<nord-nav-item v-for="diary in diariesByCategory[category.id]" :key="diary.id + 100000" href="#">{{
-					diary.topic
-				}}</nord-nav-item>
+				<nord-nav-item
+					v-for="diary in diariesByCategory[category.id]"
+					:key="diary.id + 100000"
+					icon="file-notepad"
+					:active="diary.id === selectedDiary?.id"
+					@click="selectDiary(diary)"
+					>{{ diary.topic }}</nord-nav-item
+				>
 			</nord-nav-group>
 		</nord-nav-item>
 	</nord-nav-group>

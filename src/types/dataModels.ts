@@ -14,6 +14,6 @@ export type DiaryInput = {
 export type Diary = DiaryInput & {
 	id: number;
 	reviewCount?: number;
-	// createdAt: Date;
-	// updatedAt: Date;
+	createdAt: string;
+	updatedAt: string | null;
 };
