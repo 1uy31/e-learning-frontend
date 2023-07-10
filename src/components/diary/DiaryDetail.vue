@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useDiaryStore } from "@stores/diary";
-import { onMounted } from "vue";
+import { onBeforeMount, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary } = storeToRefs(diaryStore);
 
-// onMounted(() => {});
+let starIcons = [];
+
+// onBeforeMount(() => {});
 </script>
 
 <template>
@@ -14,13 +16,33 @@ const { selectedDiary } = storeToRefs(diaryStore);
 		<div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
 			<h2 slot="header">{{ selectedDiary.topic }}</h2>
 			<div style="display: flex; flex-direction: row">
-				<nord-icon size="s" name="interface-star-filled" />
-				<nord-icon size="s" name="interface-star-filled" />
-				<nord-icon size="s" name="interface-star-filled" />
-				<nord-icon size="s" name="interface-star" />
-				<nord-icon size="s" name="interface-star" />
+				<nord-icon
+					v-for="index in selectedDiary.rate || 0"
+					size="s"
+					name="interface-star-filled"
+					:key="index"
+				/>
+				<nord-icon
+					v-for="index in 5 - (selectedDiary.rate || 0)"
+					size="s"
+					name="interface-star"
+					:key="index + 10"
+				/>
 			</div>
 		</div>
+		<div
+			style="
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: var(--n-space-s);
+			"
+		>
+			<nord-badge variant="info"><a :href="selectedDiary.sourceUrl">Source</a></nord-badge>
+			<nord-badge variant="highlight">Review times: {{ selectedDiary.reviewCount }}</nord-badge>
+		</div>
+		<nord-divider />
 
 		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla provident aliquid corporis tempora eius quam,
 		quae vel molestias esse maxime aperiam totam suscipit. Nobis consectetur optio reprehenderit animi? Suscipit,
