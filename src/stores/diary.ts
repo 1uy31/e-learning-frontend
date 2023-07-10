@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
 import { validateError } from "@src/utils";
-import { createDiaryService } from "@services/diary";
+import { useDiaryService } from "@services/diary";
 import { useCategoryStore } from "@stores/category";
 
 type DiaryStateType = {
@@ -21,7 +21,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 	getters: {},
 	actions: {
 		async getByCategorizedTopic(categoryId: number) {
-			const diaryService = createDiaryService();
+			const diaryService = useDiaryService();
 			try {
 				this.loadingDiaries = true;
 				const diaries = await diaryService.getByCategorizedTopic(categoryId);
@@ -34,7 +34,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 			}
 		},
 		async addDiary(successCallback: () => void, failureCallback: (error: Error) => void, input: DiaryInput) {
-			const diaryService = createDiaryService();
+			const diaryService = useDiaryService();
 			try {
 				const diary = await diaryService.create(input);
 				if (diary.categoryId && this.diariesByCategory[diary.categoryId]) {

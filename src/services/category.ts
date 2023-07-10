@@ -8,7 +8,7 @@ export type CategoryService = {
 	create: (name: string) => Promise<Category>;
 };
 
-export const createCategoryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): CategoryService => {
+export const useCategoryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): CategoryService => {
 	const getAll = async (name?: string) => {
 		const result = await client.query({
 			query: gql`

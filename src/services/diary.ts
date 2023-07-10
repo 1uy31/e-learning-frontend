@@ -8,7 +8,7 @@ export type DiaryService = {
 	create: (input: DiaryInput) => Promise<Diary>;
 };
 
-export const createDiaryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): DiaryService => {
+export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): DiaryService => {
 	const getByCategorizedTopic = async (categoryId?: number) => {
 		const result = await client.query({
 			query: gql`

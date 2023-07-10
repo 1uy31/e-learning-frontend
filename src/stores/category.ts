@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Category } from "@appTypes/dataModels";
-import { createCategoryService } from "@services/category";
+import { useCategoryService } from "@services/category";
 import { validateError } from "@src/utils";
 
 type CategoryStateType = {
@@ -18,7 +18,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 	getters: {},
 	actions: {
 		async getCategories() {
-			const categoryService = createCategoryService();
+			const categoryService = useCategoryService();
 			try {
 				const result = await categoryService.getAll();
 				this.categories = result.categories;
@@ -28,7 +28,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 			}
 		},
 		async addCategory(successCallback: () => void, failureCallback: (error: Error) => void, name: string) {
-			const categoryService = createCategoryService();
+			const categoryService = useCategoryService();
 			try {
 				const category = await categoryService.create(name);
 				this.categories = [...this.categories, category];
