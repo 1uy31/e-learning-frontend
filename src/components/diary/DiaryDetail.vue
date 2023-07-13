@@ -30,6 +30,7 @@ let starIcons = [];
 				/>
 			</div>
 		</div>
+
 		<div
 			style="
 				display: flex;
@@ -39,9 +40,31 @@ let starIcons = [];
 				margin-bottom: var(--n-space-s);
 			"
 		>
-			<nord-badge variant="highlight"><a :href="selectedDiary.sourceUrl">Source</a></nord-badge>
-			<nord-badge variant="highlight">Review times: {{ selectedDiary.reviewCount }}</nord-badge>
+			<div>
+				<nord-button href="#" size="s" variant="primary" style="margin-right: var(--n-space-s)">
+					<nord-icon slot="start" name="file-notes"></nord-icon>
+					New note
+				</nord-button>
+
+				<nord-button href="#" size="s" variant="default" style="margin-right: var(--n-space-s)">
+					<nord-icon slot="start" name="interface-add-small"></nord-icon>
+					Review count
+				</nord-button>
+
+				<nord-button href="#" size="s" variant="default">
+					<nord-icon slot="start" name="interface-edit-2"></nord-icon>
+					Edit
+				</nord-button>
+			</div>
+
+			<div>
+				<nord-badge variant="highlight" style="margin-right: var(--n-space-s)"
+					><a :href="selectedDiary.sourceUrl">Source</a></nord-badge
+				>
+				<nord-badge variant="highlight">Review times: {{ selectedDiary.reviewCount }}</nord-badge>
+			</div>
 		</div>
+
 		<nord-divider />
 
 		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla provident aliquid corporis tempora eius quam,

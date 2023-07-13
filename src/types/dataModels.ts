@@ -9,6 +9,7 @@ export type DiaryInput = {
 	sourceUrl?: string;
 	rate?: number;
 	categoryId?: number;
+	parentDiaryId?: number;
 };
 
 export type Diary = DiaryInput & {

@@ -9,7 +9,7 @@ import { Diary } from "@appTypes/dataModels";
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
-const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
+const { firstLayerDiariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
 const selectDiary = (diary: Diary) => {
 	diary.id === selectedDiary?.value?.id ? diaryStore.selectDiary(undefined) : diaryStore.selectDiary(diary);
@@ -36,7 +36,7 @@ onMounted(() => {
 				} else {
 					const selectedCategory = categories.value[index];
 					categoryStore.selectCategory(selectedCategory);
-					await diaryStore.getByCategorizedTopic(selectedCategory.id);
+					await diaryStore.getFirstLayerDiariesByCategory(selectedCategory.id);
 				}
 			});
 		});
@@ -58,7 +58,7 @@ onMounted(() => {
 			>{{ category.name }}
 			<nord-nav-group slot="subnav" v-if="category.diaryCount > 0">
 				<nord-nav-item
-					v-for="diary in diariesByCategory[category.id]"
+					v-for="diary in firstLayerDiariesByCategory[category.id]"
 					:key="diary.id + 100000"
 					icon="file-notepad"
 					:active="diary.id === selectedDiary?.id"

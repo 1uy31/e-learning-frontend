@@ -5,7 +5,7 @@ import { useDiaryService } from "@services/diary";
 import { useCategoryStore } from "@stores/category";
 
 type DiaryStateType = {
-	diariesByCategory: Record<number, Array<Diary>>;
+	firstLayerDiariesByCategory: Record<number, Array<Diary>>;
 	loadingDiaries: boolean;
 	diariesLoadingError: Error | null;
 	selectedDiary?: Diary;
@@ -13,19 +13,19 @@ type DiaryStateType = {
 
 export const useDiaryStore = defineStore("diaryStore", {
 	state: (): DiaryStateType => ({
-		diariesByCategory: {},
+		firstLayerDiariesByCategory: {},
 		loadingDiaries: false,
 		diariesLoadingError: null,
 		selectedDiary: undefined,
 	}),
 	getters: {},
 	actions: {
-		async getByCategorizedTopic(categoryId: number) {
+		async getFirstLayerDiariesByCategory(categoryId: number) {
 			const diaryService = useDiaryService();
 			try {
 				this.loadingDiaries = true;
 				const diaries = await diaryService.getByCategorizedTopic(categoryId);
-				this.diariesByCategory[categoryId] = diaries;
+				this.firstLayerDiariesByCategory[categoryId] = diaries;
 				this.loadingDiaries = false;
 			} catch (error) {
 				this.loadingDiaries = false;
@@ -37,8 +37,11 @@ export const useDiaryStore = defineStore("diaryStore", {
 			const diaryService = useDiaryService();
 			try {
 				const diary = await diaryService.create(input);
-				if (diary.categoryId && this.diariesByCategory[diary.categoryId]) {
-					this.diariesByCategory[diary.categoryId] = [...this.diariesByCategory[diary.categoryId], diary];
+				if (diary.categoryId && this.firstLayerDiariesByCategory[diary.categoryId]) {
+					this.firstLayerDiariesByCategory[diary.categoryId] = [
+						...this.firstLayerDiariesByCategory[diary.categoryId],
+						diary,
+					];
 				} else if (diary.categoryId) {
 					const categoryStore = useCategoryStore();
 					categoryStore.increaseDiaryCountForCategory(diary.categoryId);
