@@ -9,7 +9,7 @@ import { Diary } from "@appTypes/dataModels";
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
-const { firstLayerDiariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
+const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
 const selectDiary = (diary: Diary) => {
 	diary.id === selectedDiary?.value?.id ? diaryStore.selectDiary(undefined) : diaryStore.selectDiary(diary);
@@ -36,7 +36,7 @@ onMounted(() => {
 				} else {
 					const selectedCategory = categories.value[index];
 					categoryStore.selectCategory(selectedCategory);
-					await diaryStore.getFirstLayerDiariesByCategory(selectedCategory.id);
+					await diaryStore.getDiariesByCategory(selectedCategory.id);
 				}
 			});
 		});
@@ -53,12 +53,12 @@ onMounted(() => {
 			v-for="category in categories"
 			:key="category.id"
 			icon="interface-content-book"
-			:badge="category.diaryCount.toString()"
+			:badge="category.noParentDiaryCount.toString()"
 			:active="category.id === selectedCategory?.id"
 			>{{ category.name }}
-			<nord-nav-group slot="subnav" v-if="category.diaryCount > 0">
+			<nord-nav-group slot="subnav" v-if="category.noParentDiaryCount > 0">
 				<nord-nav-item
-					v-for="diary in firstLayerDiariesByCategory[category.id]"
+					v-for="diary in diariesByCategory[category.id]"
 					:key="diary.id + 100000"
 					icon="file-notepad"
 					:active="diary.id === selectedDiary?.id"

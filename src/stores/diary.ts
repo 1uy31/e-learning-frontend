@@ -5,7 +5,7 @@ import { useDiaryService } from "@services/diary";
 import { useCategoryStore } from "@stores/category";
 
 type DiaryStateType = {
-	firstLayerDiariesByCategory: Record<number, Array<Diary>>;
+	diariesByCategory: Record<number, Array<Diary>>;
 	loadingDiaries: boolean;
 	diariesLoadingError: Error | null;
 	selectedDiary?: Diary;
@@ -13,19 +13,19 @@ type DiaryStateType = {
 
 export const useDiaryStore = defineStore("diaryStore", {
 	state: (): DiaryStateType => ({
-		firstLayerDiariesByCategory: {},
+		diariesByCategory: {},
 		loadingDiaries: false,
 		diariesLoadingError: null,
 		selectedDiary: undefined,
 	}),
 	getters: {},
 	actions: {
-		async getFirstLayerDiariesByCategory(categoryId: number) {
+		async getDiariesByCategory(categoryId: number) {
 			const diaryService = useDiaryService();
 			try {
 				this.loadingDiaries = true;
-				const diaries = await diaryService.getByCategorizedTopic(categoryId);
-				this.firstLayerDiariesByCategory[categoryId] = diaries;
+				const diaries = await diaryService.getMatchedObjects(categoryId);
+				this.diariesByCategory[categoryId] = diaries;
 				this.loadingDiaries = false;
 			} catch (error) {
 				this.loadingDiaries = false;
@@ -37,14 +37,11 @@ export const useDiaryStore = defineStore("diaryStore", {
 			const diaryService = useDiaryService();
 			try {
 				const diary = await diaryService.create(input);
-				if (diary.categoryId && this.firstLayerDiariesByCategory[diary.categoryId]) {
-					this.firstLayerDiariesByCategory[diary.categoryId] = [
-						...this.firstLayerDiariesByCategory[diary.categoryId],
-						diary,
-					];
+				if (diary.categoryId && this.diariesByCategory[diary.categoryId]) {
+					this.diariesByCategory[diary.categoryId] = [...this.diariesByCategory[diary.categoryId], diary];
 				} else if (diary.categoryId) {
 					const categoryStore = useCategoryStore();
-					categoryStore.increaseDiaryCountForCategory(diary.categoryId);
+					categoryStore.increaseNoParentDiaryCount(diary.categoryId);
 				}
 				successCallback();
 			} catch (error) {
