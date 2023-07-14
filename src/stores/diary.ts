@@ -37,11 +37,13 @@ export const useDiaryStore = defineStore("diaryStore", {
 			const diaryService = useDiaryService();
 			try {
 				const diary = await diaryService.create(input);
-				if (diary.categoryId && this.diariesByCategory[diary.categoryId]) {
+				if (diary.parentDiaryId || !diary.categoryId) {
+					return successCallback();
+				}
+				const categoryStore = useCategoryStore();
+				categoryStore.increaseNoParentDiaryCount(diary.categoryId);
+				if (this.diariesByCategory[diary.categoryId]) {
 					this.diariesByCategory[diary.categoryId] = [...this.diariesByCategory[diary.categoryId], diary];
-				} else if (diary.categoryId) {
-					const categoryStore = useCategoryStore();
-					categoryStore.increaseNoParentDiaryCount(diary.categoryId);
 				}
 				successCallback();
 			} catch (error) {

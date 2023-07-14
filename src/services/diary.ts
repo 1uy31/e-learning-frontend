@@ -8,6 +8,7 @@ export type DiaryService = {
 	create: (input: DiaryInput) => Promise<Diary>;
 };
 
+// TODO: Fix problem that series list is cached, problematic after new series created.
 export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): DiaryService => {
 	const getMatchedObjects = async (categoryId?: number, parentDiaryId?: number) => {
 		const result = await client.query({

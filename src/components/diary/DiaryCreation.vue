@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { useCategoryStore } from "@stores/category";
 import { useDiaryStore } from "@stores/diary";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { MEDIUM_TIMING } from "@src/constants/timing";
+import { MEDIUM_TIMING, VERY_QUICK_TIMING } from "@src/constants/timing";
+import { Diary } from "@appTypes/dataModels";
 
 const categoryStore = useCategoryStore();
-const { categories } = storeToRefs(categoryStore);
-
 const diaryStore = useDiaryStore();
+const { categories } = storeToRefs(categoryStore);
+const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
+
 const DEFAULT_RATE = "3";
 
+const series = ref<Array<Diary>>([]);
+const seriesRefs = ref([]);
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	const form = <HTMLFormElement>document.getElementById("id_diary_creation_form");
 	const formBanner = form?.querySelector("nord-banner");
@@ -26,7 +30,9 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 		formBanner.style.display = "block";
 
 		const categorySelection = form.querySelectorAll("nord-select")[0];
+		const seriesSelection = form.querySelectorAll("nord-select")[1];
 		categorySelection.value = categories.value.length > 0 ? `${categories.value[0].id}` : "";
+		seriesSelection.value = "";
 
 		const textInputs = form.querySelectorAll("nord-input");
 		textInputs.forEach((textInput) => (textInput.value = ""));
@@ -57,22 +63,43 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	submitButton.loading = true;
 	await diaryStore.addDiary(successfulCreationCallback, failedCreationCallback, {
 		...entries,
-		categoryId: Number(entries.categoryId),
+		categoryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,
+		parentDiaryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,
 		rate: Number(entries.rate),
 	});
 	submitButton.loading = false;
 };
 
+const setSeriesOptions = async (categoryId?: string) => {
+	if (!categoryId) {
+		series.value = [];
+		return;
+	}
+	const categoryIdNumber = Number(categoryId);
+	if (Object.keys(diariesByCategory).includes(categoryId)) {
+		series.value = diariesByCategory.value[categoryIdNumber];
+		return;
+	}
+	await diaryStore.getDiariesByCategory(categoryIdNumber);
+	series.value = diariesByCategory.value[categoryIdNumber];
+};
+
 onMounted(() => {
 	const form = document.getElementById("id_diary_creation_form");
 	const formBanner = form?.querySelector("nord-banner");
+	const categorySelection = form?.querySelectorAll("nord-select")[0];
 	const topicInput = form?.querySelectorAll("nord-input")[0];
 	const submitButton = form?.querySelector("nord-button");
 
-	if (!formBanner || !topicInput || !submitButton) {
+	if (!formBanner || !categorySelection || !topicInput || !submitButton) {
 		window.alert("Could not load diary creation form, please reload.");
 		return;
 	}
+
+	categorySelection.addEventListener("change", async (event) => {
+		const selectedCategoryId = (<HTMLInputElement | null>event.target)?.value;
+		await setSeriesOptions(selectedCategoryId);
+	});
 
 	topicInput.addEventListener("change", (event) => {
 		if ((<HTMLInputElement | null>event.target)?.value) {
@@ -81,6 +108,11 @@ onMounted(() => {
 			submitButton.disabled = true;
 		}
 	});
+
+	setTimeout(async () => {
+		const defaultCategoryId = categories.value.length > 0 ? `${categories.value[0].id}` : undefined;
+		await setSeriesOptions(defaultCategoryId);
+	}, VERY_QUICK_TIMING);
 });
 </script>
 
@@ -96,6 +128,18 @@ onMounted(() => {
 					</option>
 				</nord-select>
 
+				<nord-progress-bar v-if="loadingDiaries" style="margin-top: var(--n-space-s)"></nord-progress-bar>
+				<nord-select v-else name="parentDiaryId" label="Series" expand>
+					<option key="-1" value="" />
+					<option
+						ref="seriesRefs"
+						v-for="noParentDiary in series"
+						:key="noParentDiary?.id"
+						:value="noParentDiary?.id"
+					>
+						{{ noParentDiary?.topic }}
+					</option>
+				</nord-select>
 				<nord-input
 					name="topic"
 					label="Topic"
