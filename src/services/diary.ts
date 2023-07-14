@@ -8,7 +8,6 @@ export type DiaryService = {
 	create: (input: DiaryInput) => Promise<Diary>;
 };
 
-// TODO: Fix problem that series list is cached, problematic after new series created.
 export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): DiaryService => {
 	const getMatchedObjects = async (categoryId?: number, parentDiaryId?: number) => {
 		const result = await client.query({
@@ -29,8 +28,7 @@ export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = ap
 			`,
 			variables: { categoryId, parentDiaryId },
 		});
-		// TODO: type guard
-		return result.data.diaries as Array<Diary>;
+		return result.data.diaries;
 	};
 
 	const create = async (input: DiaryInput) => {
@@ -64,6 +62,13 @@ export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = ap
 			`,
 			variables: { ...input },
 		});
+		client.cache.evict({
+			id: "ROOT_QUERY",
+			fieldName: "diaries",
+			args: { categoryId: input.categoryId },
+			broadcast: false,
+		});
+		client.cache.gc();
 		return result.data.addDiary;
 	};
 

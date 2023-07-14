@@ -63,7 +63,7 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	submitButton.loading = true;
 	await diaryStore.addDiary(successfulCreationCallback, failedCreationCallback, {
 		...entries,
-		categoryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,
+		categoryId: entries.categoryId ? Number(entries.categoryId) : undefined,
 		parentDiaryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,
 		rate: Number(entries.rate),
 	});

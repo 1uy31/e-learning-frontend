@@ -26,8 +26,7 @@ export const useCategoryService = (client: ApolloClient<NormalizedCacheObject> =
 			variables: { name, limit: 100 }, // TODO: Temporary until pagination implemented.
 		});
 		return {
-			// TODO: type guard
-			categories: result.data.categories.categories as Array<Category>,
+			categories: result.data.categories.categories,
 		};
 	};
 
