@@ -13,8 +13,8 @@ const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
 
 const DEFAULT_RATE = "3";
 
-const series = ref<Array<Diary>>([]);
-const seriesRefs = ref([]);
+const parentDiaries = ref<Array<Diary>>([]);
+const parentDiaryRefs = ref([]);
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	const form = <HTMLFormElement>document.getElementById("id_diary_creation_form");
 	const formBanner = form?.querySelector("nord-banner");
@@ -30,9 +30,9 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 		formBanner.style.display = "block";
 
 		const categorySelection = form.querySelectorAll("nord-select")[0];
-		const seriesSelection = form.querySelectorAll("nord-select")[1];
+		const parentDiarySelection = form.querySelectorAll("nord-select")[1];
 		categorySelection.value = categories.value.length > 0 ? `${categories.value[0].id}` : "";
-		seriesSelection.value = "";
+		parentDiarySelection.value = "";
 
 		const textInputs = form.querySelectorAll("nord-input");
 		textInputs.forEach((textInput) => (textInput.value = ""));
@@ -70,18 +70,18 @@ const submitDiaryCreationForm = async (event: SubmitEvent) => {
 	submitButton.loading = false;
 };
 
-const setSeriesOptions = async (categoryId?: string) => {
+const setParentDiaryOptions = async (categoryId?: string) => {
 	if (!categoryId) {
-		series.value = [];
+		parentDiaries.value = [];
 		return;
 	}
 	const categoryIdNumber = Number(categoryId);
 	if (Object.keys(diariesByCategory).includes(categoryId)) {
-		series.value = diariesByCategory.value[categoryIdNumber];
+		parentDiaries.value = diariesByCategory.value[categoryIdNumber];
 		return;
 	}
 	await diaryStore.getDiariesByCategory(categoryIdNumber);
-	series.value = diariesByCategory.value[categoryIdNumber];
+	parentDiaries.value = diariesByCategory.value[categoryIdNumber];
 };
 
 onMounted(() => {
@@ -98,7 +98,7 @@ onMounted(() => {
 
 	categorySelection.addEventListener("change", async (event) => {
 		const selectedCategoryId = (<HTMLInputElement | null>event.target)?.value;
-		await setSeriesOptions(selectedCategoryId);
+		await setParentDiaryOptions(selectedCategoryId);
 	});
 
 	topicInput.addEventListener("change", (event) => {
@@ -111,7 +111,7 @@ onMounted(() => {
 
 	setTimeout(async () => {
 		const defaultCategoryId = categories.value.length > 0 ? `${categories.value[0].id}` : undefined;
-		await setSeriesOptions(defaultCategoryId);
+		await setParentDiaryOptions(defaultCategoryId);
 	}, VERY_QUICK_TIMING);
 });
 </script>
@@ -129,15 +129,15 @@ onMounted(() => {
 				</nord-select>
 
 				<nord-progress-bar v-if="loadingDiaries" style="margin-top: var(--n-space-s)"></nord-progress-bar>
-				<nord-select v-else name="parentDiaryId" label="Series" expand>
+				<nord-select v-else name="parentDiaryId" label="Parent diary" expand>
 					<option key="-1" value="" />
 					<option
-						ref="seriesRefs"
-						v-for="noParentDiary in series"
-						:key="noParentDiary?.id"
-						:value="noParentDiary?.id"
+						ref="parentDiaryRefs"
+						v-for="parentDiary in parentDiaries"
+						:key="parentDiary?.id"
+						:value="parentDiary?.id"
 					>
-						{{ noParentDiary?.topic }}
+						{{ parentDiary?.topic }}
 					</option>
 				</nord-select>
 				<nord-input
