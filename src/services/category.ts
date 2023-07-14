@@ -18,7 +18,7 @@ export const useCategoryService = (client: ApolloClient<NormalizedCacheObject> =
 						categories {
 							id
 							name
-							diaryCount
+							noParentDiaryCount
 						}
 					}
 				}

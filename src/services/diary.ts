@@ -4,12 +4,12 @@ import { Diary, DiaryInput } from "@appTypes/dataModels";
 import { NormalizedCacheObject } from "@apollo/client/cache/inmemory/types";
 
 export type DiaryService = {
-	getByCategorizedTopic: (categoryId?: number, parentDiaryId?: number) => Promise<Array<Diary>>;
+	getMatchedObjects: (categoryId?: number, parentDiaryId?: number) => Promise<Array<Diary>>;
 	create: (input: DiaryInput) => Promise<Diary>;
 };
 
 export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): DiaryService => {
-	const getByCategorizedTopic = async (categoryId?: number, parentDiaryId?: number) => {
+	const getMatchedObjects = async (categoryId?: number, parentDiaryId?: number) => {
 		const result = await client.query({
 			query: gql`
 				query Diaries($categoryId: Int, $parentDiaryId: Int) {
@@ -67,7 +67,7 @@ export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = ap
 	};
 
 	return {
-		getByCategorizedTopic,
+		getMatchedObjects,
 		create,
 	};
 };
