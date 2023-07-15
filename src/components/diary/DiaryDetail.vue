@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import RateDisplay from "@components/share/RateDisplay.vue";
 import NoteCreation from "@components/note/NoteCreation.vue";
 import { alertIfNullUndefined } from "@src/utils";
+import CreatedUpdatedFooter from "@components/share/CreatedUpdatedFooter.vue";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary } = storeToRefs(diaryStore);
@@ -61,10 +62,6 @@ const openNoteCreationForm = () => {
 		</div>
 
 		<nord-divider />
-
-		Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla provident aliquid corporis tempora eius quam,
-		quae vel molestias esse maxime aperiam totam suscipit. Nobis consectetur optio reprehenderit animi? Suscipit,
-		quibusdam?
 
 		<CreatedUpdatedFooter :display-object="selectedDiary" />
 	</nord-card>

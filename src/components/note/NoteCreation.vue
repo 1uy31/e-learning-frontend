@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ContentEditor from "@components/note/ContentEditor.vue";
+</script>
+
 <template>
 	<nord-modal id="id_note_creation_modal" size="l" aria-labelledby="title">
 		<h2 id="title" slot="header">New note</h2>
@@ -10,7 +13,7 @@
 					<nord-input label="Image url" expand></nord-input>
 				</nord-stack>
 
-				<nord-textarea expand label="Content" resize="auto"></nord-textarea>
+				<ContentEditor />
 			</nord-stack>
 		</form>
 
