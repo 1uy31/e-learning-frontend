@@ -9,6 +9,8 @@ type DiaryStateType = {
 	loadingDiaries: boolean;
 	diariesLoadingError: Error | null;
 	selectedDiary?: Diary;
+	loadingChildDiaries: boolean;
+	childDiariesByDiary: Record<number, Array<Diary>>;
 };
 
 export const useDiaryStore = defineStore("diaryStore", {
@@ -17,6 +19,8 @@ export const useDiaryStore = defineStore("diaryStore", {
 		loadingDiaries: false,
 		diariesLoadingError: null,
 		selectedDiary: undefined,
+		loadingChildDiaries: false,
+		childDiariesByDiary: {},
 	}),
 	getters: {},
 	actions: {
@@ -53,6 +57,19 @@ export const useDiaryStore = defineStore("diaryStore", {
 		},
 		selectDiary(diary?: Diary) {
 			this.selectedDiary = diary;
+		},
+		async getChildDiariesByDiary(diary: Diary) {
+			const diaryService = useDiaryService();
+			try {
+				this.loadingChildDiaries = true;
+				const diaries = await diaryService.getMatchedObjects(diary.categoryId, diary.id);
+				this.childDiariesByDiary[diary.id] = diaries;
+				this.loadingChildDiaries = false;
+			} catch (error) {
+				this.loadingChildDiaries = false;
+				const validatedError = validateError(error);
+				this.diariesLoadingError = validatedError;
+			}
 		},
 	},
 });

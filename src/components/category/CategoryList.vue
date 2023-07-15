@@ -11,8 +11,12 @@ const diaryStore = useDiaryStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
 const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
-const selectDiary = (diary: Diary) => {
-	diary.id === selectedDiary?.value?.id ? diaryStore.selectDiary(undefined) : diaryStore.selectDiary(diary);
+const selectDiary = async (diary: Diary) => {
+	if (diary.id === selectedDiary?.value?.id) {
+		return diaryStore.selectDiary(undefined);
+	}
+	diaryStore.selectDiary(diary);
+	await diaryStore.getChildDiariesByDiary(diary);
 };
 
 onBeforeMount(async () => {
@@ -59,7 +63,7 @@ onMounted(() => {
 			<nord-nav-group slot="subnav" v-if="category.noParentDiaryCount > 0">
 				<nord-nav-item
 					v-for="diary in diariesByCategory[category.id]"
-					:key="diary.id + 100000"
+					:key="diary.id"
 					icon="file-notepad"
 					:active="diary.id === selectedDiary?.id"
 					@click="selectDiary(diary)"

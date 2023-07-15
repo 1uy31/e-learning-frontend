@@ -2,15 +2,24 @@
 import CategoryList from "@components/category/CategoryList.vue";
 import CategoryCreation from "@components/category/CategoryCreation.vue";
 import DiaryCreation from "@components/diary/DiaryCreation.vue";
+import ParentDiaryDetail from "@components/diary/ParentDiaryDetail.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 import DiaryDetail from "@components/diary/DiaryDetail.vue";
 import { useDiaryStore } from "@stores/diary";
+import CardSkeleton from "@components/share/CardSkeleton.vue";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
-const { selectedDiary } = storeToRefs(diaryStore);
+const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
 const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
+
+const hasChildDiary = (diaryId: number) => {
+	if (!Object.keys(childDiariesByDiary.value).includes(`${diaryId}`)) {
+		return false;
+	}
+	return childDiariesByDiary.value[diaryId].length > 0;
+};
 </script>
 
 <template>
@@ -47,7 +56,9 @@ const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 		</nord-header>
 
 		<nord-stack v-if="selectedDiary" style="margin: var(--n-space-s) auto">
-			<DiaryDetail />
+			<CardSkeleton v-if="loadingChildDiaries" />
+			<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />
+			<DiaryDetail v-else />
 		</nord-stack>
 		<nord-stack v-else-if="!selectedCategory" style="max-width: 480px; margin: var(--n-space-xl) auto">
 			<DiaryCreation />
