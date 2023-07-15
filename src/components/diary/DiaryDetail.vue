@@ -2,9 +2,16 @@
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
 import RateDisplay from "@components/share/RateDisplay.vue";
+import NoteCreation from "@components/note/NoteCreation.vue";
+import { alertIfNullUndefined } from "@src/utils";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary } = storeToRefs(diaryStore);
+
+const openNoteCreationForm = () => {
+	const modal = alertIfNullUndefined(document.getElementById("id_note_creation_modal"), "Note creation modal");
+	modal.showModal();
+};
 </script>
 
 <template>
@@ -24,7 +31,12 @@ const { selectedDiary } = storeToRefs(diaryStore);
 			"
 		>
 			<div>
-				<nord-button href="#" size="s" variant="primary" style="margin-right: var(--n-space-s)">
+				<nord-button
+					@click="openNoteCreationForm"
+					size="s"
+					variant="primary"
+					style="margin-right: var(--n-space-s)"
+				>
 					<nord-icon slot="start" name="file-notes"></nord-icon>
 					New note
 				</nord-button>
@@ -56,6 +68,7 @@ const { selectedDiary } = storeToRefs(diaryStore);
 
 		<CreatedUpdatedFooter :display-object="selectedDiary" />
 	</nord-card>
+	<NoteCreation />
 </template>
 
 <style scoped></style>

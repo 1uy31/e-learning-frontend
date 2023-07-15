@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { MEDIUM_TIMING, VERY_QUICK_TIMING } from "@src/constants/timing";
 import { Diary } from "@appTypes/dataModels";
+import { alertIfNullUndefined } from "@src/utils";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
@@ -16,11 +17,14 @@ const DEFAULT_RATE = "3";
 const parentDiaries = ref<Array<Diary>>([]);
 const parentDiaryRefs = ref([]);
 const submitDiaryCreationForm = async (event: SubmitEvent) => {
-	const form = <HTMLFormElement>document.getElementById("id_diary_creation_form");
-	const formBanner = form?.querySelector("nord-banner");
-	const submitButton = form?.querySelector("nord-button");
+	const form = alertIfNullUndefined(
+		<HTMLFormElement>document.getElementById("id_diary_creation_form"),
+		"Diary creation form"
+	);
+	const formBanner = alertIfNullUndefined(form.querySelector("nord-banner"), "Diary creation form banner");
+	const submitButton = alertIfNullUndefined(form.querySelector("nord-button"), "Diary creation form submit button");
 
-	if (!form || !formBanner || !submitButton || submitButton.loading) {
+	if (submitButton.loading) {
 		return;
 	}
 
@@ -85,16 +89,17 @@ const setParentDiaryOptions = async (categoryId?: string) => {
 };
 
 onMounted(() => {
-	const form = document.getElementById("id_diary_creation_form");
-	const formBanner = form?.querySelector("nord-banner");
-	const categorySelection = form?.querySelectorAll("nord-select")[0];
-	const topicInput = form?.querySelectorAll("nord-input")[0];
-	const submitButton = form?.querySelector("nord-button");
-
-	if (!formBanner || !categorySelection || !topicInput || !submitButton) {
-		window.alert("Could not load diary creation form, please reload.");
-		return;
-	}
+	const form = alertIfNullUndefined(document.getElementById("id_diary_creation_form"), "Diary creation form");
+	const formBanner = alertIfNullUndefined(form.querySelector("nord-banner"), "Diary creation form banner");
+	const categorySelection = alertIfNullUndefined(
+		form.querySelectorAll("nord-select")[0],
+		"Category selection in diary creation form"
+	);
+	const topicInput = alertIfNullUndefined(
+		form.querySelectorAll("nord-input")[0],
+		"Topic input in diary creation form"
+	);
+	const submitButton = alertIfNullUndefined(form.querySelector("nord-button"), "Diary creation form submit button");
 
 	categorySelection.addEventListener("change", async (event) => {
 		const selectedCategoryId = (<HTMLInputElement | null>event.target)?.value;

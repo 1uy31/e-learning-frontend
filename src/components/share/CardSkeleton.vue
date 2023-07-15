@@ -11,7 +11,7 @@
 	</nord-card>
 </template>
 
-<style>
+<style scoped>
 .skeleton-paragraph nord-skeleton {
 	margin-block-end: var(--n-space-m);
 	width: 90%;
