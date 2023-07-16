@@ -33,10 +33,10 @@ const openNoteCreationForm = () => {
 		>
 			<div>
 				<nord-button
-					@click="openNoteCreationForm"
 					size="s"
 					variant="primary"
 					style="margin-right: var(--n-space-s)"
+					@click="openNoteCreationForm"
 				>
 					<nord-icon slot="start" name="file-notes"></nord-icon>
 					New note

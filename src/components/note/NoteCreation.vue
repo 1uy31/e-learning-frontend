@@ -6,7 +6,7 @@ import ContentEditor from "@components/note/ContentEditor.vue";
 	<nord-modal id="id_note_creation_modal" size="l" aria-labelledby="title">
 		<h2 id="title" slot="header">New note</h2>
 
-		<form method="dialog" id="id_note_cration_form">
+		<form id="id_note_cration_form" method="dialog">
 			<nord-stack>
 				<nord-stack direction="horizontal">
 					<nord-input label="Source url" expand></nord-input>

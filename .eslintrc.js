@@ -6,6 +6,7 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"plugin:vue/vue3-recommended",
 		"plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+		"plugin:tailwindcss/recommended",
 	],
 	parserOptions: {
 		parser: "@typescript-eslint/parser",
@@ -33,4 +34,14 @@ module.exports = {
 			},
 		],
 	},
+	overrides: [
+		{
+			files: ["*.ts", "*.js"],
+			parser: "@typescript-eslint/parser",
+		},
+		{
+			files: ["*.vue"],
+			parser: "vue-eslint-parser",
+		},
+	],
 };

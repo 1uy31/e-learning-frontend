@@ -1,5 +1,7 @@
 <script setup lang="ts">
-defineProps(["displayObject"]);
+import { Category, Diary } from "@appTypes/dataModels";
+
+defineProps<{ displayObject: Category | Diary }>();
 </script>
 
 <template>

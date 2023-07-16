@@ -13,7 +13,8 @@ const [categoryName, setCategoryName] = useState("");
 const [isCreatingCategory, toggleIsCreatingCategory] = useState(false);
 
 const setCategoryInput = (event: Event) => {
-	const newValue = (<HTMLInputElement>event?.target)?.value;
+	const eventTarget = event?.target as HTMLInputElement | undefined;
+	const newValue = eventTarget?.value;
 	setCategoryName(newValue);
 };
 

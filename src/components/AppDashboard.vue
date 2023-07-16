@@ -6,7 +6,7 @@ import CategoryCreation from "@components/category/CategoryCreation.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 // import DiaryDetail from "@components/diary/DiaryDetail.vue";
-import { useDiaryStore } from "@stores/diary";
+// import { useDiaryStore } from "@stores/diary";
 // import CardSkeleton from "@components/share/CardSkeleton.vue";
 import { Tab, Sidenav, initTE } from "tw-elements";
 import { onMounted } from "vue";
@@ -14,16 +14,17 @@ import ColorfulSpinners from "@components/share/ColorfulSpinners.vue";
 import MenuIcon from "@assets/icons/menu.svg?component";
 
 const categoryStore = useCategoryStore();
-const diaryStore = useDiaryStore();
-const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
-const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
+// const diaryStore = useDiaryStore();
+// const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
+// const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
+const { categoriesLoadingError } = storeToRefs(categoryStore);
 
-const hasChildDiary = (diaryId: number) => {
-	if (!Object.keys(childDiariesByDiary.value).includes(`${diaryId}`)) {
-		return false;
-	}
-	return childDiariesByDiary.value[diaryId].length > 0;
-};
+// const hasChildDiary = (diaryId: number) => {
+// 	if (!Object.keys(childDiariesByDiary.value).includes(`${diaryId}`)) {
+// 		return false;
+// 	}
+// 	return childDiariesByDiary.value[diaryId].length > 0;
+// };
 
 onMounted(() => {
 	initTE({ Tab, Sidenav });
@@ -31,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<ul class="mb-4 flex list-none flex-row flex-wrap border-b-0 pl-0" id="id_app_tabs" role="tablist" data-te-nav-ref>
+	<ul id="id_app_tabs" class="mb-4 flex list-none flex-row flex-wrap border-b-0 pl-0" role="tablist" data-te-nav-ref>
 		<button
 			class="m-2 inline-block rounded bg-cyan-950 px-4 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-cyan-700 hover:shadow-lg focus:bg-cyan-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-cyan-950 active:shadow-lg"
 			data-te-sidenav-toggle-ref
@@ -43,9 +44,9 @@ onMounted(() => {
 		</button>
 		<li role="presentation">
 			<a
+				id="id_main_tab_home"
 				href="#id_main_tab_home_content"
 				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
-				id="id_main_tab_home"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_home_content"
 				data-te-nav-active
@@ -57,9 +58,9 @@ onMounted(() => {
 		</li>
 		<li role="presentation">
 			<a
-				href="#id_main_tab_new_category_content"
-				class="focus:border-transparen my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
 				id="id_main_tab_new_category"
+				href="#id_main_tab_new_category_content"
+				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_new_category_content"
 				role="tab"
@@ -72,15 +73,15 @@ onMounted(() => {
 
 	<div>
 		<div
-			class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
 			id="id_main_tab_home_content"
+			class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
 			role="tabpanel"
 			data-te-tab-active
 			aria-labelledby="id_main_tab_home"
 		></div>
 		<div
-			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
 			id="id_main_tab_new_category_content"
+			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
 			role="tabpanel"
 			aria-labelledby="id_main_tab_new_category"
 		>
