@@ -2,7 +2,7 @@
 
 <template>
 	<div
-		class="m-auto my-2 h-6 w-6 animate-spin rounded-full border-4 border-solid border-cyan-700 border-r-transparent align-[-0.125em] text-secondary motion-reduce:animate-[spin_1.5s_linear_infinite]"
+		class="m-auto mt-1 h-5 w-5 animate-spin rounded-full border-4 border-solid border-cyan-700 border-r-transparent align-[-0.125em] text-secondary motion-reduce:animate-[spin_1.5s_linear_infinite]"
 		role="status"
 	>
 		<span
