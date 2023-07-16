@@ -51,7 +51,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<ul id="id_category_sidebar" class="relative m-0 list-none px-[0.2rem]" data-te-sidenav-menu-ref>
+	<ul id="id_sidebar_content" class="relative m-0 list-none px-[0.2rem]" data-te-sidenav-menu-ref>
 		<SmallSpinner v-if="loadingDiaries" />
 		<li class="relative" v-for="category in categories" :key="category.id">
 			<a
