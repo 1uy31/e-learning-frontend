@@ -13,7 +13,7 @@ const SPINNERS_CLASSES = [
 </script>
 
 <template>
-	<div class="w-fit m-auto my-2">
+	<div class="m-auto my-2 w-fit">
 		<div
 			v-for="spinerClasses in SPINNERS_CLASSES"
 			:key="spinerClasses"

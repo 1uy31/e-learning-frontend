@@ -58,7 +58,7 @@ onBeforeMount(async () => {
 					{{ category.noParentDiaryCount || 0 }}
 				</span>
 				<span
-					class="absolute right-0 ml-auto mr-[0.8rem] [&>svg]:h-4 [&>svg]:w-4 transition-transform duration-300 ease-linear motion-reduce:transition-none"
+					class="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:h-4 [&>svg]:w-4"
 					data-te-sidenav-rotate-icon-ref
 				>
 					<ArrowDownIcon />

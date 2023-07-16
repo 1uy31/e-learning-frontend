@@ -95,7 +95,7 @@ onMounted(() => {
 		data-te-sidenav-hidden="false"
 		data-te-sidenav-position="absolute"
 	>
-		<h1 class="text-center mt-2 text-xl text-cyan-950">Category</h1>
+		<h1 class="mt-2 text-center text-xl text-cyan-950">Category</h1>
 		<p v-if="categoriesLoadingError" class="px-2 text-red-600">
 			Error on loading categories. More info: {{ categoriesLoadingError }}
 		</p>
