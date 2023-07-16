@@ -24,7 +24,7 @@ const successfulCreationCallback = () => {
 };
 
 const submitNewCategory = async () => {
-	if (!categoryName.value || isCreatingCategory.value) {
+	if (["", undefined].includes(categoryName.value) || isCreatingCategory.value) {
 		return;
 	}
 	toggleIsCreatingCategory(true);
