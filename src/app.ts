@@ -1,6 +1,7 @@
 import { createApp, provide, h } from "vue";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { apolloClient } from "@src/apolloClient";
+import "./style.css";
 import App from "@src/App.vue";
 import { createPinia } from "pinia";
 
