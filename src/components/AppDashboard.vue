@@ -46,7 +46,7 @@ onMounted(() => {
 			<a
 				id="id_main_tab_home"
 				href="#id_main_tab_home_content"
-				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950 dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_home_content"
 				data-te-nav-active
@@ -60,7 +60,7 @@ onMounted(() => {
 			<a
 				id="id_main_tab_new_category"
 				href="#id_main_tab_new_category_content"
-				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950 dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_new_category_content"
 				role="tab"
