@@ -101,7 +101,7 @@ onMounted(() => {
 	>
 		<form id="id_new_diary_form">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
-			<div class="relative mb-6 mt-4">
+			<div class="mb-6 mt-4 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
 				<select id="id_new_diary_category" data-te-select-init name="categoryId" form="id_new_diary_form">
 					<option v-for="category in categories" :key="category.id" :value="category.id">
 						{{ category.name }}
@@ -110,7 +110,7 @@ onMounted(() => {
 				<label data-te-select-label-ref>Category</label>
 			</div>
 
-			<div class="relative mb-5">
+			<div class="mb-5 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
 				<select data-te-select-init name="parentDiaryId" form="id_new_diary_form">
 					<option>No parent diary</option>
 					<option v-for="parentDiary in parentDiaries" :key="parentDiary.id" :value="parentDiary.id">
@@ -126,7 +126,7 @@ onMounted(() => {
 					name="topic"
 					form="id_new_diary_form"
 					type="text"
-					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] text-cyan-950 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
 					placeholder="Learning topic"
 					:value="diaryTopic"
 					@change="(event) => setDiaryTopic(event.target.value)"
@@ -144,7 +144,7 @@ onMounted(() => {
 					name="sourceUrl"
 					form="id_new_diary_form"
 					type="text"
-					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] text-cyan-950 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
 					placeholder="Learning source url"
 				/>
 				<label
