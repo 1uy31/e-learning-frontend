@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCategoryStore } from "@stores/category";
 import { useDiaryStore } from "@stores/diary";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
 import { Diary } from "@appTypes/dataModels";
@@ -15,7 +15,7 @@ const DEFAULT_RATE = "3";
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const { categories } = storeToRefs(categoryStore);
-const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
+const { diariesByCategory } = storeToRefs(diaryStore);
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [diaryTopic, setDiaryTopic] = useState("");
@@ -23,7 +23,7 @@ const [diaryRate, setDiaryRate] = useState(DEFAULT_RATE);
 const [parentDiaries, setParentDiaries] = useState<Array<Diary>>([]);
 const [isCreatingDiary, toggleIsCreatingDiary] = useState(false);
 
-const submitDiaryCreationForm = async (event: SubmitEvent) => {
+const submitDiaryCreationForm = async () => {
 	const form = alertIfNullUndefined(document.getElementById("id_new_diary_form"), "New diary form");
 
 	const successfulCreationCallback = () => {
@@ -102,7 +102,7 @@ onMounted(() => {
 		<form id="id_new_diary_form">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
 			<div class="relative mb-6 mt-4">
-				<select data-te-select-init name="categoryId" form="id_new_diary_form" id="id_new_diary_category">
+				<select id="id_new_diary_category" data-te-select-init name="categoryId" form="id_new_diary_form">
 					<option v-for="category in categories" :key="category.id" :value="category.id">
 						{{ category.name }}
 					</option>
@@ -159,16 +159,16 @@ onMounted(() => {
 					>Rate<span class="ml-2 text-cyan-950">{{ Number(diaryRate || DEFAULT_RATE) }}/5</span></label
 				>
 				<input
+					id="id_new_diary_rate"
 					type="range"
 					name="rate"
 					form="id_new_diary_form"
-					class="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300"
+					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300"
 					min="1"
 					max="5"
 					step="1"
 					:value="diaryRate"
 					@change="(event) => setDiaryRate(event.target.value)"
-					id="id_new_diary_rate"
 				/>
 			</div>
 
