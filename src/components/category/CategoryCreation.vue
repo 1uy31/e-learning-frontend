@@ -12,12 +12,6 @@ const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [categoryName, setCategoryName] = useState("");
 const [isCreatingCategory, toggleIsCreatingCategory] = useState(false);
 
-const setCategoryInput = (event: Event) => {
-	const eventTarget = event?.target as HTMLInputElement | undefined;
-	const newValue = eventTarget?.value;
-	setCategoryName(newValue);
-};
-
 const successfulCreationCallback = () => {
 	setCategoryName("");
 	setFormMessage({ message: "New category created successfully.", class: "text-green-800" });
@@ -44,18 +38,18 @@ onMounted(() => {
 
 <template>
 	<div
-		class="m-auto mb-12 block rounded-lg bg-stone-100 p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
+		class="mx-auto mt-12 block rounded-lg bg-stone-100 p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
 	>
 		<form>
 			<p v-if="formMessage.message" :class="'text-l mb-4 ' + formMessage.class">{{ formMessage.message }}</p>
-			<div class="relative mb-5 mt-2.5" data-te-input-wrapper-init>
+			<div class="relative mb-5" data-te-input-wrapper-init>
 				<input
 					id="id_new_category_name"
 					type="text"
 					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
 					placeholder="A unique name"
 					:value="categoryName"
-					@change="(event) => setCategoryInput(event)"
+					@change="(event) => setCategoryName(event.target.value)"
 				/>
 				<label
 					for="id_new_category_name"
@@ -72,7 +66,7 @@ onMounted(() => {
 				:disabled="['', undefined].includes(categoryName)"
 				@click.prevent="submitNewCategory"
 			>
-				<SmallSpinner v-if="isCreatingCategory" classes="" status="Creating" />
+				<SmallSpinner v-if="isCreatingCategory" status="Creating" />
 				{{ !isCreatingCategory ? "Create" : "" }}
 			</button>
 		</form>

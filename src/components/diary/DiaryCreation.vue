@@ -1,183 +1,191 @@
-<!--<script setup lang="ts">-->
-<!--import { useCategoryStore } from "@stores/category";-->
-<!--import { useDiaryStore } from "@stores/diary";-->
-<!--import { onMounted, ref } from "vue";-->
-<!--import { storeToRefs } from "pinia";-->
-<!--import { MEDIUM_TIMING, VERY_QUICK_TIMING } from "@src/constants/timing";-->
-<!--import { Diary } from "@appTypes/dataModels";-->
-<!--import { alertIfNullUndefined } from "@src/utils";-->
+<script setup lang="ts">
+import { useCategoryStore } from "@stores/category";
+import { useDiaryStore } from "@stores/diary";
+import { onMounted, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
+import { Diary } from "@appTypes/dataModels";
+import { alertIfNullUndefined } from "@src/utils";
+import { initTE, Input, Ripple, Select } from "tw-elements";
+import { useState } from "@src/composable/useState";
+import SmallSpinner from "@components/share/SmallSpinner.vue";
 
-<!--const categoryStore = useCategoryStore();-->
-<!--const diaryStore = useDiaryStore();-->
-<!--const { categories } = storeToRefs(categoryStore);-->
-<!--const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);-->
+const DEFAULT_RATE = "3";
 
-<!--const DEFAULT_RATE = "3";-->
+const categoryStore = useCategoryStore();
+const diaryStore = useDiaryStore();
+const { categories } = storeToRefs(categoryStore);
+const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
 
-<!--const parentDiaries = ref<Array<Diary>>([]);-->
-<!--const parentDiaryRefs = ref([]);-->
-<!--const submitDiaryCreationForm = async (event: SubmitEvent) => {-->
-<!--	const form = alertIfNullUndefined(-->
-<!--		<HTMLFormElement>document.getElementById("id_diary_creation_form"),-->
-<!--		"Diary creation form"-->
-<!--	);-->
-<!--	const formBanner = alertIfNullUndefined(form.querySelector("nord-banner"), "Diary creation form banner");-->
-<!--	const submitButton = alertIfNullUndefined(form.querySelector("nord-button"), "Diary creation form submit button");-->
+const [formMessage, setFormMessage] = useState({ message: "", class: "" });
+const [diaryTopic, setDiaryTopic] = useState("");
+const [diaryRate, setDiaryRate] = useState(DEFAULT_RATE);
+const [parentDiaries, setParentDiaries] = useState<Array<Diary>>([]);
+const [isCreatingDiary, toggleIsCreatingDiary] = useState(false);
 
-<!--	if (submitButton.loading) {-->
-<!--		return;-->
-<!--	}-->
+const submitDiaryCreationForm = async (event: SubmitEvent) => {
+	const form = alertIfNullUndefined(document.getElementById("id_new_diary_form"), "New diary form");
 
-<!--	const successfulCreationCallback = () => {-->
-<!--		formBanner.variant = "success";-->
-<!--		formBanner.innerHTML = "Diary created successfully.";-->
-<!--		formBanner.style.display = "block";-->
+	const successfulCreationCallback = () => {
+		setFormMessage({ message: "New diary created successfully.", class: "text-green-800" });
+		setDiaryTopic("");
+		setDiaryRate(DEFAULT_RATE);
+		form.reset();
 
-<!--		const categorySelection = form.querySelectorAll("nord-select")[0];-->
-<!--		const parentDiarySelection = form.querySelectorAll("nord-select")[1];-->
-<!--		categorySelection.value = categories.value.length > 0 ? `${categories.value[0].id}` : "";-->
-<!--		parentDiarySelection.value = "";-->
+		setTimeout(() => {
+			setFormMessage({ message: "", class: "" });
+		}, MEDIUM_TIMING);
+	};
 
-<!--		const textInputs = form.querySelectorAll("nord-input");-->
-<!--		textInputs.forEach((textInput) => (textInput.value = ""));-->
-<!--		const rate = form.querySelectorAll("nord-range")[0];-->
-<!--		rate.value = DEFAULT_RATE;-->
+	const formInput = new FormData(form as HTMLFormElement);
+	const entries = [...formInput.entries()].reduce(
+		(object, entry) => Object.assign(object, { [entry[0]]: entry[1] }),
+		{}
+	);
 
-<!--		setTimeout(() => {-->
-<!--			formBanner.style.display = "none";-->
-<!--		}, MEDIUM_TIMING);-->
-<!--	};-->
+	if (!Object.keys(entries).includes("categoryId")) {
+		entries["categoryId"] = categories.value[0]?.id;
+	}
 
-<!--	const failedCreationCallback = (error: Error) => {-->
-<!--		formBanner.variant = "danger";-->
-<!--		formBanner.innerHTML = error.message;-->
-<!--		formBanner.style.display = "block";-->
-<!--	};-->
+	toggleIsCreatingDiary(true);
+	await diaryStore.addDiary(
+		successfulCreationCallback,
+		(error: Error) => setFormMessage({ message: error.message, class: "text-red-800" }),
+		{
+			...entries,
+			categoryId: entries.categoryId ? Number(entries.categoryId) : undefined,
+			parentDiaryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,
+			rate: Number(entries.rate),
+		}
+	);
+	toggleIsCreatingDiary(false);
+};
 
-<!--	const formInput = new FormData(<HTMLFormElement>event.target);-->
-<!--	const entries = [...formInput.entries()].reduce(-->
-<!--		(object, entry) => Object.assign(object, { [entry[0]]: entry[1] }),-->
-<!--		{}-->
-<!--	);-->
+const setParentDiaryOptions = async (categoryId?: string) => {
+	if (!categoryId) {
+		setParentDiaries([]);
+		return;
+	}
+	const categoryIdNumber = Number(categoryId);
+	if (Object.keys(diariesByCategory).includes(categoryId)) {
+		setParentDiaries(diariesByCategory.value[categoryIdNumber]);
+		return;
+	}
+	await diaryStore.getDiariesByCategory(categoryIdNumber);
+	setParentDiaries(diariesByCategory.value[categoryIdNumber]);
+};
 
-<!--	if (!Object.keys(entries).includes("categoryId")) {-->
-<!--		entries["categoryId"] = categories.value[0]?.id;-->
-<!--	}-->
+onMounted(() => {
+	initTE({ Input, Ripple, Select });
+	const categorySelection = alertIfNullUndefined(
+		document.getElementById("id_new_diary_category"),
+		"Category selection in diary creation form"
+	);
 
-<!--	submitButton.loading = true;-->
-<!--	await diaryStore.addDiary(successfulCreationCallback, failedCreationCallback, {-->
-<!--		...entries,-->
-<!--		categoryId: entries.categoryId ? Number(entries.categoryId) : undefined,-->
-<!--		parentDiaryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,-->
-<!--		rate: Number(entries.rate),-->
-<!--	});-->
-<!--	submitButton.loading = false;-->
-<!--};-->
+	categorySelection.addEventListener("change", async (event) => {
+		const eventTarget = event?.target as HTMLInputElement | undefined;
+		const selectedCategoryId = eventTarget?.value;
+		await setParentDiaryOptions(selectedCategoryId);
+	});
 
-<!--const setParentDiaryOptions = async (categoryId?: string) => {-->
-<!--	if (!categoryId) {-->
-<!--		parentDiaries.value = [];-->
-<!--		return;-->
-<!--	}-->
-<!--	const categoryIdNumber = Number(categoryId);-->
-<!--	if (Object.keys(diariesByCategory).includes(categoryId)) {-->
-<!--		parentDiaries.value = diariesByCategory.value[categoryIdNumber];-->
-<!--		return;-->
-<!--	}-->
-<!--	await diaryStore.getDiariesByCategory(categoryIdNumber);-->
-<!--	parentDiaries.value = diariesByCategory.value[categoryIdNumber];-->
-<!--};-->
+	setTimeout(async () => {
+		const defaultCategoryId = categories.value.length > 0 ? `${categories.value[0].id}` : undefined;
+		await setParentDiaryOptions(defaultCategoryId);
+	}, VERY_QUICK_TIMING);
+});
+</script>
 
-<!--onMounted(() => {-->
-<!--	const form = alertIfNullUndefined(document.getElementById("id_diary_creation_form"), "Diary creation form");-->
-<!--	const formBanner = alertIfNullUndefined(form.querySelector("nord-banner"), "Diary creation form banner");-->
-<!--	const categorySelection = alertIfNullUndefined(-->
-<!--		form.querySelectorAll("nord-select")[0],-->
-<!--		"Category selection in diary creation form"-->
-<!--	);-->
-<!--	const topicInput = alertIfNullUndefined(-->
-<!--		form.querySelectorAll("nord-input")[0],-->
-<!--		"Topic input in diary creation form"-->
-<!--	);-->
-<!--	const submitButton = alertIfNullUndefined(form.querySelector("nord-button"), "Diary creation form submit button");-->
+<template>
+	<div
+		class="mx-auto mt-12 block rounded-lg bg-stone-100 p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
+	>
+		<form id="id_new_diary_form">
+			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
+			<div class="relative mb-6 mt-4">
+				<select data-te-select-init name="categoryId" form="id_new_diary_form" id="id_new_diary_category">
+					<option v-for="category in categories" :key="category.id" :value="category.id">
+						{{ category.name }}
+					</option>
+				</select>
+				<label data-te-select-label-ref>Category</label>
+			</div>
 
-<!--	categorySelection.addEventListener("change", async (event) => {-->
-<!--		const selectedCategoryId = (<HTMLInputElement | null>event.target)?.value;-->
-<!--		await setParentDiaryOptions(selectedCategoryId);-->
-<!--	});-->
+			<div class="relative mb-5">
+				<select data-te-select-init name="parentDiaryId" form="id_new_diary_form">
+					<option>No parent diary</option>
+					<option v-for="parentDiary in parentDiaries" :key="parentDiary.id" :value="parentDiary.id">
+						{{ parentDiary.topic }}
+					</option>
+				</select>
+				<label data-te-select-label-ref>Parent diary</label>
+			</div>
 
-<!--	topicInput.addEventListener("change", (event) => {-->
-<!--		if ((<HTMLInputElement | null>event.target)?.value) {-->
-<!--			submitButton.disabled = false;-->
-<!--		} else {-->
-<!--			submitButton.disabled = true;-->
-<!--		}-->
-<!--	});-->
+			<div class="relative mb-5" data-te-input-wrapper-init>
+				<input
+					id="id_new_diary_topic"
+					name="topic"
+					form="id_new_diary_form"
+					type="text"
+					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+					placeholder="Learning topic"
+					:value="diaryTopic"
+					@change="(event) => setDiaryTopic(event.target.value)"
+				/>
+				<label
+					for="id_new_diary_topic"
+					class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-cyan-700 transition-all duration-200 ease-out peer-focus:translate-y-[-1.15rem] peer-focus:scale-[0.8] peer-focus:text-cyan-800 peer-data-[te-input-state-active]:translate-y-[-1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+					>Topic
+				</label>
+			</div>
 
-<!--	setTimeout(async () => {-->
-<!--		const defaultCategoryId = categories.value.length > 0 ? `${categories.value[0].id}` : undefined;-->
-<!--		await setParentDiaryOptions(defaultCategoryId);-->
-<!--	}, VERY_QUICK_TIMING);-->
-<!--});-->
-<!--</script>-->
+			<div class="relative mb-4" data-te-input-wrapper-init>
+				<input
+					id="id_new_diary_source_url"
+					name="sourceUrl"
+					form="id_new_diary_form"
+					type="text"
+					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+					placeholder="Learning source url"
+				/>
+				<label
+					for="id_new_diary_source_url"
+					class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-cyan-700 transition-all duration-200 ease-out peer-focus:translate-y-[-1.15rem] peer-focus:scale-[0.8] peer-focus:text-cyan-800 peer-data-[te-input-state-active]:translate-y-[-1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+					>Source url
+				</label>
+			</div>
 
-<!--<template>-->
-<!--	<nord-card padding="l">-->
-<!--		<h1 slot="header">New diary</h1>-->
-<!--		<form id="id_diary_creation_form" @submit.prevent="submitDiaryCreationForm">-->
-<!--			<nord-stack>-->
-<!--				<nord-banner shadow style="display: none"></nord-banner>-->
-<!--				<nord-select name="categoryId" label="Category" expand>-->
-<!--					<option v-for="category in categories" :key="category.id" :value="category.id">-->
-<!--						{{ category.name }}-->
-<!--					</option>-->
-<!--				</nord-select>-->
+			<div class="relative mb-4">
+				<label for="id_new_diary_rate" class="inline-block text-cyan-700 dark:text-neutral-200"
+					>Rate<span class="ml-2 text-cyan-950">{{ Number(diaryRate || DEFAULT_RATE) }}/5</span></label
+				>
+				<input
+					type="range"
+					name="rate"
+					form="id_new_diary_form"
+					class="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300"
+					min="1"
+					max="5"
+					step="1"
+					:value="diaryRate"
+					@change="(event) => setDiaryRate(event.target.value)"
+					id="id_new_diary_rate"
+				/>
+			</div>
 
-<!--				<nord-progress-bar v-if="loadingDiaries" style="margin-top: var(&#45;&#45;n-space-s)"></nord-progress-bar>-->
-<!--				<nord-select v-else name="parentDiaryId" label="Parent diary" expand>-->
-<!--					<option key="-1" value="" />-->
-<!--					<option-->
-<!--						ref="parentDiaryRefs"-->
-<!--						v-for="parentDiary in parentDiaries"-->
-<!--						:key="parentDiary?.id"-->
-<!--						:value="parentDiary?.id"-->
-<!--					>-->
-<!--						{{ parentDiary?.topic }}-->
-<!--					</option>-->
-<!--				</nord-select>-->
-<!--				<nord-input-->
-<!--					name="topic"-->
-<!--					label="Topic"-->
-<!--					expand-->
-<!--					required-->
-<!--					type="text"-->
-<!--					maxlength="2"-->
-<!--					placeholder="Learning topic"-->
-<!--				></nord-input>-->
+			<button
+				form="id_new_diary_form"
+				type="button"
+				class="rounded bg-cyan-800 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] disabled:bg-gray-400 dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+				data-te-ripple-init
+				data-te-ripple-color="light"
+				:disabled="['', undefined].includes(diaryTopic)"
+				@click.prevent="submitDiaryCreationForm"
+			>
+				<SmallSpinner v-if="isCreatingDiary" status="Creating" />
+				{{ !isCreatingDiary ? "Create" : "" }}
+			</button>
+		</form>
+	</div>
+</template>
 
-<!--				<nord-input-->
-<!--					name="sourceUrl"-->
-<!--					label="Source url"-->
-<!--					expand-->
-<!--					type="url"-->
-<!--					placeholder="https://www.wikipedia.org/"-->
-<!--				>-->
-<!--				</nord-input>-->
-
-<!--				<nord-range-->
-<!--					name="rate"-->
-<!--					label="Rate"-->
-<!--					expand-->
-<!--					:value="DEFAULT_RATE"-->
-<!--					min="1"-->
-<!--					max="5"-->
-<!--					hint="How good the learning content is, the higher score the better."-->
-<!--				></nord-range>-->
-
-<!--				<nord-button type="submit" expand disabled variant="primary">Create</nord-button>-->
-<!--			</nord-stack>-->
-<!--		</form>-->
-<!--	</nord-card>-->
-<!--</template>-->
-
-<!--<style scoped></style>-->
+<style scoped></style>

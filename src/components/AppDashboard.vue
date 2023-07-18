@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CategoryList from "@components/category/CategoryList.vue";
 import CategoryCreation from "@components/category/CategoryCreation.vue";
-// import DiaryCreation from "@components/diary/DiaryCreation.vue";
+import DiaryCreation from "@components/diary/DiaryCreation.vue";
 // import ParentDiaryDetail from "@components/diary/ParentDiaryDetail.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
@@ -69,6 +69,19 @@ onMounted(() => {
 				>New Category</a
 			>
 		</li>
+		<li role="presentation">
+			<a
+				id="id_main_tab_new_diary"
+				href="#id_main_tab_new_diary_content"
+				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950 dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400"
+				data-te-toggle="pill"
+				data-te-target="#id_main_tab_new_diary_content"
+				role="tab"
+				aria-controls="id_main_tab_new_diary_content"
+				aria-selected="false"
+				>New Diary</a
+			>
+		</li>
 	</ul>
 
 	<div>
@@ -87,13 +100,21 @@ onMounted(() => {
 		>
 			<CategoryCreation />
 		</div>
+		<div
+			id="id_main_tab_new_diary_content"
+			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+			role="tabpanel"
+			aria-labelledby="id_main_tab_new_diary"
+		>
+			<DiaryCreation />
+		</div>
 	</div>
 
 	<nav
 		id="id_sidebar"
 		class="absolute left-0 top-0 z-[1035] h-full w-60 -translate-x-full overflow-hidden bg-stone-100 shadow-[0_4px_12px_0_rgba(0,0,0,0.07),_0_2px_4px_rgba(0,0,0,0.05)] data-[te-sidenav-hidden='false']:translate-x-0 dark:bg-zinc-800"
 		data-te-sidenav-init
-		data-te-sidenav-hidden="false"
+		data-te-sidenav-hidden="true"
 		data-te-sidenav-position="absolute"
 	>
 		<h1 class="mt-2 text-center text-xl text-cyan-950">Category</h1>
@@ -110,14 +131,11 @@ onMounted(() => {
 		</Suspense>
 	</nav>
 
-	<!--	<nord-stack v-if="selectedDiary" style="margin: var(&#45;&#45;n-space-s) auto">-->
-	<!--		<CardSkeleton v-if="loadingChildDiaries" />-->
-	<!--		<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />-->
-	<!--		<DiaryDetail v-else />-->
-	<!--	</nord-stack>-->
-	<!--	<nord-stack v-else-if="!selectedCategory" style="max-width: 480px; margin: var(&#45;&#45;n-space-xl) auto">-->
-	<!--		<DiaryCreation />-->
-	<!--	</nord-stack>-->
+	<!--		<nord-stack v-if="selectedDiary" style="margin: var(&#45;&#45;n-space-s) auto">-->
+	<!--			<CardSkeleton v-if="loadingChildDiaries" />-->
+	<!--			<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />-->
+	<!--			<DiaryDetail v-else />-->
+	<!--		</nord-stack>-->
 </template>
 
 <style scoped></style>
