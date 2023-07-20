@@ -1,26 +1,25 @@
-<!--<template>-->
-<!--	<nord-card padding="l" aria-busy="true">-->
-<!--		<nord-skeleton slot="header" effect="sheen"></nord-skeleton>-->
-<!--		<div class="skeleton-paragraph">-->
-<!--			<nord-skeleton effect="sheen"></nord-skeleton>-->
-<!--			<nord-skeleton effect="sheen"></nord-skeleton>-->
-<!--			<nord-skeleton effect="sheen"></nord-skeleton>-->
-<!--			<nord-skeleton effect="sheen"></nord-skeleton>-->
-<!--		</div>-->
-<!--		<nord-visually-hidden>Loading</nord-visually-hidden>-->
-<!--	</nord-card>-->
-<!--</template>-->
+<template>
+	<div class="mx-auto w-full max-w-sm rounded-md border border-stone-500 p-4 shadow">
+		<div class="flex animate-pulse space-x-4">
+			<div class="flex-1 space-y-6 py-1">
+				<div class="space-y-3">
+					<div class="grid grid-cols-3 gap-4">
+						<div class="col-span-2 h-2 rounded bg-stone-400"></div>
+						<div class="col-span-1 h-2 rounded bg-stone-400"></div>
+					</div>
+					<div class="h-2 rounded bg-stone-400"></div>
+				</div>
+				<div class="space-y-3">
+					<div class="grid grid-cols-3 gap-4">
+						<div class="col-span-1 h-2 rounded bg-stone-400"></div>
+						<div class="col-span-2 h-2 rounded bg-stone-400"></div>
+					</div>
+					<div class="h-2 rounded bg-stone-400"></div>
+				</div>
+				<div class="h-2 rounded bg-stone-400"></div>
+			</div>
+		</div>
+	</div>
+</template>
 
-<!--<style scoped>-->
-<!--.skeleton-paragraph nord-skeleton {-->
-<!--	margin-block-end: var(&#45;&#45;n-space-m);-->
-<!--	width: 90%;-->
-<!--}-->
-<!--.skeleton-paragraph nord-skeleton:nth-child(2) {-->
-<!--	width: 70%;-->
-<!--}-->
-<!--.skeleton-paragraph nord-skeleton:last-child {-->
-<!--	width: 50%;-->
-<!--	margin-block-end: 0;-->
-<!--}-->
-<!--</style>-->
+<style scoped></style>

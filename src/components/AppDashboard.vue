@@ -6,25 +6,25 @@ import DiaryCreation from "@components/diary/DiaryCreation.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 // import DiaryDetail from "@components/diary/DiaryDetail.vue";
-// import { useDiaryStore } from "@stores/diary";
-// import CardSkeleton from "@components/share/CardSkeleton.vue";
+import { useDiaryStore } from "@stores/diary";
+import CardSkeleton from "@components/share/CardSkeleton.vue";
 import { Tab, Sidenav, initTE } from "tw-elements";
 import { onMounted } from "vue";
 import ColorfulSpinners from "@components/share/ColorfulSpinners.vue";
 import MenuIcon from "@assets/icons/menu.svg?component";
 
 const categoryStore = useCategoryStore();
-// const diaryStore = useDiaryStore();
-// const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
+const diaryStore = useDiaryStore();
+const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
 // const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 const { categoriesLoadingError } = storeToRefs(categoryStore);
 
-// const hasChildDiary = (diaryId: number) => {
-// 	if (!Object.keys(childDiariesByDiary.value).includes(`${diaryId}`)) {
-// 		return false;
-// 	}
-// 	return childDiariesByDiary.value[diaryId].length > 0;
-// };
+const hasChildDiary = (diaryId: number) => {
+	if (!Object.keys(childDiariesByDiary.value).includes(`${diaryId}`)) {
+		return false;
+	}
+	return childDiariesByDiary.value[diaryId].length > 0;
+};
 
 onMounted(() => {
 	initTE({ Tab, Sidenav });
@@ -91,7 +91,13 @@ onMounted(() => {
 			role="tabpanel"
 			data-te-tab-active
 			aria-labelledby="id_main_tab_home"
-		></div>
+		>
+			<div v-if="selectedDiary">
+				<CardSkeleton v-if="loadingChildDiaries" />
+				<!--				<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />-->
+				<!--				<DiaryDetail v-else />-->
+			</div>
+		</div>
 		<div
 			id="id_main_tab_new_category_content"
 			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
@@ -130,12 +136,6 @@ onMounted(() => {
 			</template>
 		</Suspense>
 	</nav>
-
-	<!--		<nord-stack v-if="selectedDiary" style="margin: var(&#45;&#45;n-space-s) auto">-->
-	<!--			<CardSkeleton v-if="loadingChildDiaries" />-->
-	<!--			<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />-->
-	<!--			<DiaryDetail v-else />-->
-	<!--		</nord-stack>-->
 </template>
 
 <style scoped></style>
