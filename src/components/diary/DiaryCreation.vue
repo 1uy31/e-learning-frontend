@@ -15,7 +15,7 @@ const DEFAULT_RATE = "3";
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const { categories } = storeToRefs(categoryStore);
-const { diariesByCategory } = storeToRefs(diaryStore);
+const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [diaryTopic, setDiaryTopic] = useState("");
@@ -110,7 +110,12 @@ onMounted(() => {
 				<label data-te-select-label-ref>Category</label>
 			</div>
 
-			<div class="mb-5 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
+			<SmallSpinner v-if="loadingDiaries" class="-mt-2 mb-4 border-cyan-700" status="Loading diary options" />
+			<!-- UI looks buggy when v-else is used. -->
+			<div
+				class="mb-5 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5"
+				v-bind:style="[loadingDiaries ? { display: 'none' } : {}]"
+			>
 				<select data-te-select-init name="parentDiaryId" form="id_new_diary_form">
 					<option>No parent diary</option>
 					<option v-for="parentDiary in parentDiaries" :key="parentDiary.id" :value="parentDiary.id">
@@ -163,7 +168,7 @@ onMounted(() => {
 					type="range"
 					name="rate"
 					form="id_new_diary_form"
-					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300"
+					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300 accent-cyan-950"
 					min="1"
 					max="5"
 					step="1"
