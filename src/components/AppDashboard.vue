@@ -94,6 +94,7 @@ onMounted(() => {
 		>
 			<div v-if="selectedDiary">
 				<CardSkeleton v-if="loadingChildDiaries" />
+				<div v-else-if="hasChildDiary(selectedDiary.id)" />
 				<!--				<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />-->
 				<!--				<DiaryDetail v-else />-->
 			</div>
