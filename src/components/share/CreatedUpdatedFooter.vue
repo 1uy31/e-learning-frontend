@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { Category, Diary } from "@appTypes/dataModels";
+import { Diary } from "@appTypes/dataModels";
+import { displayDatetime } from "@src/utils";
 
-defineProps<{ displayObject: Category | Diary }>();
+defineProps<{ displayObject: Diary }>();
 </script>
 
 <template>
 	<div slot="footer">
-		<p>Created at: {{ displayObject.createdAt }}</p>
-		<p v-if="displayObject.updatedAt">Updated at: {{ displayObject.updatedAt }}</p>
+		<p>Created at: {{ displayDatetime(displayObject.createdAt) }}</p>
+		<p v-if="displayObject.updatedAt">Updated at: {{ displayDatetime(displayObject.updatedAt) }}</p>
 	</div>
 </template>
 
