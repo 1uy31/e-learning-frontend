@@ -2,7 +2,7 @@
 import CategoryList from "@components/category/CategoryList.vue";
 import CategoryCreation from "@components/category/CategoryCreation.vue";
 import DiaryCreation from "@components/diary/DiaryCreation.vue";
-// import ParentDiaryDetail from "@components/diary/ParentDiaryDetail.vue";
+import ParentDiaryDetail from "@components/diary/ParentDiaryDetail.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
 // import DiaryDetail from "@components/diary/DiaryDetail.vue";
@@ -94,8 +94,7 @@ onMounted(() => {
 		>
 			<div v-if="selectedDiary">
 				<CardSkeleton v-if="loadingChildDiaries" />
-				<div v-else-if="hasChildDiary(selectedDiary.id)" />
-				<!--				<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />-->
+				<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />
 				<!--				<DiaryDetail v-else />-->
 			</div>
 		</div>
