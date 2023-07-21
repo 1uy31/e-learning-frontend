@@ -14,3 +14,14 @@ export const alertIfNullUndefined = <T>(entity: T, entityName: string): NonNulla
 	}
 	return entity;
 };
+
+export const displayDatetime = (datetimeString: string) => {
+	const datetime = new Date(datetimeString);
+	return datetime.toLocaleString("en-US", {
+		day: "numeric",
+		month: "short",
+		year: "numeric",
+		hour: "numeric",
+		minute: "2-digit",
+	});
+};
