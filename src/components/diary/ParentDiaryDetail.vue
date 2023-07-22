@@ -44,6 +44,7 @@ const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 				type="button"
 				class="block w-full cursor-pointer rounded-lg p-4 text-left transition duration-500 hover:bg-stone-200 hover:text-cyan-950 focus:bg-stone-300 focus:text-cyan-950 focus:ring-0"
 				:value="childDiary.id"
+				@click="diaryStore.selectDiary(childDiary)"
 			>
 				{{ childDiary.topic }}
 			</button>
