@@ -14,5 +14,8 @@ const editor = useEditor({
 </script>
 
 <template>
-	<EditorContent :editor="editor" style="height: 50vh; border: solid 2px rgb(21 94 117); border-radius: 4px" />
+	<EditorContent
+		:editor="editor"
+		style="height: 50vh; border: solid 2px #e5e7eb; border-radius: 4px; overflow-y: scroll"
+	/>
 </template>
