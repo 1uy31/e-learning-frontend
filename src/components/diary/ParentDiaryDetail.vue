@@ -5,6 +5,7 @@ import CreatedUpdatedFooter from "@components/share/CreatedUpdatedFooter.vue";
 import RateDisplay from "@components/share/RateDisplay.vue";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import EditIcon from "@assets/icons/pencilSquare.svg?component";
+import IconButton from "@components/share/IconButton.vue";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
@@ -27,14 +28,11 @@ const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 				<a :href="selectedDiary.sourceUrl" target="_blank">Source</a>
 			</span>
 
-			<button
-				type="button"
-				class="flex flex-row items-end justify-between rounded bg-cyan-700 py-1 pl-2.5 pr-2 text-xs leading-normal text-cyan-200 shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-				data-te-ripple-init
-				data-te-ripple-color="light"
-			>
-				<EditIcon />
-			</button>
+			<IconButton>
+				<template #icon>
+					<EditIcon />
+				</template>
+			</IconButton>
 		</div>
 
 		<SectionDivider />
