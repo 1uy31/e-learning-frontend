@@ -14,12 +14,5 @@ const editor = useEditor({
 </script>
 
 <template>
-	<EditorContent
-		:editor="editor"
-		style="
-			border: 1px solid var(--n-color-border);
-			border-radius: var(--n-border-radius);
-			padding-inline: var(--n-space-m);
-		"
-	/>
+	<EditorContent :editor="editor" style="height: 50vh; border: solid 2px rgb(21 94 117); border-radius: 4px" />
 </template>
