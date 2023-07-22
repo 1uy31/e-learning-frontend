@@ -2,70 +2,71 @@
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
 import RateDisplay from "@components/share/RateDisplay.vue";
-import NoteCreation from "@components/note/NoteCreation.vue";
-import { alertIfNullUndefined } from "@src/utils";
 import CreatedUpdatedFooter from "@components/share/CreatedUpdatedFooter.vue";
+import IconButton from "@components/share/IconButton.vue";
+import NewNoteIcon from "@assets/icons/documentPlus.svg?component";
+import ReviewCountIcon from "@assets/icons/eye.svg?component";
+import EditIcon from "@assets/icons/pencilSquare.svg?component";
+import SectionDivider from "@components/share/SectionDivider.vue";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary } = storeToRefs(diaryStore);
-
-const openNoteCreationForm = () => {
-	const modal = alertIfNullUndefined(document.getElementById("id_note_creation_modal"), "Note creation modal");
-	modal.showModal();
-};
 </script>
 
 <template>
-	<nord-card padding="m">
-		<div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between">
-			<h2 slot="header">{{ selectedDiary.topic }}</h2>
+	<div
+		class="mx-auto mt-12 block rounded-lg bg-stone-100 p-6 text-cyan-950 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
+	>
+		<div class="flex flex-row items-center justify-between">
+			<h2 class="text-2xl">{{ selectedDiary.topic }}</h2>
 			<RateDisplay :rate="selectedDiary.rate" />
 		</div>
 
-		<div
-			style="
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				justify-content: space-between;
-				margin-bottom: var(--n-space-s);
-			"
-		>
-			<div>
-				<nord-button
-					size="s"
-					variant="primary"
-					style="margin-right: var(--n-space-s)"
-					@click="openNoteCreationForm"
+		<div class="my-2 flex flex-row items-center justify-between">
+			<div class="flex flex-row items-center">
+				<span
+					v-if="selectedDiary.sourceUrl"
+					class="mr-2 inline-block whitespace-nowrap rounded bg-cyan-700 p-[0.55em] text-center align-baseline text-[0.75em] font-bold leading-none text-cyan-100 shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
 				>
-					<nord-icon slot="start" name="file-notes"></nord-icon>
-					New note
-				</nord-button>
+					<a :href="selectedDiary.sourceUrl" target="_blank">Source</a>
+				</span>
 
-				<nord-button href="#" size="s" variant="default" style="margin-right: var(--n-space-s)">
-					<nord-icon slot="start" name="interface-add-small"></nord-icon>
-					Review count
-				</nord-button>
-
-				<nord-button href="#" size="s" variant="default">
-					<nord-icon slot="start" name="interface-edit-2"></nord-icon>
-					Edit
-				</nord-button>
+				<span
+					class="inline-block whitespace-nowrap bg-stone-300 p-[0.55em] text-center align-baseline text-[0.75em] leading-none text-cyan-800"
+				>
+					Review times: {{ selectedDiary.reviewCount }}
+				</span>
 			</div>
 
-			<div>
-				<nord-badge v-if="selectedDiary.sourceUrl" variant="highlight" style="margin-right: var(--n-space-s)"
-					><a :href="selectedDiary.sourceUrl">Source</a></nord-badge
-				>
-				<nord-badge variant="highlight">Review times: {{ selectedDiary.reviewCount }}</nord-badge>
+			<div class="flex flex-row items-center">
+				<IconButton class="mr-2">
+					<template #icon>
+						<ReviewCountIcon />
+					</template>
+				</IconButton>
+
+				<IconButton class="mr-2">
+					<template #icon>
+						<NewNoteIcon />
+					</template>
+				</IconButton>
+
+				<IconButton>
+					<template #icon>
+						<EditIcon />
+					</template>
+				</IconButton>
 			</div>
 		</div>
 
-		<nord-divider />
+		<SectionDivider />
+
+		<div><p>Content</p></div>
+
+		<SectionDivider />
 
 		<CreatedUpdatedFooter :display-object="selectedDiary" />
-	</nord-card>
-	<NoteCreation />
+	</div>
 </template>
 
 <style scoped></style>

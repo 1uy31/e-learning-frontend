@@ -5,7 +5,7 @@ import DiaryCreation from "@components/diary/DiaryCreation.vue";
 import ParentDiaryDetail from "@components/diary/ParentDiaryDetail.vue";
 import { useCategoryStore } from "@stores/category";
 import { storeToRefs } from "pinia";
-// import DiaryDetail from "@components/diary/DiaryDetail.vue";
+import DiaryDetail from "@components/diary/DiaryDetail.vue";
 import { useDiaryStore } from "@stores/diary";
 import CardSkeleton from "@components/share/CardSkeleton.vue";
 import { Tab, Sidenav, initTE } from "tw-elements";
@@ -16,7 +16,6 @@ import MenuIcon from "@assets/icons/menu.svg?component";
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
-// const { categoriesLoadingError, selectedCategory } = storeToRefs(categoryStore);
 const { categoriesLoadingError } = storeToRefs(categoryStore);
 
 const hasChildDiary = (diaryId: number) => {
@@ -95,7 +94,7 @@ onMounted(() => {
 			<div v-if="selectedDiary">
 				<CardSkeleton v-if="loadingChildDiaries" />
 				<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />
-				<!--				<DiaryDetail v-else />-->
+				<DiaryDetail v-else />
 			</div>
 		</div>
 		<div
