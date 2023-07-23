@@ -5,7 +5,7 @@ import CreatedUpdatedFooter from "@components/share/CreatedUpdatedFooter.vue";
 import RateDisplay from "@components/share/RateDisplay.vue";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import EditIcon from "@assets/icons/pencilSquare.svg?component";
-import NewDiaryIcon from "@assets/icons/documentList.svg?component";
+import NewDiaryIcon from "@assets/icons/documentSeries.svg?component";
 import IconButton from "@components/share/IconButton.vue";
 
 const diaryStore = useDiaryStore();
