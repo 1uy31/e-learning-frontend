@@ -12,10 +12,10 @@ import { Tab, Sidenav, initTE } from "tw-elements";
 import { onMounted } from "vue";
 import ColorfulSpinners from "@components/share/ColorfulSpinners.vue";
 import MenuIcon from "@assets/icons/menu.svg?component";
-import HomeIcon from "@assets/icons/home.svg?component";
-import NewNoteIcon from "@assets/icons/documentText.svg?component";
-import NewDiaryIcon from "@assets/icons/documentSeries.svg?component";
-import NewCategoryIcon from "@assets/icons/bookOpen.svg?component";
+import HomeIcon from "@assets/icons/heroicons/home.svg?component";
+import NewNoteIcon from "@assets/icons/heroicons/documentText.svg?component";
+import NewDiaryIcon from "@assets/icons/heroicons/documentSeries.svg?component";
+import NewCategoryIcon from "@assets/icons/heroicons/bookOpen.svg?component";
 import NoteCreation from "@components/note/NoteCreation.vue";
 
 const categoryStore = useCategoryStore();

@@ -4,9 +4,9 @@ import { storeToRefs } from "pinia";
 import RateDisplay from "@components/share/RateDisplay.vue";
 import CreatedUpdatedFooter from "@components/share/CreatedUpdatedFooter.vue";
 import IconButton from "@components/share/IconButton.vue";
-import NewNoteIcon from "@assets/icons/documentText.svg?component";
-import ReviewCountIcon from "@assets/icons/eye.svg?component";
-import EditIcon from "@assets/icons/pencilSquare.svg?component";
+import NewNoteIcon from "@assets/icons/heroicons/documentText.svg?component";
+import ReviewCountIcon from "@assets/icons/heroicons/eye.svg?component";
+import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import { Tab } from "tw-elements";
 
