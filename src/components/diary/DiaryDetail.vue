@@ -8,9 +8,15 @@ import NewNoteIcon from "@assets/icons/documentPlus.svg?component";
 import ReviewCountIcon from "@assets/icons/eye.svg?component";
 import EditIcon from "@assets/icons/pencilSquare.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
+import { Tab } from "tw-elements";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary } = storeToRefs(diaryStore);
+const openNewNoteForm = () => {
+	const someTabTriggerEl = document.getElementById("id_main_tab_new_note");
+	const tab = new Tab(someTabTriggerEl);
+	tab.show();
+};
 </script>
 
 <template>
@@ -45,7 +51,7 @@ const { selectedDiary } = storeToRefs(diaryStore);
 					</template>
 				</IconButton>
 
-				<IconButton class="mr-2">
+				<IconButton class="mr-2" @onclick="openNewNoteForm">
 					<template #icon>
 						<NewNoteIcon />
 					</template>
