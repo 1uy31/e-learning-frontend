@@ -18,3 +18,19 @@ export type Diary = DiaryInput & {
 	createdAt: string;
 	updatedAt: string | null;
 };
+
+type JsonType = Record<string | number, string | number | boolean | null>;
+
+export type NoteInput = {
+	notePosition: number;
+	sourceUrl?: string;
+	filePath?: string;
+	diaryId?: number;
+	content?: JsonType;
+};
+
+export type Note = NoteInput & {
+	id: number;
+	createdAt: string;
+	updatedAt: string | null;
+};
