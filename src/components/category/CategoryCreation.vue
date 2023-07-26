@@ -41,8 +41,8 @@ onMounted(() => {
 		class="mx-auto mt-12 block rounded-lg bg-stone-100 p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
 	>
 		<form>
-			<p v-if="formMessage.message" :class="'text-l mb-4 ' + formMessage.class">{{ formMessage.message }}</p>
-			<div class="relative mb-5" data-te-input-wrapper-init>
+			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
+			<div class="relative mb-5 mt-2" data-te-input-wrapper-init>
 				<input
 					id="id_new_category_name"
 					type="text"

@@ -101,7 +101,7 @@ onMounted(() => {
 	>
 		<form id="id_new_diary_form">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
-			<div class="mb-6 mt-4 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
+			<div class="mb-6 mt-2 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
 				<select id="id_new_diary_category" data-te-select-init name="categoryId" form="id_new_diary_form">
 					<option v-for="category in categories" :key="category.id" :value="category.id">
 						{{ category.name }}
