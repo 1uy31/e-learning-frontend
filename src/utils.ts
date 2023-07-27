@@ -29,7 +29,7 @@ export const displayDatetime = (datetimeString: string) => {
 };
 
 export const showTabById = (elementId: string) => {
-	const tabElement = alertIfNullUndefined(document.getElementById("elementId"), `Element with ID ${elementId}`);
+	const tabElement = alertIfNullUndefined(document.getElementById(elementId), `Element with ID ${elementId}`);
 	const tab = new Tab(tabElement);
 	tab.show();
 };
