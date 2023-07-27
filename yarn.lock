@@ -570,10 +570,22 @@
   resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-2.0.3.tgz#dfd55124b3e7b0482e5ccb8be46eb9c3189167e2"
   integrity sha512-jLyVIWAdjjlNzrsRhSE2lVL/7N8228/1R1QtaVU85UlMIwHFAcdzhD8FeiKkqxpTnGpaDVaTy7VNEtEgaYdCyA==
 
+"@tiptap/extension-bold@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-bold/-/extension-bold-2.0.4.tgz#debba8b0d957fe0b6943354834d8f1f0f8c0695c"
+  integrity sha512-CWSQy1uWkVsen8HUsqhm+oEIxJrCiCENABUbhaVcJL/MqhnP4Trrh1B6O00Yfoc0XToPRRibDaHMFs4A3MSO0g==
+
 "@tiptap/extension-bubble-menu@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bubble-menu/-/extension-bubble-menu-2.0.3.tgz#44b3c4e35fd478c42467d8fb7dbc9532614e5b18"
   integrity sha512-lPt1ELrYCuoQrQEUukqjp9xt38EwgPUwaKHI3wwt2Rbv+C6q1gmRsK1yeO/KqCNmFxNqF2p9ZF9srOnug/RZDQ==
+  dependencies:
+    tippy.js "^6.3.7"
+
+"@tiptap/extension-bubble-menu@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-bubble-menu/-/extension-bubble-menu-2.0.4.tgz#f9dde09d3984e9879b1fe13d3e8c1859f0779ef5"
+  integrity sha512-+cRZwj0YINNNDElSAiX1pvY2K98S2j9MQW2dXV5oLqsJhqGPZsKxVo8I1u7ZtqUla3QE1V18RYPAzVgTiMRkBg==
   dependencies:
     tippy.js "^6.3.7"
 
@@ -589,10 +601,20 @@
   dependencies:
     tippy.js "^6.3.7"
 
+"@tiptap/extension-italic@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-italic/-/extension-italic-2.0.4.tgz#4c6d0938542e4f7276f9dd18db395c040f76dcd8"
+  integrity sha512-C/6+qs4Jh8xERRP0wcOopA1+emK8MOkBE4RQx5NbPnT2iCpERP0GlmHBFQIjaYPctZgKFHxsCfRnneS5Xe76+A==
+
 "@tiptap/extension-paragraph@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-paragraph/-/extension-paragraph-2.0.3.tgz#88d332158c70622d36849256f90e43ca4d226dfe"
   integrity sha512-a+tKtmj4bU3GVCH1NE8VHWnhVexxX5boTVxsHIr4yGG3UoKo1c5AO7YMaeX2W5xB5iIA+BQqOPCDPEAx34dd2A==
+
+"@tiptap/extension-strike@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-strike/-/extension-strike-2.0.4.tgz#13286dcf8780c55610ed65b24238b8395a5be824"
+  integrity sha512-Men7LK6N/Dh3/G4/z2Z9WkDHM2Gxx1XyxYix2ZMf5CnqY37SeDNUnGDqit65pdIN3Y/TQnOZTkKSBilSAtXfJA==
 
 "@tiptap/extension-text@^2.0.3":
   version "2.0.3"
