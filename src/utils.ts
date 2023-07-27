@@ -1,3 +1,5 @@
+import { Tab } from "tw-elements";
+
 export const validateError = <T>(error: T): Error => {
 	if (error instanceof Error) {
 		return error;
@@ -24,4 +26,10 @@ export const displayDatetime = (datetimeString: string) => {
 		hour: "numeric",
 		minute: "2-digit",
 	});
+};
+
+export const showTabById = (elementId: string) => {
+	const tabElement = alertIfNullUndefined(document.getElementById("elementId"), `Element with ID ${elementId}`);
+	const tab = new Tab(tabElement);
+	tab.show();
 };
