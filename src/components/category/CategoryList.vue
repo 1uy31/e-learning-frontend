@@ -7,6 +7,7 @@ import { Category, Diary } from "@appTypes/dataModels";
 import SmallSpinner from "@components/share/SmallSpinner.vue";
 import BookIcon from "@assets/icons/book.svg?component";
 import ArrowDownIcon from "@assets/icons/arrowDown.svg?component";
+import { showTabById } from "@src/utils";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
@@ -28,6 +29,7 @@ const selectDiary = async (diary: Diary) => {
 		return diaryStore.selectDiary(undefined);
 	}
 	diaryStore.selectDiary(diary);
+	showTabById("id_main_tab_home");
 	await diaryStore.getChildDiariesByDiary(diary);
 };
 

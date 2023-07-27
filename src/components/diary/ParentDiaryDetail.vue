@@ -7,6 +7,7 @@ import SectionDivider from "@components/share/SectionDivider.vue";
 import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import NewDiaryIcon from "@assets/icons/heroicons/documentSeries.svg?component";
 import IconButton from "@components/share/IconButton.vue";
+import { showTabById } from "@src/utils";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
@@ -30,7 +31,7 @@ const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 			</span>
 
 			<div class="flex flex-row items-center">
-				<IconButton class="mr-2">
+				<IconButton class="mr-2" @onclick="showTabById('id_main_tab_new_diary')">
 					<template #icon>
 						<NewDiaryIcon />
 					</template>
