@@ -20,12 +20,14 @@ const { selectedDiary } = storeToRefs(diaryStore);
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [isCreatingNote, toggleIsCreatingNote] = useState(false);
 const [content, setContent] = useState(EMPTY_CONTENT);
+const [notePosition, setNotePosition] = useState("");
 
 const submitNoteCreationForm = async () => {
 	const form = alertIfNullUndefined(document.getElementById("id_new_note_form"), "New note form");
 
 	const successfulCreationCallback = () => {
 		setFormMessage({ message: "New note created successfully.", class: "text-green-800" });
+		setNotePosition("");
 		form.reset();
 
 		setTimeout(() => {
@@ -81,6 +83,8 @@ const submitNoteCreationForm = async () => {
 					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] text-cyan-950 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
 					form="id_new_note_form"
 					name="notePosition"
+					:value="notePosition"
+					@change="(event) => setNotePosition(event.target.value)"
 				/>
 				<label
 					for="id_new_note_position"
@@ -122,6 +126,7 @@ const submitNoteCreationForm = async () => {
 				class="mt-5 rounded bg-cyan-800 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] disabled:bg-gray-400"
 				data-te-ripple-init
 				data-te-ripple-color="light"
+				:disabled="['', undefined].includes(notePosition)"
 				@click.prevent="submitNoteCreationForm"
 			>
 				<SmallSpinner v-if="isCreatingNote" status="Creating" />
