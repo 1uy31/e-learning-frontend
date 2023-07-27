@@ -19,7 +19,7 @@ export type Diary = DiaryInput & {
 	updatedAt: string | null;
 };
 
-type JsonType = Record<string | number, string | number | boolean | null>;
+export type JsonType = Record<string | number, string | number | boolean | null>;
 
 export type NoteInput = {
 	notePosition: number;
