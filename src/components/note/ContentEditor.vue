@@ -10,6 +10,7 @@ import { onMounted } from "vue";
 import { Bold } from "@tiptap/extension-bold";
 import { Italic } from "@tiptap/extension-italic";
 import { Strike } from "@tiptap/extension-strike";
+import { MEDIUM_TIMING } from "@src/constants/timing";
 
 const props = defineProps<{ content: JsonType }>();
 const emit = defineEmits<{
@@ -25,7 +26,7 @@ const editor = useEditor({
 	injectCSS: false,
 	editorProps: {
 		attributes: {
-			class: "text-cyan-950 prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl  focus:outline-none",
+			class: "text-cyan-950 prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none",
 		},
 	},
 	onCreate: ({ editor }) => {
@@ -44,13 +45,13 @@ onMounted(() => {
 				extensions: [
 					...extensions,
 					BubbleMenu.configure({
-						shouldShow: ({ editor, view, state, oldState, from, to }) => {
-							return false;
-						},
+						// shouldShow: ({ editor, view, state, oldState, from, to }) => {
+						// 	return false;
+						// },
 					}),
 				],
 			}),
-		1000
+		MEDIUM_TIMING
 	);
 });
 </script>
