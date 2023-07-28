@@ -5,12 +5,13 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import "prosemirror-view/style/prosemirror.css";
 import { JsonType } from "@appTypes/dataModels";
-import { BubbleMenu } from "@tiptap/extension-bubble-menu";
-import { onMounted } from "vue";
 import { Bold } from "@tiptap/extension-bold";
 import { Italic } from "@tiptap/extension-italic";
 import { Strike } from "@tiptap/extension-strike";
-import { MEDIUM_TIMING } from "@src/constants/timing";
+import { BulletList } from "@tiptap/extension-bullet-list";
+import { Heading } from "@tiptap/extension-heading";
+import { Highlight } from "@tiptap/extension-highlight";
+import { ListItem } from "@tiptap/extension-list-item";
 
 const props = defineProps<{ content: JsonType }>();
 const emit = defineEmits<{
@@ -18,7 +19,18 @@ const emit = defineEmits<{
 }>();
 
 const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded-full bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
-const extensions = [Document, Paragraph, Text, Bold, Italic, Strike];
+const extensions = [
+	Document,
+	Paragraph,
+	Text,
+	Bold,
+	Italic,
+	Strike,
+	BulletList,
+	ListItem,
+	Heading,
+	Highlight.configure({ multicolor: true }),
+];
 const editor = useEditor({
 	extensions: extensions,
 	editable: true,
@@ -37,27 +49,10 @@ const editor = useEditor({
 		emit("onchange", json);
 	},
 });
-
-onMounted(() => {
-	setTimeout(
-		() =>
-			editor.value?.setOptions({
-				extensions: [
-					...extensions,
-					BubbleMenu.configure({
-						// shouldShow: ({ editor, view, state, oldState, from, to }) => {
-						// 	return false;
-						// },
-					}),
-				],
-			}),
-		MEDIUM_TIMING
-	);
-});
 </script>
 
 <template>
-	<bubble-menu v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
+	<div v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBold().run()">Bold</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">
 			Italic
@@ -65,7 +60,36 @@ onMounted(() => {
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">
 			Strike
 		</button>
-	</bubble-menu>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 1 }).run()">
+			H1
+		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 2 }).run()">
+			H2
+		</button>
+		<button
+			:class="'bg-yellow-300 hover:bg-yellow-400 ' + FORMAT_BUTTON_CLASS"
+			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(250 204 21)' }).run()"
+		>
+			Yellow
+		</button>
+		<button
+			:class="'bg-teal-300 hover:bg-teal-400 ' + FORMAT_BUTTON_CLASS"
+			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(45 212 191)' }).run()"
+		>
+			Teal
+		</button>
+		<button
+			:class="'bg-pink-300 hover:bg-pink-400 ' + FORMAT_BUTTON_CLASS"
+			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(244 114 182)' }).run()"
+		>
+			Pink
+		</button>
+	</div>
+	<div class="mt-1">
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBulletList().run()">
+			Bullet
+		</button>
+	</div>
 
 	<EditorContent
 		:editor="editor"
