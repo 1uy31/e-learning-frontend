@@ -11,6 +11,13 @@ import { showTabById } from "@src/utils";
 
 const diaryStore = useDiaryStore();
 const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
+
+const showDiaryCreationForm = () => {
+	showTabById("id_main_tab_new_diary");
+	const categorySelection = document.getElementById("id_new_diary_category");
+	// To update parent diary selection.
+	categorySelection?.dispatchEvent(new Event("change"));
+};
 </script>
 
 <template>
@@ -31,7 +38,7 @@ const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 			</span>
 
 			<div class="flex flex-row items-center">
-				<IconButton class="mr-2" @onclick="showTabById('id_main_tab_new_diary')">
+				<IconButton class="mr-2" @onclick="showDiaryCreationForm">
 					<template #icon>
 						<NewDiaryIcon />
 					</template>

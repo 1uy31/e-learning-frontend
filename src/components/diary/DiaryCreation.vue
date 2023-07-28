@@ -14,8 +14,8 @@ const DEFAULT_RATE = "3";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
-const { categories } = storeToRefs(categoryStore);
-const { diariesByCategory, loadingDiaries } = storeToRefs(diaryStore);
+const { categories, selectedCategory } = storeToRefs(categoryStore);
+const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [diaryTopic, setDiaryTopic] = useState("");
@@ -103,7 +103,12 @@ onMounted(() => {
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
 			<div class="mb-6 mt-2 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
 				<select id="id_new_diary_category" data-te-select-init name="categoryId" form="id_new_diary_form">
-					<option v-for="category in categories" :key="category.id" :value="category.id">
+					<option
+						v-for="category in categories"
+						:key="category.id"
+						:value="category.id"
+						:selected="selectedCategory?.id === category.id"
+					>
 						{{ category.name }}
 					</option>
 				</select>
@@ -118,7 +123,12 @@ onMounted(() => {
 			>
 				<select data-te-select-init name="parentDiaryId" form="id_new_diary_form">
 					<option>No parent diary</option>
-					<option v-for="parentDiary in parentDiaries" :key="parentDiary.id" :value="parentDiary.id">
+					<option
+						v-for="parentDiary in parentDiaries"
+						:key="parentDiary.id"
+						:value="parentDiary.id"
+						:selected="selectedDiary?.id === parentDiary.id && diaryStore.hasChildDiary(selectedDiary.id)"
+					>
 						{{ parentDiary.topic }}
 					</option>
 				</select>
