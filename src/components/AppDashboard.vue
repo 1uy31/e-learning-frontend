@@ -20,15 +20,8 @@ import NoteCreation from "@components/note/NoteCreation.vue";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
-const { selectedDiary, loadingChildDiaries, childDiariesByDiary } = storeToRefs(diaryStore);
+const { selectedDiary, loadingChildDiaries } = storeToRefs(diaryStore);
 const { categoriesLoadingError } = storeToRefs(categoryStore);
-
-const hasChildDiary = (diaryId: number) => {
-	if (!Object.keys(childDiariesByDiary.value).includes(`${diaryId}`)) {
-		return false;
-	}
-	return childDiariesByDiary.value[diaryId].length > 0;
-};
 
 onMounted(() => {
 	initTE({ Tab, Sidenav });
@@ -111,7 +104,7 @@ onMounted(() => {
 		>
 			<div v-if="selectedDiary">
 				<CardSkeleton v-if="loadingChildDiaries" />
-				<ParentDiaryDetail v-else-if="hasChildDiary(selectedDiary.id)" />
+				<ParentDiaryDetail v-else-if="diaryStore.hasChildDiary(selectedDiary.id)" />
 				<DiaryDetail v-else />
 			</div>
 		</div>

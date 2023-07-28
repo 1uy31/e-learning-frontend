@@ -71,5 +71,11 @@ export const useDiaryStore = defineStore("diaryStore", {
 				this.diariesLoadingError = validatedError;
 			}
 		},
+		hasChildDiary(diaryId: number) {
+			if (!Object.keys(this.childDiariesByDiary).includes(`${diaryId}`)) {
+				return false;
+			}
+			return this.childDiariesByDiary[diaryId].length > 0;
+		},
 	},
 });
