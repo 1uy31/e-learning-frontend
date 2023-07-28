@@ -53,19 +53,6 @@ const editor = useEditor({
 
 <template>
 	<div v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBold().run()">Bold</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">
-			Italic
-		</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">
-			Strike
-		</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 1 }).run()">
-			H1
-		</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 2 }).run()">
-			H2
-		</button>
 		<button
 			:class="'bg-yellow-300 hover:bg-yellow-400 ' + FORMAT_BUTTON_CLASS"
 			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(250 204 21)' }).run()"
@@ -84,8 +71,19 @@ const editor = useEditor({
 		>
 			Pink
 		</button>
-	</div>
-	<div class="mt-1">
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBold().run()">Bold</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">
+			Italic
+		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">
+			Strike
+		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 1 }).run()">
+			H1
+		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 2 }).run()">
+			H2
+		</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBulletList().run()">
 			Bullet
 		</button>
