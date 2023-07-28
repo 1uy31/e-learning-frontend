@@ -12,6 +12,8 @@ import { BulletList } from "@tiptap/extension-bullet-list";
 import { Heading } from "@tiptap/extension-heading";
 import { Highlight } from "@tiptap/extension-highlight";
 import { ListItem } from "@tiptap/extension-list-item";
+import { Underline } from "@tiptap/extension-underline";
+import { Code } from "@tiptap/extension-code";
 
 const props = defineProps<{ content: JsonType }>();
 const emit = defineEmits<{
@@ -25,11 +27,13 @@ const extensions = [
 	Text,
 	Bold,
 	Italic,
+	Underline,
 	Strike,
-	BulletList,
 	ListItem,
+	BulletList,
 	Heading,
 	Highlight.configure({ multicolor: true }),
+	Code,
 ];
 const editor = useEditor({
 	extensions: extensions,
@@ -75,6 +79,9 @@ const editor = useEditor({
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">
 			Italic
 		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleUnderline().run()">
+			Underline
+		</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">
 			Strike
 		</button>
@@ -84,9 +91,13 @@ const editor = useEditor({
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 2 }).run()">
 			H2
 		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 3 }).run()">
+			H3
+		</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBulletList().run()">
 			Bullet
 		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleCode().run()">Code</button>
 	</div>
 
 	<EditorContent
