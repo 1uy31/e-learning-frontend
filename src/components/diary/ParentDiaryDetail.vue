@@ -36,6 +36,12 @@ const showDiaryCreationForm = () => {
 			>
 				<a :href="selectedDiary.sourceUrl" target="_blank">Source</a>
 			</span>
+			<span
+				v-else
+				class="inline-block whitespace-nowrap bg-stone-300 p-[0.55em] text-center align-baseline text-[0.75em] leading-none text-cyan-800"
+			>
+				No/Unknown source
+			</span>
 
 			<div class="flex flex-row items-center">
 				<IconButton class="mr-2" @onclick="showDiaryCreationForm">
