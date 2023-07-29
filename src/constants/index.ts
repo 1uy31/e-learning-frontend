@@ -11,7 +11,21 @@ import { Heading } from "@tiptap/extension-heading";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Code } from "@tiptap/extension-code";
 
-export const editorOptions = {
+export const EXTENSIONS = [
+	Document,
+	Paragraph,
+	Text,
+	Bold,
+	Italic,
+	Underline,
+	Strike,
+	ListItem,
+	BulletList,
+	Heading,
+	Highlight.configure({ multicolor: true }),
+	Code,
+];
+export const EDITOR_OPTIONS = {
 	editable: true,
 	autofocus: false,
 	injectCSS: false,
@@ -20,18 +34,5 @@ export const editorOptions = {
 			class: "text-cyan-950 prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none",
 		},
 	},
-	extensions: [
-		Document,
-		Paragraph,
-		Text,
-		Bold,
-		Italic,
-		Underline,
-		Strike,
-		ListItem,
-		BulletList,
-		Heading,
-		Highlight.configure({ multicolor: true }),
-		Code,
-	],
+	extensions: EXTENSIONS,
 };

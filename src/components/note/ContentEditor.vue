@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEditor, EditorContent, Content } from "@tiptap/vue-3";
 import "prosemirror-view/style/prosemirror.css";
-import { editorOptions } from "@src/constants";
+import { EDITOR_OPTIONS } from "@src/constants";
 
 const props = defineProps<{ content: Content }>();
 const emit = defineEmits<{
@@ -11,7 +11,7 @@ const emit = defineEmits<{
 const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded-full bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
 
 const editor = useEditor({
-	...editorOptions,
+	...EDITOR_OPTIONS,
 	onCreate: ({ editor }) => {
 		editor.commands.setContent(props.content);
 	},

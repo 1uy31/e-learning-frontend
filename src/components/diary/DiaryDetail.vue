@@ -10,8 +10,8 @@ import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import { showTabById } from "@src/utils";
 import { useNoteStore } from "@stores/note";
-import { Editor, EditorContent } from "@tiptap/vue-3";
-import { editorOptions } from "@src/constants";
+import { generateHTML } from "@tiptap/vue-3";
+import { EXTENSIONS } from "@src/constants";
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
@@ -68,16 +68,7 @@ const { notesByDiary } = storeToRefs(noteStore);
 
 		<div v-if="selectedDiary?.id && Object.keys(notesByDiary).includes(`${selectedDiary.id}`)">
 			<div v-for="note in notesByDiary[`${selectedDiary.id}`]" :key="note.id">
-				<EditorContent
-					:editor="new Editor({ ...editorOptions, editable: false, content: note.content })"
-					style="
-						height: 400px;
-						border: solid 2px #e5e7eb;
-						border-radius: 4px;
-						overflow-y: scroll;
-						margin-top: 4px;
-					"
-				/>
+				<div v-html="generateHTML(note.content, EXTENSIONS)"></div>
 			</div>
 		</div>
 		<SectionDivider />
