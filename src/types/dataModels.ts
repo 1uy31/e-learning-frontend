@@ -1,3 +1,5 @@
+import { Content } from "@tiptap/core/src/types";
+
 export type Category = {
 	id: number;
 	name: string;
@@ -19,14 +21,12 @@ export type Diary = DiaryInput & {
 	updatedAt: string | null;
 };
 
-export type JsonType = Record<string | number, string | number | boolean | null>;
-
 export type NoteInput = {
 	notePosition: number;
 	sourceUrl?: string;
 	filePath?: string;
 	diaryId?: number;
-	content?: JsonType;
+	content?: Content;
 };
 
 export type Note = NoteInput & {
