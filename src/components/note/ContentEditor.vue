@@ -1,19 +1,8 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from "@tiptap/vue-3";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
 import "prosemirror-view/style/prosemirror.css";
 import { JsonType } from "@appTypes/dataModels";
-import { Bold } from "@tiptap/extension-bold";
-import { Italic } from "@tiptap/extension-italic";
-import { Strike } from "@tiptap/extension-strike";
-import { BulletList } from "@tiptap/extension-bullet-list";
-import { Heading } from "@tiptap/extension-heading";
-import { Highlight } from "@tiptap/extension-highlight";
-import { ListItem } from "@tiptap/extension-list-item";
-import { Underline } from "@tiptap/extension-underline";
-import { Code } from "@tiptap/extension-code";
+import { editorOptions } from "@src/constants";
 
 const props = defineProps<{ content: JsonType }>();
 const emit = defineEmits<{
@@ -21,30 +10,9 @@ const emit = defineEmits<{
 }>();
 
 const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded-full bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
-const extensions = [
-	Document,
-	Paragraph,
-	Text,
-	Bold,
-	Italic,
-	Underline,
-	Strike,
-	ListItem,
-	BulletList,
-	Heading,
-	Highlight.configure({ multicolor: true }),
-	Code,
-];
+
 const editor = useEditor({
-	extensions: extensions,
-	editable: true,
-	autofocus: false,
-	injectCSS: false,
-	editorProps: {
-		attributes: {
-			class: "text-cyan-950 prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none",
-		},
-	},
+	...editorOptions,
 	onCreate: ({ editor }) => {
 		editor.commands.setContent(props.content);
 	},
