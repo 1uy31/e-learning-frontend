@@ -8,8 +8,11 @@ import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import NewDiaryIcon from "@assets/icons/heroicons/documentSeries.svg?component";
 import IconButton from "@components/share/IconButton.vue";
 import { showTabById } from "@src/utils";
+import { Diary } from "@appTypes/dataModels";
+import { useNoteStore } from "@stores/note";
 
 const diaryStore = useDiaryStore();
+const noteStore = useNoteStore();
 const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 
 const showDiaryCreationForm = () => {
@@ -17,6 +20,11 @@ const showDiaryCreationForm = () => {
 	const categorySelection = document.getElementById("id_new_diary_category");
 	// To update parent diary selection.
 	categorySelection?.dispatchEvent(new Event("change"));
+};
+
+const showDiaryDetail = async (diary: Diary) => {
+	await noteStore.getNotesByDiary(diary);
+	diaryStore.selectDiary(diary);
 };
 </script>
 
@@ -67,7 +75,7 @@ const showDiaryCreationForm = () => {
 				type="button"
 				class="mb-1 block w-full cursor-pointer rounded-lg bg-stone-200 p-4 text-left transition duration-500 hover:bg-stone-300 hover:text-cyan-950 focus:bg-stone-400 focus:text-cyan-950 focus:ring-0"
 				:value="childDiary.id"
-				@click="diaryStore.selectDiary(childDiary)"
+				@click="showDiaryDetail"
 			>
 				{{ childDiary.topic }}
 			</button>

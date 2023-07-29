@@ -8,9 +8,11 @@ import SmallSpinner from "@components/share/SmallSpinner.vue";
 import BookIcon from "@assets/icons/book.svg?component";
 import ArrowDownIcon from "@assets/icons/arrowDown.svg?component";
 import { showTabById } from "@src/utils";
+import { useNoteStore } from "@stores/note";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
+const noteStore = useNoteStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
 const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
@@ -30,7 +32,7 @@ const selectDiary = async (diary: Diary) => {
 	}
 	diaryStore.selectDiary(diary);
 	showTabById("id_main_tab_home");
-	await diaryStore.getChildDiariesByDiary(diary);
+	await Promise.all([noteStore.getNotesByDiary(diary), diaryStore.getChildDiariesByDiary(diary)]);
 };
 
 onBeforeMount(async () => {

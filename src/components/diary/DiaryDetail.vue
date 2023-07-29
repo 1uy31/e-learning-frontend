@@ -9,9 +9,14 @@ import ReviewCountIcon from "@assets/icons/heroicons/eye.svg?component";
 import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import { showTabById } from "@src/utils";
+import { useNoteStore } from "@stores/note";
+import { Editor, EditorContent } from "@tiptap/vue-3";
+import { editorOptions } from "@src/constants";
 
 const diaryStore = useDiaryStore();
+const noteStore = useNoteStore();
 const { selectedDiary } = storeToRefs(diaryStore);
+const { notesByDiary } = storeToRefs(noteStore);
 </script>
 
 <template>
@@ -59,11 +64,22 @@ const { selectedDiary } = storeToRefs(diaryStore);
 				</IconButton>
 			</div>
 		</div>
-
 		<SectionDivider />
 
-		<div><p>Content</p></div>
-
+		<div v-if="selectedDiary?.id && Object.keys(notesByDiary).includes(`${selectedDiary.id}`)">
+			<div v-for="note in notesByDiary[`${selectedDiary.id}`]" :key="note.id">
+				<EditorContent
+					:editor="new Editor({ ...editorOptions, editable: false, content: note.content })"
+					style="
+						height: 100px;
+						border: solid 2px #e5e7eb;
+						border-radius: 4px;
+						overflow-y: scroll;
+						margin-top: 4px;
+					"
+				/>
+			</div>
+		</div>
 		<SectionDivider />
 
 		<CreatedUpdatedFooter :display-object="selectedDiary" />

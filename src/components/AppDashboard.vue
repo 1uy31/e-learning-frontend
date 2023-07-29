@@ -17,10 +17,13 @@ import NewNoteIcon from "@assets/icons/heroicons/documentText.svg?component";
 import NewDiaryIcon from "@assets/icons/heroicons/documentSeries.svg?component";
 import NewCategoryIcon from "@assets/icons/heroicons/bookOpen.svg?component";
 import NoteCreation from "@components/note/NoteCreation.vue";
+import { useNoteStore } from "@stores/note";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
+const noteStore = useNoteStore();
 const { selectedDiary, loadingChildDiaries } = storeToRefs(diaryStore);
+const { loadingNote } = storeToRefs(noteStore);
 const { categoriesLoadingError } = storeToRefs(categoryStore);
 
 onMounted(() => {
@@ -103,7 +106,7 @@ onMounted(() => {
 			aria-labelledby="id_main_tab_home"
 		>
 			<div v-if="selectedDiary">
-				<CardSkeleton v-if="loadingChildDiaries" />
+				<CardSkeleton v-if="loadingChildDiaries || loadingNote" />
 				<ParentDiaryDetail v-else-if="diaryStore.hasChildDiary(selectedDiary.id)" />
 				<DiaryDetail v-else />
 			</div>
