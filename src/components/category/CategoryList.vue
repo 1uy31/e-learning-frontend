@@ -48,7 +48,7 @@ onBeforeMount(async () => {
 		/>
 		<li v-for="category in categories" :key="category.id" class="relative">
 			<a
-				class="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-cyan-900 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+				class="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-cyan-900 outline-none transition duration-300 ease-linear hover:bg-stone-200 hover:text-inherit hover:outline-none focus:bg-stone-200 focus:text-inherit focus:outline-none active:bg-stone-200 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
 				data-te-sidenav-link-ref
 				@click="selectCategory(category)"
 			>
@@ -76,7 +76,7 @@ onBeforeMount(async () => {
 			>
 				<li v-for="diary in diariesByCategory[category.id]" :key="diary.id" class="relative">
 					<a
-						class="flex h-6 cursor-pointer items-center rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-cyan-900 outline-none transition duration-300 ease-linear hover:bg-slate-50 hover:text-inherit hover:outline-none focus:bg-slate-50 focus:text-inherit focus:outline-none active:bg-slate-50 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+						class="flex h-6 cursor-pointer items-center rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-cyan-900 outline-none transition duration-300 ease-linear hover:bg-stone-300 hover:text-inherit hover:outline-none focus:bg-stone-300 focus:text-inherit focus:outline-none active:bg-stone-300 active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
 						data-te-sidenav-link-ref
 						@click="selectDiary(diary)"
 						>{{ diary.topic }}</a

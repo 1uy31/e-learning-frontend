@@ -26,6 +26,11 @@ const { selectedDiary, loadingChildDiaries } = storeToRefs(diaryStore);
 const { loadingNote } = storeToRefs(noteStore);
 const { categoriesLoadingError } = storeToRefs(categoryStore);
 
+const MAIN_TAB_CLASS =
+	"my-2 block border-x-0 border-b-2 border-t-0 rounded border-transparent px-4 py-2.5 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-300 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950";
+
+const TAB_CONTENT_CLASS = "hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block";
+
 onMounted(() => {
 	initTE({ Tab, Sidenav });
 });
@@ -46,53 +51,53 @@ onMounted(() => {
 			<a
 				id="id_main_tab_home"
 				href="#id_main_tab_home_content"
-				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-4 py-2.5 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950"
+				:class="MAIN_TAB_CLASS"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_home_content"
 				data-te-nav-active
 				role="tab"
 				aria-controls="id_main_tab_home_content"
 				aria-selected="true"
-				><HomeIcon class="text-cyan-950"
+				><HomeIcon class="h-6 w-6"
 			/></a>
 		</li>
 		<li role="presentation">
 			<a
 				id="id_main_tab_new_note"
 				href="#id_main_tab_new_note_content"
-				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-4 py-2.5 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950"
+				:class="MAIN_TAB_CLASS"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_new_note_content"
 				role="tab"
 				aria-controls="id_main_tab_new_note_content"
 				aria-selected="false"
-				><NewNoteIcon class="h-6 w-6 text-cyan-950"
+				><NewNoteIcon class="h-6 w-6"
 			/></a>
 		</li>
 		<li role="presentation">
 			<a
 				id="id_main_tab_new_diary"
 				href="#id_main_tab_new_diary_content"
-				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-4 py-2.5 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950"
+				:class="MAIN_TAB_CLASS"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_new_diary_content"
 				role="tab"
 				aria-controls="id_main_tab_new_diary_content"
 				aria-selected="false"
-				><NewDiaryIcon class="h-6 w-6 text-cyan-950"
+				><NewDiaryIcon class="h-6 w-6"
 			/></a>
 		</li>
 		<li role="presentation">
 			<a
 				id="id_main_tab_new_category"
 				href="#id_main_tab_new_category_content"
-				class="my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-4 py-2.5 text-xs font-medium uppercase leading-tight text-cyan-950 hover:isolate hover:border-transparent hover:bg-stone-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-cyan-950 data-[te-nav-active]:text-cyan-950"
+				:class="MAIN_TAB_CLASS"
 				data-te-toggle="pill"
 				data-te-target="#id_main_tab_new_category_content"
 				role="tab"
 				aria-controls="id_main_tab_new_category_content"
 				aria-selected="false"
-				><NewCategoryIcon class="h-6 w-6 text-cyan-950"
+				><NewCategoryIcon class="h-6 w-6"
 			/></a>
 		</li>
 	</ul>
@@ -100,7 +105,7 @@ onMounted(() => {
 	<div>
 		<div
 			id="id_main_tab_home_content"
-			class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+			:class="TAB_CONTENT_CLASS"
 			role="tabpanel"
 			data-te-tab-active
 			aria-labelledby="id_main_tab_home"
@@ -113,7 +118,7 @@ onMounted(() => {
 		</div>
 		<div
 			id="id_main_tab_new_note_content"
-			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+			:class="TAB_CONTENT_CLASS"
 			role="tabpanel"
 			aria-labelledby="id_main_tab_new_note"
 		>
@@ -121,7 +126,7 @@ onMounted(() => {
 		</div>
 		<div
 			id="id_main_tab_new_diary_content"
-			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+			:class="TAB_CONTENT_CLASS"
 			role="tabpanel"
 			aria-labelledby="id_main_tab_new_diary"
 		>
@@ -129,7 +134,7 @@ onMounted(() => {
 		</div>
 		<div
 			id="id_main_tab_new_category_content"
-			class="hidden opacity-0 transition-opacity duration-150 ease-linear data-[te-tab-active]:block"
+			:class="TAB_CONTENT_CLASS"
 			role="tabpanel"
 			aria-labelledby="id_main_tab_new_category"
 		>
