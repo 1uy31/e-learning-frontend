@@ -21,7 +21,7 @@ const { notesByDiary } = storeToRefs(noteStore);
 
 <template>
 	<div
-		class="mx-auto mt-12 block rounded-lg bg-stone-100 p-6 text-cyan-950 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
+		class="mx-auto mt-7 block rounded-lg bg-stone-100 p-6 text-cyan-950 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-7/12 xl:w-7/12"
 	>
 		<div class="flex flex-row items-center justify-between">
 			<h2 class="text-2xl">{{ selectedDiary.topic }}</h2>
@@ -71,7 +71,7 @@ const { notesByDiary } = storeToRefs(noteStore);
 				<EditorContent
 					:editor="new Editor({ ...editorOptions, editable: false, content: note.content })"
 					style="
-						height: 100px;
+						height: 400px;
 						border: solid 2px #e5e7eb;
 						border-radius: 4px;
 						overflow-y: scroll;
