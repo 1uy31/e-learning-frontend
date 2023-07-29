@@ -56,9 +56,7 @@ const editor = useEditor({
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">I</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleUnderline().run()">U</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">S</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBulletList().run()">
-			Bullet
-		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBulletList().run()">•</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleCode().run()">Code</button>
 	</div>
 
