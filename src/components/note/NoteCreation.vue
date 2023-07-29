@@ -118,7 +118,7 @@ const submitNoteCreationForm = async () => {
 				/>
 			</div>
 
-			<ContentEditor :content="content" @onchange="(eventName, newContent) => setContent(newContent)" />
+			<ContentEditor :content="content" @onchange="(newContent) => setContent(newContent)" />
 
 			<button
 				form="id_new_note_form"

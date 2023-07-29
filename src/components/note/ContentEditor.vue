@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { useEditor, EditorContent } from "@tiptap/vue-3";
+import { useEditor, EditorContent, Content } from "@tiptap/vue-3";
 import "prosemirror-view/style/prosemirror.css";
-import { JsonType } from "@appTypes/dataModels";
 import { editorOptions } from "@src/constants";
 
-const props = defineProps<{ content: JsonType }>();
+const props = defineProps<{ content: Content }>();
 const emit = defineEmits<{
-	(event: "onchange", newContent: JsonType): void;
+	(event: "onchange", newContent: Content): void;
 }>();
 
 const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded-full bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
