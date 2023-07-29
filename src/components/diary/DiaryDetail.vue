@@ -12,6 +12,7 @@ import { showTabById } from "@src/utils";
 import { useNoteStore } from "@stores/note";
 import { generateHTML } from "@tiptap/vue-3";
 import { EXTENSIONS } from "@src/constants";
+import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
@@ -20,9 +21,7 @@ const { notesByDiary } = storeToRefs(noteStore);
 </script>
 
 <template>
-	<div
-		class="mx-auto mt-7 block rounded-lg bg-stone-100 p-6 text-cyan-950 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-7/12 xl:w-7/12"
-	>
+	<div :class="LARGE_CONTAINER_CLASS">
 		<div class="flex flex-row items-center justify-between">
 			<h2 class="text-2xl">{{ selectedDiary.topic }}</h2>
 			<RateDisplay :rate="selectedDiary.rate" />

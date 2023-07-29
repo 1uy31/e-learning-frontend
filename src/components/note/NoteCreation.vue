@@ -7,6 +7,15 @@ import { storeToRefs } from "pinia";
 import { alertIfNullUndefined } from "@src/utils";
 import { MEDIUM_TIMING } from "@src/constants/timing";
 import { useNoteStore } from "@stores/note";
+import {
+	FORM_BUTTON_CLASS,
+	FORM_INPUT_CLASS,
+	FORM_INPUT_LABEL_CLASS,
+	FORM_SELECTION_CLASS,
+	LARGE_CONTAINER_CLASS,
+	REQUIRED_MARK_CLASS,
+} from "@src/constants/classes";
+import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
 
 const EMPTY_CONTENT = {
 	type: "doc",
@@ -26,7 +35,7 @@ const submitNoteCreationForm = async () => {
 	const form = alertIfNullUndefined(document.getElementById("id_new_note_form"), "New note form");
 
 	const successfulCreationCallback = () => {
-		setFormMessage({ message: "New note created successfully.", class: "text-green-800" });
+		setFormMessage({ message: "New note created successfully.", ...SUCCESS_INFO });
 		setNotePosition("");
 		form.reset();
 
@@ -53,7 +62,7 @@ const submitNoteCreationForm = async () => {
 	toggleIsCreatingNote(true);
 	await noteStore.addNote(
 		successfulCreationCallback,
-		(error: Error) => setFormMessage({ message: error.message, class: "text-red-800" }),
+		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
 		entries
 	);
 	toggleIsCreatingNote(false);
@@ -61,13 +70,11 @@ const submitNoteCreationForm = async () => {
 </script>
 
 <template>
-	<div
-		class="mx-auto mt-7 block rounded-lg bg-stone-100 p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-7/12 xl:w-7/12"
-	>
+	<div :class="LARGE_CONTAINER_CLASS">
 		<form id="id_new_note_form">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
 
-			<div class="mb-4 mt-2 text-cyan-950 [&_input]:py-[0.6rem] [&_label]:text-cyan-700 [&_span]:top-3.5">
+			<div :class="'mb-4 mt-2 ' + FORM_SELECTION_CLASS">
 				<select id="id_new_note_diary" disabled data-te-select-init name="diaryId" form="id_new_note_form">
 					<option value="selectedDiary?.id">
 						{{ selectedDiary ? selectedDiary.topic : "Free note" }}
@@ -80,16 +87,14 @@ const submitNoteCreationForm = async () => {
 				<input
 					id="id_new_note_position"
 					type="number"
-					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] text-cyan-950 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+					:class="FORM_INPUT_CLASS"
 					form="id_new_note_form"
 					name="notePosition"
 					:value="notePosition"
 					@change="(event) => setNotePosition(event.target.value)"
 				/>
-				<label
-					for="id_new_note_position"
-					class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-cyan-700 transition-all duration-200 ease-out peer-focus:translate-y-[-1.15rem] peer-focus:scale-[0.8] peer-focus:text-cyan-800 peer-data-[te-input-state-active]:translate-y-[-1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none"
-					><span class="text-danger-600">*</span> Note position
+				<label for="id_new_note_position" :class="FORM_INPUT_LABEL_CLASS"
+					><span :class="REQUIRED_MARK_CLASS">*</span> Note position
 				</label>
 			</div>
 
@@ -99,13 +104,9 @@ const submitNoteCreationForm = async () => {
 					name="sourceUrl"
 					form="id_new_note_form"
 					type="text"
-					class="peer block min-h-[auto] w-full rounded bg-transparent px-3 py-[0.32rem] leading-[2.15] text-cyan-950 outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+					:class="FORM_INPUT_CLASS"
 				/>
-				<label
-					for="id_new_note_source_url"
-					class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-cyan-700 transition-all duration-200 ease-out peer-focus:translate-y-[-1.15rem] peer-focus:scale-[0.8] peer-focus:text-cyan-800 peer-data-[te-input-state-active]:translate-y-[-1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none"
-					>Source url
-				</label>
+				<label for="id_new_note_source_url" :class="FORM_INPUT_LABEL_CLASS">Source url </label>
 			</div>
 
 			<div class="mb-4">
@@ -123,7 +124,7 @@ const submitNoteCreationForm = async () => {
 			<button
 				form="id_new_note_form"
 				type="button"
-				class="mt-5 rounded bg-cyan-800 px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] disabled:bg-gray-400"
+				:class="'mt-5 ' + FORM_BUTTON_CLASS"
 				data-te-ripple-init
 				data-te-ripple-color="light"
 				:disabled="['', undefined].includes(notePosition)"

@@ -10,6 +10,7 @@ import IconButton from "@components/share/IconButton.vue";
 import { showTabById } from "@src/utils";
 import { Diary } from "@appTypes/dataModels";
 import { useNoteStore } from "@stores/note";
+import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
@@ -29,9 +30,7 @@ const showDiaryDetail = async (diary: Diary) => {
 </script>
 
 <template>
-	<div
-		class="mx-auto mt-12 block rounded-lg bg-stone-100 p-6 text-cyan-950 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12"
-	>
+	<div :class="MEDIUM_CONTAINER_CLASS">
 		<div class="flex flex-row items-center justify-between">
 			<h2 class="text-2xl">{{ selectedDiary.topic }}</h2>
 			<RateDisplay :rate="selectedDiary.rate" />

@@ -11,6 +11,9 @@ import { Heading } from "@tiptap/extension-heading";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Code } from "@tiptap/extension-code";
 
+export const SUCCESS_INFO = { class: "text-green-800" };
+export const ERROR_INFO = { class: "text-red-800" };
+
 export const EXTENSIONS = [
 	Document,
 	Paragraph,
