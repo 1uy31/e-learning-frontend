@@ -8,7 +8,7 @@ const emit = defineEmits<{
 	(event: "onchange", newContent: Content): void;
 }>();
 
-const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded-full bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
+const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
 
 const editor = useEditor({
 	...EDITOR_OPTIONS,
@@ -18,40 +18,13 @@ const editor = useEditor({
 	onUpdate: ({ editor }) => {
 		const json = editor.getJSON();
 		emit("onchange", json);
+		console.log(json);
 	},
 });
 </script>
 
 <template>
 	<div v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
-		<button
-			:class="'bg-yellow-300 hover:bg-yellow-400 ' + FORMAT_BUTTON_CLASS"
-			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(250 204 21)' }).run()"
-		>
-			Yellow
-		</button>
-		<button
-			:class="'bg-teal-300 hover:bg-teal-400 ' + FORMAT_BUTTON_CLASS"
-			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(45 212 191)' }).run()"
-		>
-			Teal
-		</button>
-		<button
-			:class="'bg-pink-300 hover:bg-pink-400 ' + FORMAT_BUTTON_CLASS"
-			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(244 114 182)' }).run()"
-		>
-			Pink
-		</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBold().run()">Bold</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">
-			Italic
-		</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleUnderline().run()">
-			Underline
-		</button>
-		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">
-			Strike
-		</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 1 }).run()">
 			H1
 		</button>
@@ -61,6 +34,28 @@ const editor = useEditor({
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleHeading({ level: 3 }).run()">
 			H3
 		</button>
+		<button
+			:class="'bg-yellow-300 hover:bg-yellow-400 ' + FORMAT_BUTTON_CLASS"
+			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(250 204 21)' }).run()"
+		>
+			@
+		</button>
+		<button
+			:class="'bg-teal-300 hover:bg-teal-400 ' + FORMAT_BUTTON_CLASS"
+			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(45 212 191)' }).run()"
+		>
+			@
+		</button>
+		<button
+			class="mr-2 rounded bg-pink-300 px-2 py-0.5 text-sm hover:bg-pink-400"
+			@click.prevent="editor.chain().focus().toggleHighlight({ color: 'rgb(244 114 182)' }).run()"
+		>
+			@
+		</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBold().run()">B</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleItalic().run()">I</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleUnderline().run()">U</button>
+		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleStrike().run()">S</button>
 		<button :class="FORMAT_BUTTON_CLASS" @click.prevent="editor.chain().focus().toggleBulletList().run()">
 			Bullet
 		</button>

@@ -10,5 +10,14 @@ module.exports = {
 		extend: {},
 	},
 	darkMode: "class",
-	plugins: [require("tw-elements/dist/plugin.cjs")],
+	plugins: [
+		require("tw-elements/dist/plugin.cjs"),
+		require("tailwindcss/plugin")(function ({ addBase, theme }) {
+			addBase({
+				h1: { fontSize: theme("fontSize.3xl") },
+				h2: { fontSize: theme("fontSize.2xl") },
+				h3: { fontSize: theme("fontSize.xl") },
+			});
+		}),
+	],
 };
