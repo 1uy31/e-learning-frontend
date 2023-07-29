@@ -89,7 +89,7 @@ const submitNoteCreationForm = async () => {
 				<label
 					for="id_new_note_position"
 					class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-cyan-700 transition-all duration-200 ease-out peer-focus:translate-y-[-1.15rem] peer-focus:scale-[0.8] peer-focus:text-cyan-800 peer-data-[te-input-state-active]:translate-y-[-1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none"
-					>Note position
+					><span class="text-danger-600">*</span> Note position
 				</label>
 			</div>
 
