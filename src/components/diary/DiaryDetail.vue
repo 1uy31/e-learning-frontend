@@ -12,7 +12,12 @@ import { showTabById } from "@src/utils";
 import { useNoteStore } from "@stores/note";
 import { generateHTML } from "@tiptap/vue-3";
 import { EXTENSIONS } from "@src/constants";
-import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
+import {
+	INFO_WRAPPER_CLASS,
+	LARGE_CONTAINER_CLASS,
+	HYPER_LINK_WRAPPER_CLASS,
+	ROW_CENTER_BETWEEN_CLASS,
+} from "@src/constants/classes";
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
@@ -22,25 +27,18 @@ const { notesByDiary } = storeToRefs(noteStore);
 
 <template>
 	<div :class="LARGE_CONTAINER_CLASS">
-		<div class="flex flex-row items-center justify-between">
+		<div :class="ROW_CENTER_BETWEEN_CLASS">
 			<h2 class="text-2xl">{{ selectedDiary.topic }}</h2>
 			<RateDisplay :rate="selectedDiary.rate" />
 		</div>
 
-		<div class="my-2 flex flex-row items-center justify-between">
+		<div :class="'my-2 ' + ROW_CENTER_BETWEEN_CLASS">
 			<div class="flex flex-row items-center">
-				<span
-					v-if="selectedDiary.sourceUrl"
-					class="mr-2 inline-block whitespace-nowrap rounded bg-cyan-700 p-[0.55em] text-center align-baseline text-[0.75em] font-bold leading-none text-cyan-100 shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-				>
+				<span v-if="selectedDiary.sourceUrl" :class="HYPER_LINK_WRAPPER_CLASS">
 					<a :href="selectedDiary.sourceUrl" target="_blank">Source</a>
 				</span>
 
-				<span
-					class="inline-block whitespace-nowrap bg-stone-300 p-[0.55em] text-center align-baseline text-[0.75em] leading-none text-cyan-800"
-				>
-					Review times: {{ selectedDiary.reviewCount }}
-				</span>
+				<span :class="INFO_WRAPPER_CLASS"> Review times: {{ selectedDiary.reviewCount }} </span>
 			</div>
 
 			<div class="flex flex-row items-center">

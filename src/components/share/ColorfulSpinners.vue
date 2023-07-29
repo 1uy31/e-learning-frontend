@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const BASE_CLASSES =
+const BASE_CLASS =
 	"inline-block h-6 w-6 animate-[spinner-grow_0.75s_linear_infinite] rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite] ";
-const SPINNERS_CLASSES = [
+const SPINNERS_CLASS = [
 	"text-cyan-800 mr-1",
 	"text-cyan-700 mr-1",
 	"text-cyan-600 mr-1",
@@ -15,9 +15,9 @@ const SPINNERS_CLASSES = [
 <template>
 	<div class="m-auto my-2 w-fit">
 		<div
-			v-for="spinerClasses in SPINNERS_CLASSES"
-			:key="spinerClasses"
-			:class="BASE_CLASSES + spinerClasses"
+			v-for="spinnerClass in SPINNERS_CLASS"
+			:key="spinnerClass"
+			:class="BASE_CLASS + spinnerClass"
 			role="status"
 		>
 			<span
