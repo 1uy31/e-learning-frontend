@@ -4,10 +4,38 @@ import { Note, NoteInput } from "@appTypes/dataModels";
 import { NormalizedCacheObject } from "@apollo/client/cache/inmemory/types";
 
 export type NoteService = {
+	getMatchedObjects: (diaryId?: number, diaryIds?: Array<number>) => Promise<{ notes: Array<Note>; total: number }>;
 	create: (input: NoteInput) => Promise<Note>;
 };
 
 export const useNoteService = (client: ApolloClient<NormalizedCacheObject> = apolloClient): NoteService => {
+	const getMatchedObjects = async (diaryId?: number, diaryIds?: Array<number>) => {
+		const result = await client.query({
+			query: gql`
+				query Notes($diaryId: Int, $limit: Int, $offset: Int) {
+					notes(diaryId: $diaryId, limit: $limit, offset: $offset) {
+						total
+						notes {
+							id
+							notePosition
+							content
+							sourceUrl
+							filePath
+							diaryId
+							createdAt
+							updatedAt
+						}
+					}
+				}
+			`,
+			variables: { diaryId, diaryIds, limit: 100, offset: 0 }, // TODO: Temporary until pagination implemented.
+		});
+		return {
+			notes: result.data.notes.notes,
+			total: result.data.notes.total,
+		};
+	};
+
 	const create = async (input: NoteInput) => {
 		const result = await client.mutate({
 			mutation: gql`
@@ -37,17 +65,18 @@ export const useNoteService = (client: ApolloClient<NormalizedCacheObject> = apo
 			`,
 			variables: { ...input },
 		});
-		// client.cache.evict({
-		// 	id: "ROOT_QUERY",
-		// 	fieldName: "notes",
-		// 	args: {},
-		// 	broadcast: false,
-		// });
-		// client.cache.gc();
+		client.cache.evict({
+			id: "ROOT_QUERY",
+			fieldName: "notes",
+			args: { diaryId: input.diaryId }, // TODO: Evict for query base on diaryIds.
+			broadcast: false,
+		});
+		client.cache.gc();
 		return result.data.addNote;
 	};
 
 	return {
+		getMatchedObjects,
 		create,
 	};
 };
