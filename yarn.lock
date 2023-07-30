@@ -587,10 +587,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bullet-list/-/extension-bullet-list-2.0.4.tgz#d192767d39e45253c5e9d974e949f271e09c72d7"
   integrity sha512-JSZKBVTaKSuLl5fR4EKE4dOINOrgeRHYA25Vj6cWjgdvpTw5ef7vcUdn9yP4JwTmLRI+VnnMlYL3rqigU3iZNg==
 
-"@tiptap/extension-code@^2.0.4":
+"@tiptap/extension-code-block@^2.0.4":
   version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-code/-/extension-code-2.0.4.tgz#6952d402e7372dd2d129e962bf9bd54d68ee6183"
-  integrity sha512-HuwJSJkipZf4hkns9witv1CABNIPiB9C8lgAQXK4xJKcoUQChcnljEL+PQ2NqeEeMTEeV3nG3A/0QafH0pgTgg==
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-code-block/-/extension-code-block-2.0.4.tgz#d551ee7c13fef379bbbad298f1be757d1125cd54"
+  integrity sha512-In2tV3rgm/MznVF0N7qYsYugPWSzhZHaCRCWcFKNvllMExpo91bUWvk+hXaIhhPxvuqGIVezjybwrYuU3bJW0g==
 
 "@tiptap/extension-document@^2.0.3":
   version "2.0.3"
