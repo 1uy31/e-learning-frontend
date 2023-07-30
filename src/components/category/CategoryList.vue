@@ -17,7 +17,7 @@ const { categories, selectedCategory } = storeToRefs(categoryStore);
 const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
 const LIST_ITEM_CLASS =
-	"flex cursor-pointer items-center rounded-[5px] py-4 text-cyan-900 outline-none transition duration-300 ease-linear  hover:text-inherit hover:outline-none focus:text-inherit focus:outline-none  active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none";
+	"flex cursor-pointer items-center rounded-[5px] py-4 text-cyan-900 outline-none transition duration-300 ease-linear hover:text-inherit hover:outline-none focus:text-inherit focus:outline-none active:text-inherit active:outline-none data-[te-sidenav-state-active]:text-inherit data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none";
 
 const selectCategory = async (category: Category) => {
 	if (category.id === selectedCategory?.value?.id) {
@@ -52,8 +52,7 @@ onBeforeMount(async () => {
 		<li v-for="category in categories" :key="category.id" class="relative">
 			<a
 				:class="
-					'pl-[3.4rem] pr-6 text-[0.78rem] hover:bg-stone-300 focus:bg-stone-300 active:bg-stone-300 ' +
-					LIST_ITEM_CLASS
+					'pr-6 text-[0.78rem] hover:bg-stone-300 focus:bg-stone-300 active:bg-stone-300 ' + LIST_ITEM_CLASS
 				"
 				data-te-sidenav-link-ref
 				@click="selectCategory(category)"
