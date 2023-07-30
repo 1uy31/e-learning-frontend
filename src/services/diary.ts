@@ -62,11 +62,17 @@ export const useDiaryService = (client: ApolloClient<NormalizedCacheObject> = ap
 			`,
 			variables: { ...input },
 		});
-		client.cache.evict({
-			id: "ROOT_QUERY",
-			fieldName: "diaries",
-			args: { categoryId: input.categoryId },
-			broadcast: false,
+		const argsList = [
+			{ categoryId: input.categoryId, parentDiaryId: input.parentDiaryId },
+			{ categoryId: undefined, parentDiaryId: undefined },
+		];
+		argsList.forEach((args) => {
+			client.cache.evict({
+				id: "ROOT_QUERY",
+				fieldName: "diaries",
+				args,
+				broadcast: false,
+			});
 		});
 		client.cache.gc();
 		return result.data.addDiary;

@@ -16,6 +16,7 @@ import {
 	REQUIRED_MARK_CLASS,
 } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
+import { onMounted } from "vue";
 
 const EMPTY_CONTENT = {
 	type: "doc",
@@ -24,7 +25,7 @@ const EMPTY_CONTENT = {
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
-const { selectedDiary } = storeToRefs(diaryStore);
+const { selectedDiary, diaries } = storeToRefs(diaryStore);
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [isCreatingNote, toggleIsCreatingNote] = useState(false);
@@ -67,6 +68,14 @@ const submitNoteCreationForm = async () => {
 	);
 	toggleIsCreatingNote(false);
 };
+
+onMounted(async () => {
+	if (selectedDiary?.value) {
+		await Promise.all([diaryStore.getAllDiaries(), diaryStore.getChildDiariesByDiary(selectedDiary.value)]);
+	} else {
+		await diaryStore.getAllDiaries();
+	}
+});
 </script>
 
 <template>
@@ -74,10 +83,17 @@ const submitNoteCreationForm = async () => {
 		<form id="id_new_note_form">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
 
-			<div :class="'mb-4 mt-2 ' + FORM_SELECTION_CLASS">
-				<select id="id_new_note_diary" disabled data-te-select-init name="diaryId" form="id_new_note_form">
-					<option value="selectedDiary?.id">
-						{{ selectedDiary ? selectedDiary.topic : "Free note" }}
+			<SmallSpinner v-if="loadingDiaries" class="-mt-2 mb-4 border-cyan-700" status="Loading diary options" />
+			<!-- UI looks buggy when v-else is used. -->
+			<div :class="'mb-4 mt-2 ' + FORM_SELECTION_CLASS" :style="[loadingDiaries ? { display: 'none' } : {}]">
+				<select id="id_new_note_diary" data-te-select-init name="diaryId" form="id_new_note_form">
+					<option
+						v-for="diary in diaries.filter((_diary) => !diaryStore.hasChildDiary(_diary.id))"
+						:key="diary.id"
+						:value="diary.id"
+						:selected="selectedDiary?.id === diary.id"
+					>
+						{{ diary.topic }}
 					</option>
 				</select>
 				<label data-te-select-label-ref>Diary</label>
