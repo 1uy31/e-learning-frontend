@@ -7,9 +7,8 @@
 	}
 	code {
 		font-size: 0.875rem;
-		background: #e7e5e4;
-		margin-inline: 8px;
-		padding-inline: 14px;
+		color: #fafaf9;
+		background: #404040;
 		padding-block: 4px;
 	}
 }

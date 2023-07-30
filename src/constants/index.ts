@@ -9,7 +9,7 @@ import { ListItem } from "@tiptap/extension-list-item";
 import { BulletList } from "@tiptap/extension-bullet-list";
 import { Heading } from "@tiptap/extension-heading";
 import { Highlight } from "@tiptap/extension-highlight";
-import { Code } from "@tiptap/extension-code";
+import { CodeBlock } from "@tiptap/extension-code-block";
 
 export const SUCCESS_INFO = { class: "text-green-800" };
 export const ERROR_INFO = { class: "text-red-800" };
@@ -26,7 +26,7 @@ export const EXTENSIONS = [
 	BulletList,
 	Heading,
 	Highlight.configure({ multicolor: true }),
-	Code,
+	CodeBlock,
 ];
 export const EDITOR_OPTIONS = {
 	editable: true,
