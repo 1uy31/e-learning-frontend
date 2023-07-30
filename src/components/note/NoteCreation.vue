@@ -25,7 +25,7 @@ const EMPTY_CONTENT = {
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
-const { selectedDiary, diaries } = storeToRefs(diaryStore);
+const { selectedDiary, diaries, loadingDiaries } = storeToRefs(diaryStore);
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [isCreatingNote, toggleIsCreatingNote] = useState(false);
