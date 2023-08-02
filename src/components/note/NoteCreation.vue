@@ -53,6 +53,8 @@ const submitNoteCreationForm = async () => {
 
 	if (!Object.keys(entries).includes("diaryId")) {
 		entries["diaryId"] = selectedDiary?.value?.id;
+	} else {
+		entries["diaryId"] = Number(entries["diaryId"]);
 	}
 	entries["notePosition"] = Number(entries["notePosition"]);
 	entries["content"] = content.value || EMPTY_CONTENT;
