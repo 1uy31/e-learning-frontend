@@ -71,7 +71,7 @@ const showDiaryDetail = async (diary: Diary) => {
 				type="button"
 				class="mb-1 block w-full cursor-pointer rounded-lg bg-stone-200 p-4 text-left transition duration-500 hover:bg-stone-300 hover:text-cyan-950 focus:bg-stone-400 focus:text-cyan-950 focus:ring-0"
 				:value="childDiary.id"
-				@click="showDiaryDetail"
+				@click="showDiaryDetail(childDiary)"
 			>
 				{{ childDiary.topic }}
 			</button>
