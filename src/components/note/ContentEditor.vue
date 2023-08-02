@@ -123,3 +123,10 @@ const getToolStyle = (toolName: string, attributes: Record<string, string | numb
 		style="height: 240px; border: solid 2px #e5e7eb; border-radius: 4px; overflow-y: scroll; margin-top: 4px"
 	/>
 </template>
+
+<style>
+.ProseMirror ul {
+	padding: 0 1rem;
+	list-style: disc;
+}
+</style>
