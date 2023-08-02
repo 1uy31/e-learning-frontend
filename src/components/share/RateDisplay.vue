@@ -2,7 +2,7 @@
 import FilledStarIcon from "@assets/icons/heroicons/filledStar.svg?component";
 import EmptyStarIcon from "@assets/icons/heroicons/emptyStar.svg?component";
 
-const props = defineProps<{ rate: number }>();
+const props = defineProps<{ rate?: number }>();
 const rating = Math.min(props.rate || 0, 5);
 </script>
 
