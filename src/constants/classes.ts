@@ -19,6 +19,9 @@ export const REQUIRED_MARK_CLASS = "text-danger-600";
 export const HYPER_LINK_WRAPPER_CLASS =
 	"mr-2 inline-block whitespace-nowrap rounded bg-cyan-700 p-[0.55em] text-center align-baseline text-[0.75em] font-bold leading-none text-cyan-100 shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-cyan-900 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-cyan-900 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-cyan-900 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]";
 
+export const IN_BODY_HYPER_LINK_WRAPPER_CLASS =
+	"whitespace-nowrap rounded bg-cyan-600 p-1 text-center align-baseline text-[0.75em] font-bold leading-none text-cyan-100 transition duration-150 ease-in-out hover:bg-cyan-700 focus:bg-cyan-700 focus:outline-none focus:ring-0 active:bg-cyan-700";
+
 export const INFO_WRAPPER_CLASS =
 	"inline-block whitespace-nowrap bg-stone-300 p-[0.55em] text-center align-baseline text-[0.75em] leading-none text-cyan-800";
 

@@ -17,6 +17,7 @@ import {
 	LARGE_CONTAINER_CLASS,
 	HYPER_LINK_WRAPPER_CLASS,
 	ROW_CENTER_BETWEEN_CLASS,
+	IN_BODY_HYPER_LINK_WRAPPER_CLASS,
 } from "@src/constants/classes";
 
 const diaryStore = useDiaryStore();
@@ -65,7 +66,10 @@ const { notesByDiary } = storeToRefs(noteStore);
 
 		<div v-if="selectedDiary?.id && Object.keys(notesByDiary).includes(`${selectedDiary.id}`)">
 			<div v-for="note in notesByDiary[`${selectedDiary.id}`]" :key="note.id">
-				<div v-html="generateHTML(note.content, EXTENSIONS)"></div>
+				<div v-html="generateHTML(note.content, EXTENSIONS)" />
+				<span v-if="note.sourceUrl" :class="IN_BODY_HYPER_LINK_WRAPPER_CLASS">
+					<a :href="note.sourceUrl" target="_blank">Source</a>
+				</span>
 			</div>
 		</div>
 		<SectionDivider />
