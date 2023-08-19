@@ -54,7 +54,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 			const otherCategories = this.categories.filter((category) => category.id !== categoryId);
 			const categoryList = [...otherCategories];
 			categoryList.splice(categoryIndex, 0, replacingCategory);
-			this.categories = categoryList;
+			this.categories = [...categoryList]; // Must use spread operator for the UI list to be re-rendered.
 		},
 	},
 });

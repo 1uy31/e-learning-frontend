@@ -41,6 +41,13 @@ const submitDiaryCreationForm = async () => {
 		setDiaryRate(DEFAULT_RATE);
 		form.reset();
 
+		// To load the new option for field parent diary.
+		const categorySelection = alertIfNullUndefined(
+			document.getElementById("id_new_diary_category"),
+			"New diary's category field"
+		);
+		categorySelection.dispatchEvent(new Event("change"));
+
 		setTimeout(() => {
 			setFormMessage({ message: "", class: "" });
 		}, MEDIUM_TIMING);
