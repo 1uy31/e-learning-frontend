@@ -39,7 +39,7 @@
 		"pinia": "^2.0.34",
 		"tw-elements": "^1.0.0-beta2",
 		"vee-validate": "^4.11.6",
-		"vue": "^3.2.47",
+		"vue": "^3.3.4",
 		"zod": "^3.22.2"
 	},
 	"devDependencies": {
