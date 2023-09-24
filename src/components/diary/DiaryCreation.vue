@@ -18,6 +18,9 @@ import {
 	REQUIRED_MARK_CLASS,
 } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
+import { useForm, useResetForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
 
 const DEFAULT_RATE = "3";
 
@@ -26,9 +29,28 @@ const diaryStore = useDiaryStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
 const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
+const {
+	errors: formErrors,
+	values: formValues,
+	defineInputBinds,
+} = useForm({
+	initialValues: {
+		rateField: DEFAULT_RATE,
+	},
+	validationSchema: toTypedSchema(
+		zod.object({
+			topicField: zod.string().max(1024),
+			sourceUrlField: zod.string().max(256).optional(),
+			rateField: zod.string().nonempty().max(1),
+		})
+	),
+});
+const resetForm = useResetForm();
+const topicField = defineInputBinds("topicField");
+const sourceUrlField = defineInputBinds("sourceUrlField");
+const rateField = defineInputBinds("rateField");
+
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
-const [diaryTopic, setDiaryTopic] = useState("");
-const [diaryRate, setDiaryRate] = useState(DEFAULT_RATE);
 const [parentDiaries, setParentDiaries] = useState<Array<Diary>>([]);
 const [isCreatingDiary, toggleIsCreatingDiary] = useState(false);
 
@@ -36,10 +58,8 @@ const submitDiaryCreationForm = async () => {
 	const form = alertIfNullUndefined(document.getElementById("id_new_diary_form"), "New diary form");
 
 	const successfulCreationCallback = () => {
+		resetForm();
 		setFormMessage({ message: "New diary created successfully.", ...SUCCESS_INFO });
-		setDiaryTopic("");
-		setDiaryRate(DEFAULT_RATE);
-		form.reset();
 
 		// To load the new option for field parent diary.
 		const categorySelection = alertIfNullUndefined(
@@ -113,7 +133,7 @@ onMounted(() => {
 
 <template>
 	<div :class="MEDIUM_CONTAINER_CLASS">
-		<form id="id_new_diary_form">
+		<form id="id_new_diary_form" @submit.prevent="submitDiaryCreationForm">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
 			<div :class="'mb-6 mt-2 ' + FORM_SELECTION_CLASS">
 				<select id="id_new_diary_category" data-te-select-init name="categoryId" form="id_new_diary_form">
@@ -148,58 +168,71 @@ onMounted(() => {
 
 			<div class="relative mb-5" data-te-input-wrapper-init>
 				<input
-					id="id_new_diary_topic"
+					id="id_topic_field"
+					type="text"
+					v-bind="topicField"
 					name="topic"
 					form="id_new_diary_form"
-					type="text"
+					required
+					aria-required
+					aria-describedby="id_topic_field_error"
+					:aria-invalid="formErrors.topicField ? true : null"
 					:class="FORM_INPUT_CLASS"
 					placeholder="Learning topic"
-					:value="diaryTopic"
-					@change="(event) => setDiaryTopic(event.target.value)"
 				/>
-				<label for="id_new_diary_topic" :class="FORM_INPUT_LABEL_CLASS"
+				<label for="id_topic_field" :class="FORM_INPUT_LABEL_CLASS"
 					><span :class="REQUIRED_MARK_CLASS">*</span> Topic
 				</label>
 			</div>
+			<p v-if="formErrors.topicField" id="id_topic_field_error" :class="'text-l mb-5 ' + ERROR_INFO.class">
+				{{ formErrors.topicField }}
+			</p>
 
 			<div class="relative mb-4" data-te-input-wrapper-init>
 				<input
-					id="id_new_diary_source_url"
+					id="id_source_url_field"
+					type="text"
+					v-bind="sourceUrlField"
 					name="sourceUrl"
 					form="id_new_diary_form"
-					type="text"
+					aria-describedby="id_source_url_field_error"
+					:aria-invalid="formErrors.sourceUrlField ? true : null"
 					:class="FORM_INPUT_CLASS"
 					placeholder="Learning source url"
 				/>
-				<label for="id_new_diary_source_url" :class="FORM_INPUT_LABEL_CLASS">Source url </label>
+				<label for="id_source_url_field" :class="FORM_INPUT_LABEL_CLASS">Source url</label>
 			</div>
+			<p
+				v-if="formErrors.sourceUrlField"
+				id="id_source_url_field_error"
+				:class="'text-l mb-5 ' + ERROR_INFO.class"
+			>
+				{{ formErrors.sourceUrlField }}
+			</p>
 
 			<div class="relative mb-4">
-				<label for="id_new_diary_rate" class="inline-block text-cyan-700"
-					>Rate<span class="ml-2 text-cyan-950">{{ Number(diaryRate || DEFAULT_RATE) }}/5</span></label
+				<label for="id_rate_field" class="inline-block text-cyan-700"
+					>Rate<span class="ml-2 text-cyan-950">{{ Number(rateField.value || DEFAULT_RATE) }}/5</span></label
 				>
 				<input
-					id="id_new_diary_rate"
+					id="id_rate_field"
 					type="range"
+					v-bind="rateField"
 					name="rate"
 					form="id_new_diary_form"
 					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300 accent-cyan-950"
 					min="1"
 					max="5"
 					step="1"
-					:value="diaryRate"
-					@change="(event) => setDiaryRate(event.target.value)"
 				/>
 			</div>
 
 			<button
-				form="id_new_diary_form"
-				type="button"
+				type="submit"
 				:class="FORM_BUTTON_CLASS"
 				data-te-ripple-init
 				data-te-ripple-color="light"
-				:disabled="['', undefined].includes(diaryTopic)"
-				@click.prevent="submitDiaryCreationForm"
+				:aria-disabled="!formValues.topicField"
 			>
 				<SmallSpinner v-if="isCreatingDiary" status="Creating" />
 				{{ !isCreatingDiary ? "Create" : "" }}

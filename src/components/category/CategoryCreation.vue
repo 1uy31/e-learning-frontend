@@ -13,7 +13,7 @@ import {
 	REQUIRED_MARK_CLASS,
 } from "@src/constants/classes";
 import { ERROR_INFO, SUCCESS_INFO } from "@src/constants";
-import { useForm, useResetForm } from "vee-validate";
+import { useForm, useResetForm, useIsFormValid, useIsFormDirty } from "vee-validate";
 import * as zod from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
 
@@ -30,11 +30,12 @@ const {
 	),
 });
 const resetForm = useResetForm();
+const isFormValid = useIsFormValid();
+const isFormDirty = useIsFormDirty();
+const categoryField = defineInputBinds("categoryField");
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [isCreatingCategory, toggleIsCreatingCategory] = useState(false);
-
-const categoryField = defineInputBinds("categoryField");
 
 const successfulCreationCallback = () => {
 	resetForm();
@@ -44,14 +45,14 @@ const successfulCreationCallback = () => {
 
 const submitNewCategory = async (event: SubmitEvent) => {
 	event.preventDefault();
-	if (Object.keys(formErrors.value).length > 0 || !formValues.categoryField) {
+	if (!isFormValid || !isFormDirty) {
 		return;
 	}
 	toggleIsCreatingCategory(true);
 	await categoryStore.addCategory(
 		successfulCreationCallback,
 		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
-		formValues.categoryField
+		formValues.categoryField || "" // Wrong type-warning.
 	);
 	toggleIsCreatingCategory(false);
 };
@@ -63,27 +64,31 @@ onMounted(() => {
 
 <template>
 	<div :class="MEDIUM_CONTAINER_CLASS">
-		<form id="id_new_category_form" @submit.prevent="submitNewCategory">
+		<form @submit.prevent="submitNewCategory">
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class" aria-live="assertive">
 				{{ formMessage.message }}
 			</p>
 			<div class="relative mb-5 mt-2" data-te-input-wrapper-init>
 				<input
-					id="id_category_field"
+					id="id_new_category_field_category"
 					type="text"
 					v-bind="categoryField"
 					required
 					aria-required
-					aria-describedby="id_category_field_error"
+					aria-describedby="id_new_category_field_category_error"
 					:aria-invalid="formErrors.categoryField ? true : null"
 					:class="FORM_INPUT_CLASS"
 					placeholder="Unique category name"
 				/>
-				<label for="id_category_field" :class="FORM_INPUT_LABEL_CLASS"
+				<label for="id_new_category_field_category" :class="FORM_INPUT_LABEL_CLASS"
 					><span :class="REQUIRED_MARK_CLASS">*</span> Category name
 				</label>
 			</div>
-			<p v-if="formErrors.categoryField" id="id_category_field_error" :class="'text-l mb-5 ' + ERROR_INFO.class">
+			<p
+				v-if="formErrors.categoryField"
+				id="id_new_category_field_category_error"
+				:class="'text-l mb-5 ' + ERROR_INFO.class"
+			>
 				{{ formErrors.categoryField }}
 			</p>
 
