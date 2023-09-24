@@ -790,6 +790,15 @@
     "@typescript-eslint/types" "5.57.1"
     eslint-visitor-keys "^3.3.0"
 
+"@vee-validate/zod@^4.11.7":
+  version "4.11.7"
+  resolved "https://registry.yarnpkg.com/@vee-validate/zod/-/zod-4.11.7.tgz#b98d4c587d8f9a6caca65699d5e42ca3bdc7befc"
+  integrity sha512-1QONwpY5m93VXimuMLW7nbmvHUGHO3rrTXSM9bxLFWZSggfy5dqepg/RSJBAxlONtjf3P3nqIobGmAfPZrhLzA==
+  dependencies:
+    type-fest "^4.3.1"
+    vee-validate "4.11.7"
+    zod "^3.22.2"
+
 "@vitejs/plugin-vue@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-4.1.0.tgz#b6a9d83cd91575f7ee15593f6444397f68751073"
@@ -3299,7 +3308,7 @@ type-fest@^2.19.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
   integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
 
-type-fest@^4.2.0:
+type-fest@^4.2.0, type-fest@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.3.1.tgz#5cb58cdab5120f7ab0b40cfdc35073fb9adb651d"
   integrity sha512-pphNW/msgOUSkJbH58x8sqpq8uQj6b0ZKGxEsLKMUnGorRcDjrUaLS+39+/ub41JNTwrrMyJcUB8+YZs3mbwqw==
@@ -3348,6 +3357,14 @@ uuid@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
   integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
+
+vee-validate@4.11.7:
+  version "4.11.7"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-4.11.7.tgz#eb928ddfc9cf97bbca94cba0fcab3d17babccbea"
+  integrity sha512-HWnZgOY02mPuAQheaVcKZwahC879YsGNRW4/kkjxeOJ3wu1oruEeomuk+ovCyxTPQoAl1WPHurVJKL1yPGd/WQ==
+  dependencies:
+    "@vue/devtools-api" "^6.5.0"
+    type-fest "^4.3.1"
 
 vee-validate@^4.11.6:
   version "4.11.6"
