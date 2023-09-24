@@ -168,54 +168,58 @@ onMounted(() => {
 
 			<div class="relative mb-5" data-te-input-wrapper-init>
 				<input
-					id="id_topic_field"
+					id="id_new_diary_topic_field"
 					type="text"
 					v-bind="topicField"
 					name="topic"
 					form="id_new_diary_form"
 					required
 					aria-required
-					aria-describedby="id_topic_field_error"
+					aria-describedby="id_new_diary_topic_field_error"
 					:aria-invalid="formErrors.topicField ? true : null"
 					:class="FORM_INPUT_CLASS"
 					placeholder="Learning topic"
 				/>
-				<label for="id_topic_field" :class="FORM_INPUT_LABEL_CLASS"
+				<label for="id_new_diary_topic_field" :class="FORM_INPUT_LABEL_CLASS"
 					><span :class="REQUIRED_MARK_CLASS">*</span> Topic
 				</label>
 			</div>
-			<p v-if="formErrors.topicField" id="id_topic_field_error" :class="'text-l mb-5 ' + ERROR_INFO.class">
+			<p
+				v-if="formErrors.topicField"
+				id="id_new_diary_topic_field_error"
+				:class="'text-l mb-5 ' + ERROR_INFO.class"
+			>
 				{{ formErrors.topicField }}
 			</p>
 
 			<div class="relative mb-4" data-te-input-wrapper-init>
 				<input
-					id="id_source_url_field"
+					id="id_new_diary_source_url_field"
 					type="text"
 					v-bind="sourceUrlField"
 					name="sourceUrl"
 					form="id_new_diary_form"
-					aria-describedby="id_source_url_field_error"
+					aria-describedby="id_new_diary_source_url_field_error"
 					:aria-invalid="formErrors.sourceUrlField ? true : null"
 					:class="FORM_INPUT_CLASS"
 					placeholder="Learning source url"
 				/>
-				<label for="id_source_url_field" :class="FORM_INPUT_LABEL_CLASS">Source url</label>
+				<label for="id_new_diary_source_url_field" :class="FORM_INPUT_LABEL_CLASS">Source url</label>
 			</div>
 			<p
 				v-if="formErrors.sourceUrlField"
-				id="id_source_url_field_error"
+				id="id_new_diary_source_url_field_error"
 				:class="'text-l mb-5 ' + ERROR_INFO.class"
 			>
 				{{ formErrors.sourceUrlField }}
 			</p>
 
 			<div class="relative mb-4">
-				<label for="id_rate_field" class="inline-block text-cyan-700"
+				<label for="id_new_diary_rate_field" class="inline-block text-cyan-700"
 					>Rate<span class="ml-2 text-cyan-950">{{ Number(rateField.value || DEFAULT_RATE) }}/5</span></label
 				>
 				<input
-					id="id_rate_field"
+					id="id_new_diary_rate_field"
 					type="range"
 					v-bind="rateField"
 					name="rate"
