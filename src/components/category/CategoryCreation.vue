@@ -64,14 +64,14 @@ onMounted(() => {
 			</p>
 
 			<InputField
-				type="text"
 				id="id_new_category_field_category"
+				type="text"
 				label="Category name"
 				required
 				:value="categoryValue"
-				@change="handleCategoryChange"
 				:error="categoryError"
 				placeholder="Unique category name"
+				@change="handleCategoryChange"
 			/>
 
 			<button
