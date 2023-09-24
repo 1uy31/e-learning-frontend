@@ -13,28 +13,45 @@ import {
 	REQUIRED_MARK_CLASS,
 } from "@src/constants/classes";
 import { ERROR_INFO, SUCCESS_INFO } from "@src/constants";
+import { useForm, useResetForm } from "vee-validate";
+import * as zod from "zod";
+import { toTypedSchema } from "@vee-validate/zod";
 
 const categoryStore = useCategoryStore();
+const {
+	errors: formErrors,
+	values: formValues,
+	defineInputBinds,
+} = useForm({
+	validationSchema: toTypedSchema(
+		zod.object({
+			categoryField: zod.string().nonempty().max(256),
+		})
+	),
+});
+const resetForm = useResetForm();
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
-const [categoryName, setCategoryName] = useState("");
 const [isCreatingCategory, toggleIsCreatingCategory] = useState(false);
 
+const categoryField = defineInputBinds("categoryField");
+
 const successfulCreationCallback = () => {
-	setCategoryName("");
+	resetForm();
 	setFormMessage({ message: "New category created successfully.", ...SUCCESS_INFO });
 	setTimeout(() => setFormMessage({ message: "", class: "" }), MEDIUM_TIMING);
 };
 
-const submitNewCategory = async () => {
-	if (["", undefined].includes(categoryName.value) || isCreatingCategory.value) {
+const submitNewCategory = async (event: SubmitEvent) => {
+	event.preventDefault();
+	if (Object.keys(formErrors.value).length > 0 || !formValues.categoryField) {
 		return;
 	}
 	toggleIsCreatingCategory(true);
 	await categoryStore.addCategory(
 		successfulCreationCallback,
-		(error: Error) => setFormMessage({ message: error.message, ERROR_INFO }),
-		categoryName.value
+		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
+		formValues.categoryField
 	);
 	toggleIsCreatingCategory(false);
 };
@@ -46,29 +63,36 @@ onMounted(() => {
 
 <template>
 	<div :class="MEDIUM_CONTAINER_CLASS">
-		<form>
-			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
+		<form id="id_new_category_form" @submit.prevent="submitNewCategory">
+			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class" aria-live="assertive">
+				{{ formMessage.message }}
+			</p>
 			<div class="relative mb-5 mt-2" data-te-input-wrapper-init>
 				<input
-					id="id_new_category_name"
+					id="id_category_field"
 					type="text"
+					v-bind="categoryField"
+					required
+					aria-required
+					aria-describedby="id_category_field_error"
+					:aria-invalid="formErrors.categoryField ? true : null"
 					:class="FORM_INPUT_CLASS"
-					placeholder="A unique name"
-					:value="categoryName"
-					@change="(event) => setCategoryName(event.target.value)"
+					placeholder="Unique category name"
 				/>
-				<label for="id_new_category_name" :class="FORM_INPUT_LABEL_CLASS"
+				<label for="id_category_field" :class="FORM_INPUT_LABEL_CLASS"
 					><span :class="REQUIRED_MARK_CLASS">*</span> Category name
 				</label>
 			</div>
+			<p v-if="formErrors.categoryField" id="id_category_field_error" :class="'text-l mb-5 ' + ERROR_INFO.class">
+				{{ formErrors.categoryField }}
+			</p>
 
 			<button
-				type="button"
+				type="submit"
 				:class="FORM_BUTTON_CLASS"
 				data-te-ripple-init
 				data-te-ripple-color="light"
-				:disabled="['', undefined].includes(categoryName)"
-				@click.prevent="submitNewCategory"
+				:aria-disabled="!formValues.categoryField"
 			>
 				<SmallSpinner v-if="isCreatingCategory" status="Creating" />
 				{{ !isCreatingCategory ? "Create" : "" }}
