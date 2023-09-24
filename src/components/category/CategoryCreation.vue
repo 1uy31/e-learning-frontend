@@ -1,38 +1,33 @@
 <script setup lang="ts">
 import { useCategoryStore } from "@stores/category";
 import { onMounted } from "vue";
-import { Input, Ripple, initTE } from "tw-elements";
+import { Ripple, initTE } from "tw-elements";
 import SmallSpinner from "@components/share/SmallSpinner.vue";
 import { useState } from "@src/composable/useState";
 import { MEDIUM_TIMING } from "@src/constants/timing";
-import {
-	FORM_BUTTON_CLASS,
-	FORM_INPUT_CLASS,
-	FORM_INPUT_LABEL_CLASS,
-	MEDIUM_CONTAINER_CLASS,
-	REQUIRED_MARK_CLASS,
-} from "@src/constants/classes";
+import { FORM_BUTTON_CLASS, MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { ERROR_INFO, SUCCESS_INFO } from "@src/constants";
-import { useForm, useResetForm, useIsFormValid, useIsFormDirty } from "vee-validate";
+import { useField, useForm, useResetForm, useIsFormValid, useIsFormDirty } from "vee-validate";
 import * as zod from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
+import InputField from "@components/share/InputField.vue";
 
 const categoryStore = useCategoryStore();
-const {
-	errors: formErrors,
-	values: formValues,
-	defineInputBinds,
-} = useForm({
+useForm({
 	validationSchema: toTypedSchema(
 		zod.object({
-			categoryField: zod.string().nonempty().max(256),
+			categoryField: zod.string().nonempty().max(3),
 		})
 	),
 });
 const resetForm = useResetForm();
 const isFormValid = useIsFormValid();
 const isFormDirty = useIsFormDirty();
-const categoryField = defineInputBinds("categoryField");
+const {
+	value: categoryValue,
+	errorMessage: categoryError,
+	handleChange: handleCategoryChange,
+} = useField<string>("categoryField");
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [isCreatingCategory, toggleIsCreatingCategory] = useState(false);
@@ -43,22 +38,21 @@ const successfulCreationCallback = () => {
 	setTimeout(() => setFormMessage({ message: "", class: "" }), MEDIUM_TIMING);
 };
 
-const submitNewCategory = async (event: SubmitEvent) => {
-	event.preventDefault();
-	if (!isFormValid || !isFormDirty) {
+const submitNewCategory = async () => {
+	if (!isFormValid.value || !isFormDirty.value) {
 		return;
 	}
 	toggleIsCreatingCategory(true);
 	await categoryStore.addCategory(
 		successfulCreationCallback,
 		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
-		formValues.categoryField || "" // Wrong type-warning.
+		categoryValue.value
 	);
 	toggleIsCreatingCategory(false);
 };
 
 onMounted(() => {
-	initTE({ Input, Ripple });
+	initTE({ Ripple });
 });
 </script>
 
@@ -68,36 +62,24 @@ onMounted(() => {
 			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class" aria-live="assertive">
 				{{ formMessage.message }}
 			</p>
-			<div class="relative mb-5 mt-2" data-te-input-wrapper-init>
-				<input
-					id="id_new_category_field_category"
-					type="text"
-					v-bind="categoryField"
-					required
-					aria-required
-					aria-describedby="id_new_category_field_category_error"
-					:aria-invalid="formErrors.categoryField ? true : null"
-					:class="FORM_INPUT_CLASS"
-					placeholder="Unique category name"
-				/>
-				<label for="id_new_category_field_category" :class="FORM_INPUT_LABEL_CLASS"
-					><span :class="REQUIRED_MARK_CLASS">*</span> Category name
-				</label>
-			</div>
-			<p
-				v-if="formErrors.categoryField"
-				id="id_new_category_field_category_error"
-				:class="'text-l mb-5 ' + ERROR_INFO.class"
-			>
-				{{ formErrors.categoryField }}
-			</p>
+
+			<InputField
+				type="text"
+				id="id_new_category_field_category"
+				label="Category name"
+				required
+				:value="categoryValue"
+				@change="handleCategoryChange"
+				:error="categoryError"
+				placeholder="Unique category name"
+			/>
 
 			<button
 				type="submit"
+				:aria-disabled="!categoryValue"
 				:class="FORM_BUTTON_CLASS"
 				data-te-ripple-init
 				data-te-ripple-color="light"
-				:aria-disabled="!formValues.categoryField"
 			>
 				<SmallSpinner v-if="isCreatingCategory" status="Creating" />
 				{{ !isCreatingCategory ? "Create" : "" }}
