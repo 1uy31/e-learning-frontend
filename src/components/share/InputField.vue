@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { initTE, Input, Ripple } from "tw-elements";
+import { initTE, Input } from "tw-elements";
 import { ERROR_INFO } from "@src/constants";
 import { FORM_INPUT_CLASS, FORM_INPUT_LABEL_CLASS, REQUIRED_MARK_CLASS } from "@src/constants/classes";
 
