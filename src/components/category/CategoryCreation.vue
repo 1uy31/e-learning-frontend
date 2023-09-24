@@ -16,7 +16,7 @@ const categoryStore = useCategoryStore();
 useForm({
 	validationSchema: toTypedSchema(
 		zod.object({
-			categoryField: zod.string().nonempty().max(3),
+			categoryField: zod.string().nonempty(),
 		})
 	),
 });
