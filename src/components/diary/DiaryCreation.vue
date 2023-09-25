@@ -6,34 +6,27 @@ import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
 import { Diary } from "@appTypes/dataModels";
 import { alertIfNullUndefined } from "@src/utils";
-import { initTE, Input, Ripple, Select } from "tw-elements";
+import { initTE, Select } from "tw-elements";
 import { useState } from "@src/composable/useState";
 import SmallSpinner from "@components/share/SmallSpinner.vue";
-import {
-	FORM_BUTTON_CLASS,
-	FORM_INPUT_CLASS,
-	FORM_INPUT_LABEL_CLASS,
-	FORM_SELECTION_CLASS,
-	MEDIUM_CONTAINER_CLASS,
-	REQUIRED_MARK_CLASS,
-} from "@src/constants/classes";
+import { FORM_SELECTION_CLASS, MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
-import { useForm, useResetForm } from "vee-validate";
+import { useField, useForm, useResetForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import InputField from "@components/share/InputField.vue";
+import InputRange from "@components/share/InputRange.vue";
+import FormButton from "@components/share/FormButton.vue";
+import FormMessage from "@components/share/FormMessage.vue";
 
-const DEFAULT_RATE = "3";
+const DEFAULT_RATE = 3;
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
 const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
-const {
-	errors: formErrors,
-	values: formValues,
-	defineInputBinds,
-} = useForm({
+const { values: formValues } = useForm({
 	initialValues: {
 		rateField: DEFAULT_RATE,
 	},
@@ -41,14 +34,18 @@ const {
 		zod.object({
 			topicField: zod.string().max(1024),
 			sourceUrlField: zod.string().max(256).optional(),
-			rateField: zod.string().nonempty().max(1),
+			rateField: zod.number().min(1).max(5),
 		})
 	),
 });
 const resetForm = useResetForm();
-const topicField = defineInputBinds("topicField");
-const sourceUrlField = defineInputBinds("sourceUrlField");
-const rateField = defineInputBinds("rateField");
+const { value: topicValue, errorMessage: topicError, handleChange: handleTopicChange } = useField("topicField");
+const {
+	value: sourceUrlValue,
+	errorMessage: sourceUrlError,
+	handleChange: handleSourceUrlChange,
+} = useField("sourceUrlField");
+const { value: rateValue, errorMessage: rateError, handleChange: handleRateChange } = useField("rateField");
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [parentDiaries, setParentDiaries] = useState<Array<Diary>>([]);
@@ -63,7 +60,7 @@ const submitDiaryCreationForm = async () => {
 
 		// To load the new option for field parent diary.
 		const categorySelection = alertIfNullUndefined(
-			document.getElementById("id_new_diary_category"),
+			document.getElementById("id_new_diary_field_category"),
 			"New diary's category field"
 		);
 		categorySelection.dispatchEvent(new Event("change"));
@@ -112,9 +109,9 @@ const setParentDiaryOptions = async (categoryId?: string) => {
 };
 
 onMounted(() => {
-	initTE({ Input, Ripple, Select });
+	initTE({ Select });
 	const categorySelection = alertIfNullUndefined(
-		document.getElementById("id_new_diary_category"),
+		document.getElementById("id_new_diary_field_category"),
 		"Category selection in diary creation form"
 	);
 
@@ -134,9 +131,17 @@ onMounted(() => {
 <template>
 	<div :class="MEDIUM_CONTAINER_CLASS">
 		<form id="id_new_diary_form" @submit.prevent="submitDiaryCreationForm">
-			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
+			<FormMessage :message="formMessage.message" :message-class="formMessage.class" />
+
 			<div :class="'mb-6 mt-2 ' + FORM_SELECTION_CLASS">
-				<select id="id_new_diary_category" data-te-select-init name="categoryId" form="id_new_diary_form">
+				<select
+					id="id_new_diary_field_category"
+					required
+					aria-required
+					name="categoryId"
+					form="id_new_diary_form"
+					data-te-select-init
+				>
 					<option
 						v-for="category in categories"
 						:key="category.id"
@@ -146,13 +151,18 @@ onMounted(() => {
 						{{ category.name }}
 					</option>
 				</select>
-				<label data-te-select-label-ref>Category</label>
+				<label for="id_new_diary_field_category" data-te-select-label-ref>Category</label>
 			</div>
 
 			<SmallSpinner v-if="loadingDiaries" class="-mt-2 mb-4 border-cyan-700" status="Loading diary options" />
 			<!-- UI looks buggy when v-else is used. -->
 			<div :class="'mb-5 ' + FORM_SELECTION_CLASS" :style="[loadingDiaries ? { display: 'none' } : {}]">
-				<select data-te-select-init name="parentDiaryId" form="id_new_diary_form">
+				<select
+					id="id_new_diary_field_parent_diary"
+					name="parentDiaryId"
+					form="id_new_diary_form"
+					data-te-select-init
+				>
 					<option>No parent diary</option>
 					<option
 						v-for="parentDiary in parentDiaries"
@@ -163,84 +173,54 @@ onMounted(() => {
 						{{ parentDiary.topic }}
 					</option>
 				</select>
-				<label data-te-select-label-ref>Parent diary</label>
+				<label for="id_new_diary_field_parent_diary" data-te-select-label-ref>Parent diary</label>
 			</div>
 
-			<div class="relative mb-5" data-te-input-wrapper-init>
-				<input
-					id="id_new_diary_topic_field"
-					type="text"
-					v-bind="topicField"
-					name="topic"
-					form="id_new_diary_form"
-					required
-					aria-required
-					aria-describedby="id_new_diary_topic_field_error"
-					:aria-invalid="formErrors.topicField ? true : null"
-					:class="FORM_INPUT_CLASS"
-					placeholder="Learning topic"
-				/>
-				<label for="id_new_diary_topic_field" :class="FORM_INPUT_LABEL_CLASS"
-					><span :class="REQUIRED_MARK_CLASS">*</span> Topic
-				</label>
-			</div>
-			<p
-				v-if="formErrors.topicField"
-				id="id_new_diary_topic_field_error"
-				:class="'text-l mb-5 ' + ERROR_INFO.class"
-			>
-				{{ formErrors.topicField }}
-			</p>
+			<InputField
+				id="id_new_diary_field_topic"
+				type="text"
+				label="Topic"
+				required
+				name="topic"
+				form="id_new_diary_form"
+				:value="topicValue"
+				:error="topicError"
+				placeholder="Learning topic"
+				@change="handleTopicChange"
+			/>
 
-			<div class="relative mb-4" data-te-input-wrapper-init>
-				<input
-					id="id_new_diary_source_url_field"
-					type="text"
-					v-bind="sourceUrlField"
-					name="sourceUrl"
-					form="id_new_diary_form"
-					aria-describedby="id_new_diary_source_url_field_error"
-					:aria-invalid="formErrors.sourceUrlField ? true : null"
-					:class="FORM_INPUT_CLASS"
-					placeholder="Learning source url"
-				/>
-				<label for="id_new_diary_source_url_field" :class="FORM_INPUT_LABEL_CLASS">Source url</label>
-			</div>
-			<p
-				v-if="formErrors.sourceUrlField"
-				id="id_new_diary_source_url_field_error"
-				:class="'text-l mb-5 ' + ERROR_INFO.class"
-			>
-				{{ formErrors.sourceUrlField }}
-			</p>
+			<InputField
+				id="id_new_diary_field_source_url"
+				type="text"
+				label="Source URL"
+				name="sourceUrl"
+				form="id_new_diary_form"
+				:value="sourceUrlValue"
+				:error="sourceUrlError"
+				placeholder="Learning source url"
+				@change="handleSourceUrlChange"
+			/>
 
-			<div class="relative mb-4">
-				<label for="id_new_diary_rate_field" class="inline-block text-cyan-700"
-					>Rate<span class="ml-2 text-cyan-950">{{ Number(rateField.value || DEFAULT_RATE) }}/5</span></label
-				>
-				<input
-					id="id_new_diary_rate_field"
-					type="range"
-					v-bind="rateField"
-					name="rate"
-					form="id_new_diary_form"
-					class="h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-stone-300 accent-cyan-950"
-					min="1"
-					max="5"
-					step="1"
-				/>
-			</div>
+			<InputRange
+				id="id_new_diary_field_rate"
+				label="Rate"
+				name="rate"
+				form="id_new_diary_form"
+				min="1"
+				max="5"
+				step="1"
+				:value="rateValue"
+				:error="rateError"
+				:display-value="`${Number(rateValue || DEFAULT_RATE)}/5`"
+				@change="handleRateChange"
+			/>
 
-			<button
-				type="submit"
-				:class="FORM_BUTTON_CLASS"
-				data-te-ripple-init
-				data-te-ripple-color="light"
+			<FormButton
 				:aria-disabled="!formValues.topicField"
-			>
-				<SmallSpinner v-if="isCreatingDiary" status="Creating" />
-				{{ !isCreatingDiary ? "Create" : "" }}
-			</button>
+				label="Create"
+				:status="isCreatingDiary"
+				status-label="Creating"
+			/>
 		</form>
 	</div>
 </template>
