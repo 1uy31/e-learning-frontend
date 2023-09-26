@@ -6,18 +6,17 @@ import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
 import { Diary } from "@appTypes/dataModels";
 import { alertIfNullUndefined } from "@src/utils";
-import { initTE, Select } from "tw-elements";
 import { useState } from "@src/composable/useState";
-import SmallSpinner from "@components/share/SmallSpinner.vue";
-import { FORM_SELECTION_CLASS, MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
+import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
 import { useField, useForm, useResetForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import InputField from "@components/share/InputField.vue";
-import InputRange from "@components/share/InputRange.vue";
+import RangeField from "@components/share/RangeField.vue";
 import FormButton from "@components/share/FormButton.vue";
 import FormMessage from "@components/share/FormMessage.vue";
+import SelectField from "@components/share/SelectField.vue";
 
 const DEFAULT_RATE = 3;
 
@@ -28,10 +27,14 @@ const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diarySt
 
 const { values: formValues } = useForm({
 	initialValues: {
+		categoryField: selectedCategory?.value?.id,
+		parentDiaryField: selectedDiary?.value?.id,
 		rateField: DEFAULT_RATE,
 	},
 	validationSchema: toTypedSchema(
 		zod.object({
+			categoryField: zod.number(),
+			parentDiaryField: zod.number().optional(),
 			topicField: zod.string().max(1024),
 			sourceUrlField: zod.string().max(256).optional(),
 			rateField: zod.number().min(1).max(5),
@@ -39,6 +42,17 @@ const { values: formValues } = useForm({
 	),
 });
 const resetForm = useResetForm();
+
+const {
+	value: categoryValue,
+	errorMessage: categoryError,
+	handleChange: handleCategoryChange,
+} = useField("categoryField");
+const {
+	value: parentDiaryValue,
+	errorMessage: parentDiaryError,
+	handleChange: handleParentDiaryChange,
+} = useField("parentDiaryField");
 const { value: topicValue, errorMessage: topicError, handleChange: handleTopicChange } = useField("topicField");
 const {
 	value: sourceUrlValue,
@@ -109,7 +123,6 @@ const setParentDiaryOptions = async (categoryId?: string) => {
 };
 
 onMounted(() => {
-	initTE({ Select });
 	const categorySelection = alertIfNullUndefined(
 		document.getElementById("id_new_diary_field_category"),
 		"Category selection in diary creation form"
@@ -133,48 +146,39 @@ onMounted(() => {
 		<form id="id_new_diary_form" @submit.prevent="submitDiaryCreationForm">
 			<FormMessage :message="formMessage.message" :message-class="formMessage.class" />
 
-			<div :class="'mb-6 mt-2 ' + FORM_SELECTION_CLASS">
-				<select
-					id="id_new_diary_field_category"
-					required
-					aria-required
-					name="categoryId"
-					form="id_new_diary_form"
-					data-te-select-init
-				>
-					<option
-						v-for="category in categories"
-						:key="category.id"
-						:value="category.id"
-						:selected="selectedCategory?.id === category.id"
-					>
+			<SelectField
+				id="id_new_diary_field_category"
+				label="Category"
+				name="categoryId"
+				form="id_new_diary_form"
+				required
+				:value="categoryValue"
+				:error="categoryError"
+				@change="handleCategoryChange"
+			>
+				<template #options>
+					<option v-for="category in categories" :key="category.id" :value="category.id">
 						{{ category.name }}
 					</option>
-				</select>
-				<label for="id_new_diary_field_category" data-te-select-label-ref>Category</label>
-			</div>
+				</template>
+			</SelectField>
 
-			<SmallSpinner v-if="loadingDiaries" class="-mt-2 mb-4 border-cyan-700" status="Loading diary options" />
-			<!-- UI looks buggy when v-else is used. -->
-			<div :class="'mb-5 ' + FORM_SELECTION_CLASS" :style="[loadingDiaries ? { display: 'none' } : {}]">
-				<select
-					id="id_new_diary_field_parent_diary"
-					name="parentDiaryId"
-					form="id_new_diary_form"
-					data-te-select-init
-				>
-					<option>No parent diary</option>
-					<option
-						v-for="parentDiary in parentDiaries"
-						:key="parentDiary.id"
-						:value="parentDiary.id"
-						:selected="selectedDiary?.id === parentDiary.id && diaryStore.hasChildDiary(selectedDiary.id)"
-					>
+			<SelectField
+				id="id_new_diary_field_parent_diary"
+				label="Parent diary"
+				name="parentDiaryId"
+				form="id_new_diary_form"
+				:value="parentDiaryValue"
+				:error="parentDiaryError"
+				:loading-options="loadingDiaries"
+				@change="handleParentDiaryChange"
+			>
+				<template #options>
+					<option v-for="parentDiary in parentDiaries" :key="parentDiary.id" :value="parentDiary.id">
 						{{ parentDiary.topic }}
 					</option>
-				</select>
-				<label for="id_new_diary_field_parent_diary" data-te-select-label-ref>Parent diary</label>
-			</div>
+				</template>
+			</SelectField>
 
 			<InputField
 				id="id_new_diary_field_topic"
@@ -201,7 +205,7 @@ onMounted(() => {
 				@change="handleSourceUrlChange"
 			/>
 
-			<InputRange
+			<RangeField
 				id="id_new_diary_field_rate"
 				label="Rate"
 				name="rate"
