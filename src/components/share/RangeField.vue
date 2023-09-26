@@ -22,6 +22,8 @@ onMounted(() => {
 				:id="id"
 				:required="Boolean(required)"
 				:aria-required="Boolean(required)"
+				:aria-describedby="`${id}_error`"
+				:aria-invalid="error ? true : null"
 				type="range"
 				class="h-1.5 grow cursor-pointer appearance-none self-center rounded-lg border-transparent bg-stone-300 accent-cyan-950"
 			/>

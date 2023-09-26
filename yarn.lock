@@ -3278,10 +3278,10 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-tw-elements@^1.0.0-beta2:
-  version "1.0.0-beta2"
-  resolved "https://registry.yarnpkg.com/tw-elements/-/tw-elements-1.0.0-beta2.tgz#a405bd6bdc3320bac2f660c8b7d745e700d9b39b"
-  integrity sha512-0DAm5i7OSk1NCW9i/JotHZOWG0NIuCBr5S0t1h66rDgH1M2fxCQvvQw3AxK0fVaCJG0jk82UhAsI7PCEMoq6Xw==
+tw-elements@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tw-elements/-/tw-elements-1.0.0.tgz#fd65decc587a300d0d43c4583d21a36fd2443da8"
+  integrity sha512-pD2bA1bTGzvigU79dz4pGvO207CCOpzhwlxzb7hswx40SMMkJISOkoDxU2ot3OQ7LTZM5GwuLDkZ+dquK0wdYQ==
   dependencies:
     "@popperjs/core" "^2.6.0"
     chart.js "^3.7.1"
