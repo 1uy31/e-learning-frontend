@@ -12,11 +12,11 @@ import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
 import { useField, useForm, useResetForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import InputField from "@components/share/InputField.vue";
-import RangeField from "@components/share/RangeField.vue";
-import FormButton from "@components/share/FormButton.vue";
-import FormMessage from "@components/share/FormMessage.vue";
-import SelectField from "@components/share/SelectField.vue";
+import InputField from "@components/share/form/InputField.vue";
+import RangeField from "@components/share/form/RangeField.vue";
+import FormButton from "@components/share/form/FormButton.vue";
+import FormMessage from "@components/share/form/FormMessage.vue";
+import SelectField from "@components/share/form/SelectField.vue";
 
 const DEFAULT_RATE = 3;
 

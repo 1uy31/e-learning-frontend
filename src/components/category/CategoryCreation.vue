@@ -7,9 +7,9 @@ import { ERROR_INFO, SUCCESS_INFO } from "@src/constants";
 import { useField, useForm, useResetForm, useIsFormValid, useIsFormDirty } from "vee-validate";
 import * as zod from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
-import InputField from "@components/share/InputField.vue";
-import FormButton from "@components/share/FormButton.vue";
-import FormMessage from "@components/share/FormMessage.vue";
+import InputField from "@components/share/form/InputField.vue";
+import FormButton from "@components/share/form/FormButton.vue";
+import FormMessage from "@components/share/form/FormMessage.vue";
 
 const categoryStore = useCategoryStore();
 useForm({
