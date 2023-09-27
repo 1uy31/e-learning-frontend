@@ -120,7 +120,7 @@ const getToolStyle = (toolName: string, attributes: Record<string, string | numb
 
 	<EditorContent
 		:editor="editor"
-		style="height: 240px; border: solid 2px #e5e7eb; border-radius: 4px; overflow-y: scroll; margin-top: 4px"
+		style="height: 240px; border: solid 2px #e5e7eb; border-radius: 4px; overflow-y: scroll; margin-block: 1rem"
 	/>
 </template>
 
