@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import ContentEditor from "@components/note/ContentEditor.vue";
-import SmallSpinner from "@components/share/SmallSpinner.vue";
 import { useState } from "@src/composable/useState";
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
 import { alertIfNullUndefined } from "@src/utils";
 import { MEDIUM_TIMING } from "@src/constants/timing";
 import { useNoteStore } from "@stores/note";
-import {
-	FORM_BUTTON_CLASS,
-	FORM_INPUT_CLASS,
-	FORM_INPUT_LABEL_CLASS,
-	FORM_SELECTION_CLASS,
-	LARGE_CONTAINER_CLASS,
-	REQUIRED_MARK_CLASS,
-} from "@src/constants/classes";
+import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
 import { onMounted } from "vue";
+import { useField, useForm, useResetForm } from "vee-validate";
+import { NoteInput } from "@appTypes/dataModels";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+import InputField from "@components/share/form/InputField.vue";
+import FormButton from "@components/share/form/FormButton.vue";
+import FormMessage from "@components/share/form/FormMessage.vue";
+import SelectField from "@components/share/form/SelectField.vue";
+import { JSONContent } from "@tiptap/vue-3";
 
 const EMPTY_CONTENT = {
 	type: "doc",
@@ -27,46 +28,62 @@ const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
 const { selectedDiary, diaries, loadingDiaries } = storeToRefs(diaryStore);
 
+const { values: formValues } = useForm<NoteInput>({
+	initialValues: {
+		diaryId: selectedDiary?.value?.id,
+		content: EMPTY_CONTENT,
+	},
+	validationSchema: toTypedSchema(
+		zod.object({
+			diaryId: zod.string(),
+			notePosition: zod.number(),
+			content: zod.object({}),
+			sourceUrl: zod.string().optional(),
+		})
+	),
+});
+const resetForm = useResetForm();
+
+const { value: diaryValue, errorMessage: diaryError, handleChange: handleDiaryChange } = useField("diaryId");
+const {
+	value: notePositionValue,
+	errorMessage: notePositionError,
+	handleChange: handleNotePositionChange,
+} = useField("notePosition");
+const {
+	value: sourceUrlValue,
+	errorMessage: sourceUrlError,
+	handleChange: handleSourceUrlChange,
+} = useField("sourceUrl");
+const { value: contentValue, handleChange: handleContentChange } = useField<JSONContent>("content");
+
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [isCreatingNote, toggleIsCreatingNote] = useState(false);
-const [content, setContent] = useState(EMPTY_CONTENT);
-const [notePosition, setNotePosition] = useState("");
+
+const successfulCreationCallback = () => {
+	resetForm();
+	setFormMessage({ message: "New note created successfully.", ...SUCCESS_INFO });
+
+	setTimeout(() => {
+		setFormMessage({ message: "", class: "" });
+	}, MEDIUM_TIMING);
+};
 
 const submitNoteCreationForm = async () => {
+	alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
+
 	const form = alertIfNullUndefined(document.getElementById("id_new_note_form"), "New note form");
-
-	const successfulCreationCallback = () => {
-		setFormMessage({ message: "New note created successfully.", ...SUCCESS_INFO });
-		setNotePosition("");
-		form.reset();
-
-		setTimeout(() => {
-			setFormMessage({ message: "", class: "" });
-		}, MEDIUM_TIMING);
-	};
-
 	const formInput = new FormData(form as HTMLFormElement);
-	const entries = [...formInput.entries()].reduce(
-		(object, entry) => Object.assign(object, { [entry[0]]: entry[1] }),
-		{}
-	);
-
-	if (!Object.keys(entries).includes("diaryId")) {
-		entries["diaryId"] = selectedDiary?.value?.id;
-	} else {
-		entries["diaryId"] = Number(entries["diaryId"]);
-	}
-	entries["notePosition"] = Number(entries["notePosition"]);
-	entries["content"] = content.value || EMPTY_CONTENT;
-	const file = entries.file;
-	delete entries.file;
-	console.log(file);
+	console.log(formInput);
 
 	toggleIsCreatingNote(true);
 	await noteStore.addNote(
 		successfulCreationCallback,
 		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
-		entries
+		{
+			...formValues,
+			diaryId: formValues.diaryId ? Number(formValues.diaryId) : diaries.value[0].id,
+		}
 	);
 	toggleIsCreatingNote(false);
 };
@@ -82,75 +99,73 @@ onMounted(async () => {
 
 <template>
 	<div :class="LARGE_CONTAINER_CLASS">
-		<form id="id_new_note_form">
-			<p v-if="formMessage.message" :class="'text-l mb-5 ' + formMessage.class">{{ formMessage.message }}</p>
+		<form id="id_new_note_form" @submit.prevent="submitNoteCreationForm">
+			<FormMessage :message="formMessage.message" :message-class="formMessage.class" />
 
-			<SmallSpinner v-if="loadingDiaries" class="-mt-2 mb-4 border-cyan-700" status="Loading diary options" />
-			<!-- UI looks buggy when v-else is used. -->
-			<div :class="'mb-4 mt-2 ' + FORM_SELECTION_CLASS" :style="[loadingDiaries ? { display: 'none' } : {}]">
-				<select id="id_new_note_diary" data-te-select-init name="diaryId" form="id_new_note_form">
+			<SelectField
+				id="id_new_note_field_diary"
+				name="diaryId"
+				label="Diary"
+				required
+				:value="diaryValue"
+				:error="diaryError"
+				:loading-options="loadingDiaries"
+				@change="handleDiaryChange"
+			>
+				<template #options>
 					<option
 						v-for="diary in diaries.filter((_diary) => !diaryStore.hasChildDiary(_diary.id))"
 						:key="diary.id"
 						:value="diary.id"
-						:selected="selectedDiary?.id === diary.id"
 					>
 						{{ diary.topic }}
 					</option>
-				</select>
-				<label data-te-select-label-ref>Diary</label>
+				</template>
+			</SelectField>
+
+			<InputField
+				id="id_new_note_field_note_position"
+				name="notePosition"
+				type="number"
+				required
+				label="Note position"
+				:value="notePositionValue"
+				:error="notePositionError"
+				@change="handleNotePositionChange"
+			/>
+
+			<InputField
+				id="id_new_note_field_source_url"
+				name="sourceUrl"
+				type="text"
+				label="Source URL"
+				:value="sourceUrlValue"
+				:error="sourceUrlError"
+				placeholder="Learning source url"
+				@change="handleSourceUrlChange"
+			/>
+
+			<!--			TODO-->
+			<!--			<div class="mb-4">-->
+			<!--				<input-->
+			<!--					id="id_new_note_file"-->
+			<!--					class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.6rem] text-base font-normal text-cyan-950 transition duration-300 ease-in-out file:-mx-3 file:my-[-0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-cyan-800 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-cyan-950 focus:shadow-te-primary focus:outline-none"-->
+			<!--					type="file"-->
+			<!--					form="id_new_note_form"-->
+			<!--					name="file"-->
+			<!--				/>-->
+			<!--			</div>-->
+
+			<div id="id_new_note_field_content_wrapper">
+				<ContentEditor :content="contentValue" @onchange="handleContentChange" />
 			</div>
 
-			<div class="relative mb-4" data-te-input-wrapper-init>
-				<input
-					id="id_new_note_position"
-					type="number"
-					:class="FORM_INPUT_CLASS"
-					form="id_new_note_form"
-					name="notePosition"
-					:value="notePosition"
-					@change="(event) => setNotePosition(event.target.value)"
-				/>
-				<label for="id_new_note_position" :class="FORM_INPUT_LABEL_CLASS"
-					><span :class="REQUIRED_MARK_CLASS">*</span> Note position
-				</label>
-			</div>
-
-			<div class="relative mb-4" data-te-input-wrapper-init>
-				<input
-					id="id_new_note_source_url"
-					name="sourceUrl"
-					form="id_new_note_form"
-					type="text"
-					:class="FORM_INPUT_CLASS"
-				/>
-				<label for="id_new_note_source_url" :class="FORM_INPUT_LABEL_CLASS">Source url </label>
-			</div>
-
-			<div class="mb-4">
-				<input
-					id="id_new_note_file"
-					class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.6rem] text-base font-normal text-cyan-950 transition duration-300 ease-in-out file:-mx-3 file:my-[-0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-cyan-800 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-cyan-950 focus:shadow-te-primary focus:outline-none"
-					type="file"
-					form="id_new_note_form"
-					name="file"
-				/>
-			</div>
-
-			<ContentEditor :content="content" @onchange="(newContent) => setContent(newContent)" />
-
-			<button
-				form="id_new_note_form"
-				type="button"
-				:class="'mt-5 ' + FORM_BUTTON_CLASS"
-				data-te-ripple-init
-				data-te-ripple-color="light"
-				:disabled="['', undefined].includes(notePosition)"
-				@click.prevent="submitNoteCreationForm"
-			>
-				<SmallSpinner v-if="isCreatingNote" status="Creating" />
-				{{ !isCreatingNote ? "Create" : "" }}
-			</button>
+			<FormButton
+				:aria-disabled="!notePositionValue"
+				label="Create"
+				:status="isCreatingNote"
+				status-label="Creating"
+			/>
 		</form>
 	</div>
 </template>
