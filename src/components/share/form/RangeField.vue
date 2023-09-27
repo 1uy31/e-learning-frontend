@@ -16,7 +16,8 @@ onMounted(() => {
 		<label :for="id" class="inline-block text-cyan-700"
 			><span v-if="required" :class="REQUIRED_MARK_CLASS">*</span> {{ label }}
 		</label>
-		<div class="flex flex-row">
+		<div class="flex flex-row justify-between">
+			<p class="text-cyan-950">{{ displayValue }}</p>
 			<input
 				v-bind="$attrs"
 				:id="id"
@@ -25,9 +26,8 @@ onMounted(() => {
 				:aria-describedby="`${id}_error`"
 				:aria-invalid="error ? true : null"
 				type="range"
-				class="h-1.5 grow cursor-pointer appearance-none self-center rounded-lg border-transparent bg-stone-300 accent-cyan-950"
+				class="h-1.5 w-3/4 cursor-pointer appearance-none self-center rounded-lg border-transparent bg-stone-300 accent-cyan-950"
 			/>
-			<p class="ml-5 text-cyan-950">{{ displayValue }}</p>
 		</div>
 	</div>
 	<p v-if="error" :id="`${id}_error`" :class="'text-l -mt-2 mb-5 ' + ERROR_INFO.class">
