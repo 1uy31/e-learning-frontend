@@ -25,7 +25,7 @@ onMounted(() => {
 		:class="'mb-5 mt-2 flex flex-row items-center justify-between ' + FORM_SELECTION_CLASS"
 		:style="[loadingOptions ? { display: 'none' } : {}]"
 	>
-		<label :for="id" class="mr-2"><span v-if="required" :class="REQUIRED_MARK_CLASS">*</span> {{ label }}</label>
+		<label :for="id"><span v-if="required" :class="REQUIRED_MARK_CLASS">*</span> {{ label }}</label>
 		<div class="w-3/4">
 			<select
 				v-bind="$attrs"
