@@ -19,6 +19,7 @@ import FormMessage from "@components/share/form/FormMessage.vue";
 import SelectField from "@components/share/form/SelectField.vue";
 
 const DEFAULT_RATE = 3;
+const CATEGORY_SELECTION_ELEMENT = "Category selection in diary creation form";
 
 const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
@@ -65,28 +66,24 @@ const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [parentDiaries, setParentDiaries] = useState<Array<Diary>>([]);
 const [isCreatingDiary, toggleIsCreatingDiary] = useState(false);
 
+const successfulCreationCallback = () => {
+	resetForm();
+	setFormMessage({ message: "New diary created successfully.", ...SUCCESS_INFO });
+
+	// To load the new option for field parent diary.
+	const categorySelection = alertIfNullUndefined(
+		document.getElementById("id_new_diary_field_category"),
+		CATEGORY_SELECTION_ELEMENT
+	);
+	categorySelection.dispatchEvent(new Event("change"));
+
+	setTimeout(() => {
+		setFormMessage({ message: "", class: "" });
+	}, MEDIUM_TIMING);
+};
+
 const submitDiaryCreationForm = async () => {
-	const successfulCreationCallback = () => {
-		resetForm();
-		setFormMessage({ message: "New diary created successfully.", ...SUCCESS_INFO });
-
-		// To load the new option for field parent diary.
-		const categorySelection = alertIfNullUndefined(
-			document.getElementById("id_new_diary_field_category"),
-			"New diary's category field"
-		);
-		categorySelection.dispatchEvent(new Event("change"));
-
-		setTimeout(() => {
-			setFormMessage({ message: "", class: "" });
-		}, MEDIUM_TIMING);
-	};
-
-	if (!categories.value[0]?.id) {
-		const errorMessage = "Please create a category first.";
-		window.alert(errorMessage);
-		throw Error(errorMessage);
-	}
+	alertIfNullUndefined(categories.value[0]?.id, "", "Please create a category first.");
 
 	toggleIsCreatingDiary(true);
 	await diaryStore.addDiary(
@@ -118,7 +115,7 @@ const setParentDiaryOptions = async (categoryId?: string) => {
 onMounted(() => {
 	const categorySelection = alertIfNullUndefined(
 		document.getElementById("id_new_diary_field_category"),
-		"Category selection in diary creation form"
+		CATEGORY_SELECTION_ELEMENT
 	);
 
 	categorySelection.addEventListener("change", async (event) => {

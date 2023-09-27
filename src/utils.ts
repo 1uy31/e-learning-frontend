@@ -7,10 +7,10 @@ export const validateError = <T>(error: T): Error => {
 	throw error;
 };
 
-export const alertIfNullUndefined = <T>(entity: T, entityName: string): NonNullable<T> => {
+export const alertIfNullUndefined = <T>(entity: T, entityName?: string, alertMessage?: string): NonNullable<T> => {
 	// null == undefined
 	if (entity == null) {
-		const message = `${entityName} is null or undefined.`;
+		const message = alertMessage || `${entityName || "An expected entity"} is null or undefined.`;
 		window.alert(message);
 		throw Error(message);
 	}
