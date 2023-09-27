@@ -4,7 +4,7 @@ import { useDiaryStore } from "@stores/diary";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
-import { Diary } from "@appTypes/dataModels";
+import { Diary, DiaryInput } from "@appTypes/dataModels";
 import { alertIfNullUndefined } from "@src/utils";
 import { useState } from "@src/composable/useState";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
@@ -25,19 +25,19 @@ const diaryStore = useDiaryStore();
 const { categories, selectedCategory } = storeToRefs(categoryStore);
 const { diariesByCategory, loadingDiaries, selectedDiary } = storeToRefs(diaryStore);
 
-const { values: formValues } = useForm({
+const { values: formValues } = useForm<DiaryInput>({
 	initialValues: {
-		categoryField: selectedCategory?.value?.id,
-		parentDiaryField: selectedDiary?.value?.id,
-		rateField: DEFAULT_RATE,
+		categoryId: selectedCategory?.value?.id,
+		parentDiaryId: selectedDiary?.value?.id,
+		rate: DEFAULT_RATE,
 	},
 	validationSchema: toTypedSchema(
 		zod.object({
-			categoryField: zod.number(),
-			parentDiaryField: zod.number().optional(),
-			topicField: zod.string().max(1024),
-			sourceUrlField: zod.string().max(256).optional(),
-			rateField: zod.number().min(1).max(5),
+			categoryId: zod.string(),
+			parentDiaryId: zod.string().optional(),
+			topic: zod.string().max(1024),
+			sourceUrl: zod.string().max(256).optional(),
+			rate: zod.number().min(1).max(5),
 		})
 	),
 });
@@ -47,27 +47,25 @@ const {
 	value: categoryValue,
 	errorMessage: categoryError,
 	handleChange: handleCategoryChange,
-} = useField("categoryField");
+} = useField("categoryId");
 const {
 	value: parentDiaryValue,
 	errorMessage: parentDiaryError,
 	handleChange: handleParentDiaryChange,
-} = useField("parentDiaryField");
-const { value: topicValue, errorMessage: topicError, handleChange: handleTopicChange } = useField("topicField");
+} = useField("parentDiaryId");
+const { value: topicValue, errorMessage: topicError, handleChange: handleTopicChange } = useField("topic");
 const {
 	value: sourceUrlValue,
 	errorMessage: sourceUrlError,
 	handleChange: handleSourceUrlChange,
-} = useField("sourceUrlField");
-const { value: rateValue, errorMessage: rateError, handleChange: handleRateChange } = useField("rateField");
+} = useField("sourceUrl");
+const { value: rateValue, errorMessage: rateError, handleChange: handleRateChange } = useField("rate");
 
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [parentDiaries, setParentDiaries] = useState<Array<Diary>>([]);
 const [isCreatingDiary, toggleIsCreatingDiary] = useState(false);
 
 const submitDiaryCreationForm = async () => {
-	const form = alertIfNullUndefined(document.getElementById("id_new_diary_form"), "New diary form");
-
 	const successfulCreationCallback = () => {
 		resetForm();
 		setFormMessage({ message: "New diary created successfully.", ...SUCCESS_INFO });
@@ -84,14 +82,10 @@ const submitDiaryCreationForm = async () => {
 		}, MEDIUM_TIMING);
 	};
 
-	const formInput = new FormData(form as HTMLFormElement);
-	const entries = [...formInput.entries()].reduce(
-		(object, entry) => Object.assign(object, { [entry[0]]: entry[1] }),
-		{}
-	);
-
-	if (!Object.keys(entries).includes("categoryId")) {
-		entries["categoryId"] = categories.value[0]?.id;
+	if (!categories.value[0]?.id) {
+		const errorMessage = "Please create a category first.";
+		window.alert(errorMessage);
+		throw Error(errorMessage);
 	}
 
 	toggleIsCreatingDiary(true);
@@ -99,10 +93,9 @@ const submitDiaryCreationForm = async () => {
 		successfulCreationCallback,
 		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
 		{
-			...entries,
-			categoryId: entries.categoryId ? Number(entries.categoryId) : undefined,
-			parentDiaryId: entries.parentDiaryId ? Number(entries.parentDiaryId) : undefined,
-			rate: Number(entries.rate),
+			...formValues,
+			categoryId: formValues.categoryId ? Number(formValues.categoryId) : categories.value[0].id,
+			parentDiaryId: formValues.parentDiaryId ? Number(formValues.parentDiaryId) : undefined,
 		}
 	);
 	toggleIsCreatingDiary(false);
@@ -148,9 +141,8 @@ onMounted(() => {
 
 			<SelectField
 				id="id_new_diary_field_category"
-				label="Category"
 				name="categoryId"
-				form="id_new_diary_form"
+				label="Category"
 				required
 				:value="categoryValue"
 				:error="categoryError"
@@ -165,9 +157,8 @@ onMounted(() => {
 
 			<SelectField
 				id="id_new_diary_field_parent_diary"
-				label="Parent diary"
 				name="parentDiaryId"
-				form="id_new_diary_form"
+				label="Parent diary"
 				:value="parentDiaryValue"
 				:error="parentDiaryError"
 				:loading-options="loadingDiaries"
@@ -182,11 +173,10 @@ onMounted(() => {
 
 			<InputField
 				id="id_new_diary_field_topic"
+				name="topic"
 				type="text"
 				label="Topic"
 				required
-				name="topic"
-				form="id_new_diary_form"
 				:value="topicValue"
 				:error="topicError"
 				placeholder="Learning topic"
@@ -195,10 +185,9 @@ onMounted(() => {
 
 			<InputField
 				id="id_new_diary_field_source_url"
+				name="sourceUrl"
 				type="text"
 				label="Source URL"
-				name="sourceUrl"
-				form="id_new_diary_form"
 				:value="sourceUrlValue"
 				:error="sourceUrlError"
 				placeholder="Learning source url"
@@ -207,9 +196,8 @@ onMounted(() => {
 
 			<RangeField
 				id="id_new_diary_field_rate"
-				label="Rate"
 				name="rate"
-				form="id_new_diary_form"
+				label="Rate"
 				min="1"
 				max="5"
 				step="1"
@@ -220,7 +208,7 @@ onMounted(() => {
 			/>
 
 			<FormButton
-				:aria-disabled="!formValues.topicField"
+				:aria-disabled="!categoryValue || !topicValue"
 				label="Create"
 				:status="isCreatingDiary"
 				status-label="Creating"

@@ -30,7 +30,6 @@ onMounted(() => {
 			<select
 				v-bind="$attrs"
 				:id="id"
-				:required="Boolean(required)"
 				:aria-required="Boolean(required)"
 				:aria-describedby="`${id}_error`"
 				:aria-invalid="error ? true : null"
