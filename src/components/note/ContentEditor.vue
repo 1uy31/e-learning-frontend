@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useEditor, EditorContent, Content } from "@tiptap/vue-3";
 import "prosemirror-view/style/prosemirror.css";
-import { EDITOR_OPTIONS } from "@src/constants";
+import { EDITOR_OPTIONS, EMPTY_TIP_TAP_CONTENT, ERROR_INFO } from "@src/constants";
+import { defineExpose } from "vue";
 
-const props = defineProps<{ content: Content }>();
+const props = defineProps<{ id: string; content?: Content; error?: string }>();
 const emit = defineEmits<{
-	(event: "onchange", newContent: Content): void;
+	(event: "change", newContent: Content): void;
 }>();
 
 const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded bg-stone-300 px-2 py-0.5 hover:bg-stone-400";
@@ -13,12 +14,10 @@ const FORMAT_BUTTON_CLASS = "mr-2 text-sm rounded bg-stone-300 px-2 py-0.5 hover
 const editor = useEditor({
 	...EDITOR_OPTIONS,
 	onCreate: ({ editor }) => {
-		editor.commands.setContent(props.content);
+		editor.commands.setContent(props.content || EMPTY_TIP_TAP_CONTENT);
 	},
 	onUpdate: ({ editor }) => {
-		const json = editor.getJSON();
-		emit("onchange", json);
-		console.log(json);
+		emit("change", editor.getJSON());
 	},
 });
 
@@ -28,6 +27,21 @@ const getToolStyle = (toolName: string, attributes: Record<string, string | numb
 	}
 	return {};
 };
+
+const isContentEmpty = () => editor.value?.getText().length === 0;
+const getContent = () => {
+	if (editor.value) {
+		return editor.value.getJSON();
+	}
+	return EMPTY_TIP_TAP_CONTENT;
+};
+const resetContent = () => editor.value?.commands.setContent(EMPTY_TIP_TAP_CONTENT);
+
+defineExpose({
+	isContentEmpty,
+	getContent,
+	resetContent,
+});
 </script>
 
 <template>
@@ -119,9 +133,15 @@ const getToolStyle = (toolName: string, attributes: Record<string, string | numb
 	</div>
 
 	<EditorContent
+		:id="id"
+		:aria-describedby="`${id}_error`"
+		:aria-invalid="error ? true : null"
 		:editor="editor"
 		style="height: 240px; border: solid 2px #e5e7eb; border-radius: 4px; overflow-y: scroll; margin-block: 1rem"
 	/>
+	<p v-if="error" :id="`${id}_error`" :class="'text-l -mt-2 mb-5 ' + ERROR_INFO.class">
+		{{ error }}
+	</p>
 </template>
 
 <style>

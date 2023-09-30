@@ -39,3 +39,8 @@ export const EDITOR_OPTIONS = {
 	},
 	extensions: EXTENSIONS,
 };
+
+export const EMPTY_TIP_TAP_CONTENT = {
+	type: "doc",
+	content: [{ type: "paragraph", content: [] }],
+};
