@@ -8,8 +8,8 @@ import { MEDIUM_TIMING } from "@src/constants/timing";
 import { useNoteStore } from "@stores/note";
 import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
-import { onMounted } from "vue";
-import { useField, useForm, useResetForm } from "vee-validate";
+import { onMounted, ref } from "vue";
+import { useField, useForm, useIsFormDirty, useIsFormValid, useResetForm } from "vee-validate";
 import { NoteInput } from "@appTypes/dataModels";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -17,34 +17,38 @@ import InputField from "@components/share/form/InputField.vue";
 import FormButton from "@components/share/form/FormButton.vue";
 import FormMessage from "@components/share/form/FormMessage.vue";
 import SelectField from "@components/share/form/SelectField.vue";
-import { JSONContent } from "@tiptap/vue-3";
-
-const EMPTY_CONTENT = {
-	type: "doc",
-	content: [{ type: "paragraph", content: [] }],
-};
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
 const { selectedDiary, diaries, loadingDiaries } = storeToRefs(diaryStore);
+const [formMessage, setFormMessage] = useState({ message: "", class: "" });
+const [contentError, setContentError] = useState("");
+const [isCreatingNote, toggleIsCreatingNote] = useState(false);
+const contentEditor = ref<ContentEditor | null>(null);
 
 const { values: formValues } = useForm<NoteInput>({
 	initialValues: {
 		diaryId: selectedDiary?.value?.id,
-		content: EMPTY_CONTENT,
 	},
 	validationSchema: toTypedSchema(
 		zod.object({
-			diaryId: zod.string(),
+			diaryId: zod.number(),
 			notePosition: zod.number(),
-			content: zod.object({}),
 			sourceUrl: zod.string().optional(),
 		})
 	),
 });
-const resetForm = useResetForm();
 
-const { value: diaryValue, errorMessage: diaryError, handleChange: handleDiaryChange } = useField("diaryId");
+const resetForm = useResetForm();
+const isFormValid = useIsFormValid();
+const isFormDirty = useIsFormDirty();
+
+const {
+	value: diaryValue,
+	errorMessage: diaryError,
+	handleChange: handleDiaryChange,
+	setValue: setDiaryValue,
+} = useField("diaryId");
 const {
 	value: notePositionValue,
 	errorMessage: notePositionError,
@@ -55,13 +59,10 @@ const {
 	errorMessage: sourceUrlError,
 	handleChange: handleSourceUrlChange,
 } = useField("sourceUrl");
-const { value: contentValue, handleChange: handleContentChange } = useField<JSONContent>("content");
-
-const [formMessage, setFormMessage] = useState({ message: "", class: "" });
-const [isCreatingNote, toggleIsCreatingNote] = useState(false);
 
 const successfulCreationCallback = () => {
 	resetForm();
+	contentEditor.value.resetContent();
 	setFormMessage({ message: "New note created successfully.", ...SUCCESS_INFO });
 
 	setTimeout(() => {
@@ -70,7 +71,15 @@ const successfulCreationCallback = () => {
 };
 
 const submitNoteCreationForm = async () => {
-	alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
+	if (contentEditor.value.isContentEmpty()) {
+		setContentError("Required");
+		return;
+	}
+	setContentError("");
+
+	if (!isFormValid.value || !isFormDirty.value) {
+		return;
+	}
 
 	const form = alertIfNullUndefined(document.getElementById("id_new_note_form"), "New note form");
 	const formInput = new FormData(form as HTMLFormElement);
@@ -82,7 +91,8 @@ const submitNoteCreationForm = async () => {
 		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
 		{
 			...formValues,
-			diaryId: formValues.diaryId ? Number(formValues.diaryId) : diaries.value[0].id,
+			content: contentEditor.value.getContent(),
+			diaryId: formValues.diaryId,
 		}
 	);
 	toggleIsCreatingNote(false);
@@ -94,6 +104,8 @@ onMounted(async () => {
 	} else {
 		await diaryStore.getAllDiaries();
 	}
+	alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
+	setDiaryValue(diaries.value[0].id);
 });
 </script>
 
@@ -156,9 +168,7 @@ onMounted(async () => {
 			<!--				/>-->
 			<!--			</div>-->
 
-			<div id="id_new_note_field_content_wrapper">
-				<ContentEditor :content="contentValue" @onchange="handleContentChange" />
-			</div>
+			<ContentEditor id="id_new_note_field_content" ref="contentEditor" :error="contentError" />
 
 			<FormButton
 				:aria-disabled="!notePositionValue"
