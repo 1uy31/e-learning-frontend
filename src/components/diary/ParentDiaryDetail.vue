@@ -23,7 +23,7 @@ const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 
 const showDiaryCreationForm = () => {
 	showTabById("id_main_tab_new_diary");
-	const categorySelection = document.getElementById("id_new_diary_category");
+	const categorySelection = document.getElementById("id_new_diary_field_category");
 	// To update parent diary selection.
 	categorySelection?.dispatchEvent(new Event("change"));
 };
