@@ -9,7 +9,7 @@ import { alertIfNullUndefined } from "@src/utils";
 import { useState } from "@src/composable/useState";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
-import { useField, useForm, useResetForm } from "vee-validate";
+import { useField, useForm, useIsFormDirty, useIsFormValid, useResetForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import InputField from "@components/share/form/InputField.vue";
@@ -34,8 +34,8 @@ const { values: formValues } = useForm<DiaryInput>({
 	},
 	validationSchema: toTypedSchema(
 		zod.object({
-			categoryId: zod.string(),
-			parentDiaryId: zod.string().optional(),
+			categoryId: zod.number(),
+			parentDiaryId: zod.number().optional(),
 			topic: zod.string().max(1024),
 			sourceUrl: zod.string().max(256).optional(),
 			rate: zod.number().min(1).max(5),
@@ -43,11 +43,14 @@ const { values: formValues } = useForm<DiaryInput>({
 	),
 });
 const resetForm = useResetForm();
+const isFormValid = useIsFormValid();
+const isFormDirty = useIsFormDirty();
 
 const {
 	value: categoryValue,
 	errorMessage: categoryError,
 	handleChange: handleCategoryChange,
+	setValue: setCategoryValue,
 } = useField("categoryId");
 const {
 	value: parentDiaryValue,
@@ -85,31 +88,33 @@ const successfulCreationCallback = () => {
 const submitDiaryCreationForm = async () => {
 	alertIfNullUndefined(categories.value[0]?.id, "", "Please create a category first.");
 
+	if (!isFormValid.value || !isFormDirty.value) {
+		return;
+	}
 	toggleIsCreatingDiary(true);
 	await diaryStore.addDiary(
 		successfulCreationCallback,
 		(error: Error) => setFormMessage({ message: error.message, ...ERROR_INFO }),
 		{
 			...formValues,
-			categoryId: formValues.categoryId ? Number(formValues.categoryId) : categories.value[0].id,
-			parentDiaryId: formValues.parentDiaryId ? Number(formValues.parentDiaryId) : undefined,
+			categoryId: formValues.categoryId,
+			parentDiaryId: formValues.parentDiaryId,
 		}
 	);
 	toggleIsCreatingDiary(false);
 };
 
-const setParentDiaryOptions = async (categoryId?: string) => {
+const setParentDiaryOptions = async (categoryId?: number) => {
 	if (!categoryId) {
 		setParentDiaries([]);
 		return;
 	}
-	const categoryIdNumber = Number(categoryId);
-	if (Object.keys(diariesByCategory).includes(categoryId)) {
-		setParentDiaries(diariesByCategory.value[categoryIdNumber]);
+	if (Object.keys(diariesByCategory).includes(`${categoryId}`)) {
+		setParentDiaries(diariesByCategory.value[categoryId]);
 		return;
 	}
-	await diaryStore.getDiariesByCategory(categoryIdNumber);
-	setParentDiaries(diariesByCategory.value[categoryIdNumber]);
+	await diaryStore.getDiariesByCategory(categoryId);
+	setParentDiaries(diariesByCategory.value[categoryId]);
 };
 
 onMounted(() => {
@@ -120,13 +125,16 @@ onMounted(() => {
 
 	categorySelection.addEventListener("change", async (event) => {
 		const eventTarget = event?.target as HTMLInputElement | undefined;
-		const selectedCategoryId = eventTarget?.value;
+		const selectedCategoryId = eventTarget?.value ? Number(eventTarget?.value) : undefined;
 		await setParentDiaryOptions(selectedCategoryId);
 	});
 
 	setTimeout(async () => {
-		const defaultCategoryId = categories.value.length > 0 ? `${categories.value[0].id}` : undefined;
-		await setParentDiaryOptions(defaultCategoryId);
+		const defaultCategoryId = categories.value[0].id;
+		if (defaultCategoryId) {
+			setCategoryValue(defaultCategoryId);
+			await setParentDiaryOptions(defaultCategoryId);
+		}
 	}, VERY_QUICK_TIMING);
 });
 </script>
