@@ -124,7 +124,8 @@ onMounted(() => {
 	);
 
 	categorySelection.addEventListener("change", async (event) => {
-		const eventTarget = event?.target as HTMLInputElement | undefined;
+		// It is safe to cast the target type according to how the field is declared.
+		const eventTarget = event?.target as HTMLSelectElement | undefined;
 		const selectedCategoryId = eventTarget?.value ? Number(eventTarget?.value) : undefined;
 		await setParentDiaryOptions(selectedCategoryId);
 	});
