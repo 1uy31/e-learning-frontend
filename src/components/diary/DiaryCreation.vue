@@ -6,7 +6,7 @@ import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
 import { alertIfNullUndefined } from "@src/utils";
-import { useState } from "@src/composable/useState";
+import { useState } from "@src/composable/hooks";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
 import { useField, useForm, useIsFormDirty, useIsFormValid, useResetForm } from "vee-validate";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCategoryStore } from "@stores/category";
-import { useState } from "@src/composable/useState";
+import { useState } from "@src/composable/hooks";
 import { MEDIUM_TIMING } from "@src/constants/timing";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { ERROR_INFO, SUCCESS_INFO } from "@src/constants";

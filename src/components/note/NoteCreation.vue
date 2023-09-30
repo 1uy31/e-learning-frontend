@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ContentEditor from "@components/note/ContentEditor.vue";
-import { useState } from "@src/composable/useState";
+import { useState } from "@src/composable/hooks";
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
 import { alertIfNullUndefined } from "@src/utils";
