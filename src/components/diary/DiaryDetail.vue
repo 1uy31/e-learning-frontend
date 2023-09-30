@@ -24,6 +24,32 @@ const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
 const { selectedDiary } = storeToRefs(diaryStore);
 const { notesByDiary } = storeToRefs(noteStore);
+
+/**
+ * - Show the note creation form.
+ * - Pre-select the diary field.
+ * - Pre-set the position field.
+ */
+const showNoteCreationForm = () => {
+	showTabById("id_main_tab_new_note");
+	// It is safe to cast below fields' type according to how they are declared.
+	const diarySelectionField = document.getElementById("id_new_note_field_diary") as HTMLSelectElement | null;
+	const positionField = document.getElementById("id_new_note_field_note_position") as HTMLInputElement | null;
+	if (!diarySelectionField?.options || !positionField || !selectedDiary?.value) {
+		return;
+	}
+	const selectedDiaryId = selectedDiary.value.id;
+	const matchedOptionIndex = Array.from(diarySelectionField?.options || []).findIndex(
+		(option) => Number(option.value) === selectedDiaryId
+	);
+	if (matchedOptionIndex !== -1) {
+		diarySelectionField.options[matchedOptionIndex].selected = true;
+		diarySelectionField.dispatchEvent(new Event("change"));
+		const usedNotePositions = notesByDiary.value[selectedDiaryId]?.map((note) => note.notePosition) || [0];
+		positionField.value = `${Math.max(...usedNotePositions) + 1}`;
+		positionField.dispatchEvent(new Event("change"));
+	}
+};
 </script>
 
 <template>
@@ -49,7 +75,7 @@ const { notesByDiary } = storeToRefs(noteStore);
 					</template>
 				</IconButton>
 
-				<IconButton class="mr-2" @onclick="showTabById('id_main_tab_new_note')">
+				<IconButton class="mr-2" @onclick="showNoteCreationForm">
 					<template #icon>
 						<NewNoteIcon />
 					</template>

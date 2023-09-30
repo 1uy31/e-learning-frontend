@@ -33,7 +33,7 @@ const { values: formValues } = useForm<NoteInput>({
 	validationSchema: toTypedSchema(
 		zod.object({
 			diaryId: zod.number(),
-			notePosition: zod.number(),
+			notePosition: zod.preprocess((value) => (value ? Number(value) : undefined), zod.number()),
 			sourceUrl: zod.string().optional(),
 		})
 	),
@@ -101,9 +101,9 @@ const submitNoteCreationForm = async () => {
 onMounted(async () => {
 	if (selectedDiary?.value) {
 		await Promise.all([diaryStore.getAllDiaries(), diaryStore.getChildDiariesByDiary(selectedDiary.value)]);
-	} else {
-		await diaryStore.getAllDiaries();
+		return;
 	}
+	await diaryStore.getAllDiaries();
 	alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
 	setDiaryValue(diaries.value[0].id);
 });
