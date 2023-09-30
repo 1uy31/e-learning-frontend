@@ -32,7 +32,7 @@ const { notesByDiary } = storeToRefs(noteStore);
  */
 const showNoteCreationForm = () => {
 	showTabById("id_main_tab_new_note");
-	// It is safe to cast below fields' type according to how they are declared.
+	// It is safe to cast below fields' type according to their declaration.
 	const diarySelectionField = document.getElementById("id_new_note_field_diary") as HTMLSelectElement | null;
 	const positionField = document.getElementById("id_new_note_field_note_position") as HTMLInputElement | null;
 	if (!diarySelectionField?.options || !positionField || !selectedDiary?.value) {

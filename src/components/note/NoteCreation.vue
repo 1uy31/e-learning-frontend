@@ -82,7 +82,7 @@ const submitNoteCreationForm = async () => {
 	}
 
 	const form = alertIfNullUndefined(document.getElementById("id_new_note_form"), "New note form");
-	// It is safe to cast the form's type according to it is declared.
+	// It is safe to cast the form's type according to its declaration.
 	const formInput = new FormData(form as HTMLFormElement);
 	console.log(formInput);
 
