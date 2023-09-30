@@ -3,8 +3,9 @@ import { useEditor, EditorContent, Content } from "@tiptap/vue-3";
 import "prosemirror-view/style/prosemirror.css";
 import { EDITOR_OPTIONS, EMPTY_TIP_TAP_CONTENT, ERROR_INFO } from "@src/constants";
 import { defineExpose } from "vue";
+import { REQUIRED_MARK_CLASS } from "@src/constants/classes";
 
-const props = defineProps<{ id: string; content?: Content; error?: string }>();
+const props = defineProps<{ id: string; label?: string; content?: Content; required?: boolean; error?: string }>();
 const emit = defineEmits<{
 	(event: "change", newContent: Content): void;
 }>();
@@ -45,7 +46,10 @@ defineExpose({
 </script>
 
 <template>
-	<div v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
+	<label :for="id" class="text-cyan-700"
+		><span v-if="required" :class="REQUIRED_MARK_CLASS">*</span> {{ label || "Content" }}
+	</label>
+	<div v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }" class="mt-2">
 		<button
 			:class="FORMAT_BUTTON_CLASS"
 			:style="getToolStyle('heading', { level: 1 })"

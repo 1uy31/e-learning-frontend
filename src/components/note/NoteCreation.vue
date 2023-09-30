@@ -168,7 +168,7 @@ onMounted(async () => {
 			<!--				/>-->
 			<!--			</div>-->
 
-			<ContentEditor id="id_new_note_field_content" ref="contentEditor" :error="contentError" />
+			<ContentEditor id="id_new_note_field_content" ref="contentEditor" required :error="contentError" />
 
 			<FormButton
 				:aria-disabled="!notePositionValue"
