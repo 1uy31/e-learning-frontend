@@ -1,4 +1,5 @@
 import { Tab } from "tw-elements";
+import { Note } from "@appTypes/dataModels";
 
 export const validateError = <T>(error: T): Error => {
 	if (error instanceof Error) {
@@ -32,4 +33,30 @@ export const showTabById = (elementId: string) => {
 	const tabElement = alertIfNullUndefined(document.getElementById(elementId), `Element with ID ${elementId}`);
 	const tab = new Tab(tabElement);
 	tab.show();
+};
+
+/**
+ * - Pre-select the diary field.
+ * - Pre-set the position field.
+ */
+export const presetNoteCreationFormFields = (notesByDiary: Record<number, Array<Note>>, selectedDiaryId?: number) => {
+	if (!selectedDiaryId) {
+		return;
+	}
+	// It is safe to cast below fields' type according to their declaration.
+	const diarySelectionField = document.getElementById("id_new_note_field_diary") as HTMLSelectElement | null;
+	const positionField = document.getElementById("id_new_note_field_note_position") as HTMLInputElement | null;
+	if (!diarySelectionField?.options || !positionField) {
+		return;
+	}
+	const matchedOptionIndex = Array.from(diarySelectionField?.options || []).findIndex(
+		(option) => Number(option.value) === selectedDiaryId
+	);
+	if (matchedOptionIndex !== -1) {
+		diarySelectionField.options[matchedOptionIndex].selected = true;
+		diarySelectionField.dispatchEvent(new Event("change"));
+		const usedNotePositions = notesByDiary[selectedDiaryId]?.map((note) => note.notePosition) || [0];
+		positionField.value = `${Math.max(...usedNotePositions) + 1}`;
+		positionField.dispatchEvent(new Event("change"));
+	}
 };

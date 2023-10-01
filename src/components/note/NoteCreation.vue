@@ -3,7 +3,7 @@ import ContentEditor from "@components/note/ContentEditor.vue";
 import { useState } from "@src/composable/hooks";
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
-import { alertIfNullUndefined } from "@src/utils";
+import { alertIfNullUndefined, presetNoteCreationFormFields } from "@src/utils";
 import { MEDIUM_TIMING } from "@src/constants/timing";
 import { useNoteStore } from "@stores/note";
 import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
@@ -21,6 +21,7 @@ import SelectField from "@components/share/form/SelectField.vue";
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
 const { selectedDiary, diaries, loadingDiaries } = storeToRefs(diaryStore);
+const { notesByDiary } = storeToRefs(noteStore);
 const [formMessage, setFormMessage] = useState({ message: "", class: "" });
 const [contentError, setContentError] = useState("");
 const [isCreatingNote, toggleIsCreatingNote] = useState(false);
@@ -107,6 +108,7 @@ onMounted(async () => {
 	await diaryStore.getAllDiaries();
 	alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
 	setDiaryValue(diaries.value[0].id);
+	presetNoteCreationFormFields(notesByDiary.value || {}, diaries.value[0].id);
 });
 </script>
 
