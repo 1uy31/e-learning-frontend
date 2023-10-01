@@ -72,6 +72,8 @@ const successfulCreationCallback = () => {
 };
 
 const submitNoteCreationForm = async () => {
+	alertIfNullUndefined(diaryValue, "", "Please create a diary first.");
+
 	if (contentEditor.value.isContentEmpty()) {
 		setContentError("Required");
 		return;
@@ -101,15 +103,6 @@ const submitNoteCreationForm = async () => {
 };
 
 onMounted(async () => {
-	if (selectedDiary?.value) {
-		await Promise.all([diaryStore.getAllDiaries(), diaryStore.getChildDiariesByDiary(selectedDiary.value)]);
-	} else {
-		await diaryStore.getAllDiaries();
-		alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
-		setDiaryValue(diaries.value[0].id);
-		presetSelectionField("id_new_note_field_diary", diaries.value[0].id);
-	}
-
 	const diarySelection = alertIfNullUndefined(
 		document.getElementById("id_new_note_field_diary"),
 		"Diary selection in note creation form"
@@ -128,6 +121,16 @@ onMounted(async () => {
 		positionField.value = usedNotePositions ? `${Math.max(0, ...usedNotePositions) + 1}` : "1";
 		["input", "change"].forEach((type) => positionField.dispatchEvent(new Event(type)));
 	});
+
+	if (selectedDiary?.value) {
+		await Promise.all([diaryStore.getAllDiaries(), diaryStore.getChildDiariesByDiary(selectedDiary.value)]);
+		return;
+	}
+	await diaryStore.getAllDiaries();
+	if (diaries.value[0].id) {
+		setDiaryValue(diaries.value[0].id);
+		presetSelectionField("id_new_note_field_diary", diaries.value[0].id);
+	}
 });
 </script>
 
