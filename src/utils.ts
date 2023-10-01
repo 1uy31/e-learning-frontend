@@ -55,8 +55,8 @@ export const presetNoteCreationFormFields = (notesByDiary: Record<number, Array<
 	if (matchedOptionIndex !== -1) {
 		diarySelectionField.options[matchedOptionIndex].selected = true;
 		diarySelectionField.dispatchEvent(new Event("change"));
-		const usedNotePositions = notesByDiary[selectedDiaryId]?.map((note) => note.notePosition) || [0];
-		positionField.value = `${Math.max(...usedNotePositions) + 1}`;
+		const usedNotePositions = notesByDiary[selectedDiaryId]?.map((note) => note.notePosition);
+		positionField.value = usedNotePositions ? `${Math.max(0, ...usedNotePositions) + 1}` : "1";
 		positionField.dispatchEvent(new Event("change"));
 	}
 };
