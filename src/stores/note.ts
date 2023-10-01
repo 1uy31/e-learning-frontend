@@ -1,8 +1,7 @@
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import { Diary, Note, NoteInput } from "@appTypes/dataModels";
 import { validateError } from "@src/utils";
 import { useNoteService } from "@services/note";
-import { useDiaryService } from "@services/diary";
 import { useDiaryStore } from "@stores/diary";
 
 type NoteStateType = {
