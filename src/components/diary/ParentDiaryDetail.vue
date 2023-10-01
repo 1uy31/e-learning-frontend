@@ -27,7 +27,6 @@ const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 const showDiaryCreationForm = () => {
 	showTabById("id_main_tab_new_diary");
 	presetSelectionField("id_new_diary_field_category", selectedCategory?.value?.id);
-	presetSelectionField("id_new_diary_field_parent_diary", selectedDiary?.value?.id);
 };
 
 const showDiaryDetail = async (diary: Diary) => {

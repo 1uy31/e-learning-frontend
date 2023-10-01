@@ -5,7 +5,7 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
-import { alertIfNullUndefined } from "@src/utils";
+import { alertIfNullUndefined, presetSelectionField } from "@src/utils";
 import { useState } from "@src/composable/hooks";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
@@ -128,6 +128,7 @@ onMounted(() => {
 		const eventTarget = event?.target as HTMLSelectElement | undefined;
 		const selectedCategoryId = eventTarget?.value ? Number(eventTarget?.value) : undefined;
 		await setParentDiaryOptions(selectedCategoryId);
+		presetSelectionField("id_new_diary_field_parent_diary", selectedDiary?.value?.id);
 	});
 
 	setTimeout(async () => {
