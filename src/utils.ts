@@ -40,23 +40,29 @@ export const showTabById = (elementId: string) => {
  * - Pre-set the position field.
  */
 export const presetNoteCreationFormFields = (notesByDiary: Record<number, Array<Note>>, selectedDiaryId?: number) => {
-	if (!selectedDiaryId) {
-		return;
-	}
+	presetSelectionField("id_new_note_field_diary", selectedDiaryId);
 	// It is safe to cast below fields' type according to their declaration.
-	const diarySelectionField = document.getElementById("id_new_note_field_diary") as HTMLSelectElement | null;
 	const positionField = document.getElementById("id_new_note_field_note_position") as HTMLInputElement | null;
-	if (!diarySelectionField?.options || !positionField) {
+	if (!selectedDiaryId || !positionField) {
 		return;
 	}
-	const matchedOptionIndex = Array.from(diarySelectionField?.options || []).findIndex(
-		(option) => Number(option.value) === selectedDiaryId
+	const usedNotePositions = notesByDiary[selectedDiaryId]?.map((note) => note.notePosition);
+	positionField.value = usedNotePositions ? `${Math.max(0, ...usedNotePositions) + 1}` : "1";
+	positionField.dispatchEvent(new Event("change"));
+};
+
+export const presetSelectionField = (selectionFieldId: string, selectedValue?: number) => {
+	// It is safe to cast the fields' type to HTMLSelectElement.
+	const selectionField = document.getElementById(`${selectionFieldId}`) as HTMLSelectElement | null;
+
+	if (!selectionField || !selectedValue) {
+		return;
+	}
+	const matchedOptionIndex = Array.from(selectionField?.options || []).findIndex(
+		(option) => Number(option.value) === selectedValue
 	);
 	if (matchedOptionIndex !== -1) {
-		diarySelectionField.options[matchedOptionIndex].selected = true;
-		diarySelectionField.dispatchEvent(new Event("change"));
-		const usedNotePositions = notesByDiary[selectedDiaryId]?.map((note) => note.notePosition);
-		positionField.value = usedNotePositions ? `${Math.max(0, ...usedNotePositions) + 1}` : "1";
-		positionField.dispatchEvent(new Event("change"));
+		selectionField.options[matchedOptionIndex].selected = true;
+		selectionField.dispatchEvent(new Event("change"));
 	}
 };

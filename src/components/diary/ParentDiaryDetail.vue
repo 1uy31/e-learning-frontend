@@ -7,7 +7,7 @@ import SectionDivider from "@components/share/SectionDivider.vue";
 import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import NewDiaryIcon from "@assets/icons/heroicons/documentSeries.svg?component";
 import IconButton from "@components/share/IconButton.vue";
-import { showTabById } from "@src/utils";
+import { presetSelectionField, showTabById } from "@src/utils";
 import { Diary } from "@appTypes/dataModels";
 import { useNoteStore } from "@stores/note";
 import {
@@ -16,16 +16,18 @@ import {
 	HYPER_LINK_WRAPPER_CLASS,
 	ROW_CENTER_BETWEEN_CLASS,
 } from "@src/constants/classes";
+import { useCategoryStore } from "@stores/category";
 
+const categoryStore = useCategoryStore();
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
+const { selectedCategory } = storeToRefs(categoryStore);
 const { selectedDiary, childDiariesByDiary } = storeToRefs(diaryStore);
 
 const showDiaryCreationForm = () => {
 	showTabById("id_main_tab_new_diary");
-	const categorySelection = document.getElementById("id_new_diary_field_category");
-	// To update parent diary selection.
-	categorySelection?.dispatchEvent(new Event("change"));
+	presetSelectionField("id_new_diary_field_category", selectedCategory?.value?.id);
+	presetSelectionField("id_new_diary_field_parent_diary", selectedDiary?.value?.id);
 };
 
 const showDiaryDetail = async (diary: Diary) => {
