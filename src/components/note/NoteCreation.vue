@@ -3,7 +3,7 @@ import ContentEditor from "@components/note/ContentEditor.vue";
 import { useState } from "@src/composable/hooks";
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
-import { alertIfNullUndefined, presetNoteCreationFormFields } from "@src/utils";
+import { alertIfNullUndefined, presetSelectionField } from "@src/utils";
 import { MEDIUM_TIMING } from "@src/constants/timing";
 import { useNoteStore } from "@stores/note";
 import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
@@ -103,12 +103,31 @@ const submitNoteCreationForm = async () => {
 onMounted(async () => {
 	if (selectedDiary?.value) {
 		await Promise.all([diaryStore.getAllDiaries(), diaryStore.getChildDiariesByDiary(selectedDiary.value)]);
-		return;
+	} else {
+		await diaryStore.getAllDiaries();
+		alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
+		setDiaryValue(diaries.value[0].id);
+		presetSelectionField("id_new_note_field_diary", diaries.value[0].id);
 	}
-	await diaryStore.getAllDiaries();
-	alertIfNullUndefined(diaries.value[0]?.id, "", "Please create a diary first.");
-	setDiaryValue(diaries.value[0].id);
-	presetNoteCreationFormFields(notesByDiary.value || {}, diaries.value[0].id);
+
+	const diarySelection = alertIfNullUndefined(
+		document.getElementById("id_new_note_field_diary"),
+		"Diary selection in note creation form"
+	);
+	diarySelection.addEventListener("change", async (event) => {
+		// It is safe to cast the target's type according to how the field is declared.
+		const eventTarget = event?.target as HTMLSelectElement | undefined;
+		const selectedDiaryId = eventTarget?.value ? Number(eventTarget?.value) : undefined;
+		// It is safe to cast below field's type according to its declaration.
+		const positionField = document.getElementById("id_new_note_field_note_position") as HTMLInputElement | null;
+		if (!selectedDiaryId || !positionField) {
+			return;
+		}
+		await noteStore.getNotesByDiaryId(selectedDiaryId);
+		const usedNotePositions = notesByDiary.value[selectedDiaryId]?.map((note) => note.notePosition);
+		positionField.value = usedNotePositions ? `${Math.max(0, ...usedNotePositions) + 1}` : "1";
+		["input", "change"].forEach((type) => positionField.dispatchEvent(new Event(type)));
+	});
 });
 </script>
 

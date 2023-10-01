@@ -8,7 +8,7 @@ import NewNoteIcon from "@assets/icons/heroicons/documentText.svg?component";
 import ReviewCountIcon from "@assets/icons/heroicons/eye.svg?component";
 import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
-import { presetNoteCreationFormFields, showTabById } from "@src/utils";
+import { presetSelectionField, showTabById } from "@src/utils";
 import { useNoteStore } from "@stores/note";
 import { generateHTML } from "@tiptap/vue-3";
 import { EXTENSIONS } from "@src/constants";
@@ -27,7 +27,7 @@ const { notesByDiary } = storeToRefs(noteStore);
 
 const showNoteCreationForm = () => {
 	showTabById("id_main_tab_new_note");
-	presetNoteCreationFormFields(notesByDiary.value || {}, selectedDiary?.value?.id);
+	presetSelectionField("id_new_note_field_diary", selectedDiary?.value?.id);
 };
 </script>
 

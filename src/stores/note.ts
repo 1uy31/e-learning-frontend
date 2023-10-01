@@ -1,7 +1,9 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { Diary, Note, NoteInput } from "@appTypes/dataModels";
 import { validateError } from "@src/utils";
 import { useNoteService } from "@services/note";
+import { useDiaryService } from "@services/diary";
+import { useDiaryStore } from "@stores/diary";
 
 type NoteStateType = {
 	loadingNote: boolean;
@@ -30,6 +32,14 @@ export const useNoteStore = defineStore("noteStore", {
 				this.loadingNote = false;
 				const validatedError = validateError(error);
 				this.notesLoadingError = validatedError;
+			}
+		},
+		async getNotesByDiaryId(diaryId: number) {
+			const diaryStore = useDiaryStore();
+			const { diaries } = diaryStore;
+			const diary = diaries.find((_diary) => _diary.id === diaryId);
+			if (diary) {
+				await this.getNotesByDiary(diary);
 			}
 		},
 		async addNote(successCallback: () => void, failureCallback: (error: Error) => void, input: NoteInput) {
