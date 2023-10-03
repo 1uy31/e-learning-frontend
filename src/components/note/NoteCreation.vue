@@ -3,7 +3,7 @@ import ContentEditor from "@components/note/ContentEditor.vue";
 import { useState } from "@src/composable/hooks";
 import { useDiaryStore } from "@stores/diary";
 import { storeToRefs } from "pinia";
-import { alertIfNullUndefined, presetSelectionField } from "@src/utils";
+import { alertIfNullUndefined, dispatchEventForElement, presetSelectionField } from "@src/utils";
 import { MEDIUM_TIMING } from "@src/constants/timing";
 import { useNoteStore } from "@stores/note";
 import { LARGE_CONTAINER_CLASS } from "@src/constants/classes";
@@ -63,6 +63,7 @@ const {
 
 const successfulCreationCallback = () => {
 	resetForm();
+	dispatchEventForElement("id_new_note_field_diary", "Diary selection in note creation form", ["change"]);
 	contentEditor.value.resetContent();
 	setFormMessage({ message: "New note created successfully.", ...SUCCESS_INFO });
 
@@ -119,7 +120,7 @@ onMounted(async () => {
 		await noteStore.getNotesByDiaryId(selectedDiaryId);
 		const usedNotePositions = notesByDiary.value[selectedDiaryId]?.map((note) => note.notePosition);
 		positionField.value = usedNotePositions ? `${Math.max(0, ...usedNotePositions) + 1}` : "1";
-		["input", "change"].forEach((type) => positionField.dispatchEvent(new Event(type)));
+		["input", "change"].forEach((eventType) => positionField.dispatchEvent(new Event(eventType)));
 	});
 
 	if (selectedDiary?.value) {

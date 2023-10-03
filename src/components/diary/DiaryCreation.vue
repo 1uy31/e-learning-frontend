@@ -5,7 +5,7 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
-import { alertIfNullUndefined, presetSelectionField } from "@src/utils";
+import { alertIfNullUndefined, dispatchEventForElement, presetSelectionField } from "@src/utils";
 import { useState } from "@src/composable/hooks";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
@@ -74,11 +74,7 @@ const successfulCreationCallback = () => {
 	setFormMessage({ message: "New diary created successfully.", ...SUCCESS_INFO });
 
 	// To load the new option for field parent diary.
-	const categorySelection = alertIfNullUndefined(
-		document.getElementById("id_new_diary_field_category"),
-		CATEGORY_SELECTION_ELEMENT
-	);
-	categorySelection.dispatchEvent(new Event("change"));
+	dispatchEventForElement("id_new_diary_field_category", CATEGORY_SELECTION_ELEMENT, ["change"]);
 
 	setTimeout(() => {
 		setFormMessage({ message: "", class: "" });

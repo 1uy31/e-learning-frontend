@@ -49,3 +49,8 @@ export const presetSelectionField = (selectionFieldId: string, selectedValue?: n
 		selectionField.dispatchEvent(new Event("change"));
 	}
 };
+
+export const dispatchEventForElement = (elementId: string, elementName: string, eventTypes: Array<string>) => {
+	const element = alertIfNullUndefined(document.getElementById(elementId), elementName);
+	eventTypes.forEach((eventType) => element.dispatchEvent(new Event(eventType)));
+};
