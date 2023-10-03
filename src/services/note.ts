@@ -54,6 +54,7 @@ export const useNoteService = (client: ApolloClient<NormalizedCacheObject> = apo
 						filePath: $filePath
 					) {
 						id
+						notePosition
 						content
 						sourceUrl
 						filePath
@@ -65,12 +66,15 @@ export const useNoteService = (client: ApolloClient<NormalizedCacheObject> = apo
 			`,
 			variables: { ...input },
 		});
-		client.cache.evict({
-			id: "ROOT_QUERY",
-			fieldName: "notes",
-			args: { diaryId: input.diaryId }, // TODO: Evict for query base on diaryIds.
-			broadcast: false,
-		});
+		const argsList = [{ diaryId: input.diaryId }];
+		argsList.forEach((args) =>
+			client.cache.evict({
+				id: "ROOT_QUERY",
+				fieldName: "notes",
+				args: args,
+				broadcast: false,
+			})
+		);
 		client.cache.gc();
 		return result.data.addNote;
 	};

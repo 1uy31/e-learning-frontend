@@ -44,7 +44,7 @@ export const useNoteStore = defineStore("noteStore", {
 		async addNote(successCallback: () => void, failureCallback: (error: Error) => void, input: NoteInput) {
 			const noteService = useNoteService();
 			try {
-				const note = await noteService.create(input);
+				await noteService.create(input);
 				successCallback();
 			} catch (error) {
 				const validatedError = validateError(error);
