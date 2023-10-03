@@ -48,9 +48,6 @@ export const useDiaryStore = defineStore("diaryStore", {
 				}
 				const categoryStore = useCategoryStore();
 				categoryStore.increaseNoParentDiaryCount(diary.categoryId);
-				if (this.diariesByCategory[diary.categoryId]) {
-					this.diariesByCategory[diary.categoryId] = [...this.diariesByCategory[diary.categoryId], diary];
-				}
 				successCallback();
 			} catch (error) {
 				const validatedError = validateError(error);
