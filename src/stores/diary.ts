@@ -30,7 +30,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 			const diaryService = useDiaryService();
 			try {
 				this.loadingDiaries = true;
-				const diaries = await diaryService.getMatchedObjects(categoryId, null);
+				const diaries = await diaryService.getMatchedObjects(categoryId);
 				this.diariesByCategory[categoryId] = diaries;
 				this.loadingDiaries = false;
 			} catch (error) {
