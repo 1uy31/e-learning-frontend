@@ -87,6 +87,7 @@ onBeforeMount(async () => {
 						"
 						data-te-sidenav-link-ref
 						@click="selectDiary(diary)"
+						v-if="!diary.parentDiaryId"
 						>{{ diary.topic }}</a
 					>
 				</li>
