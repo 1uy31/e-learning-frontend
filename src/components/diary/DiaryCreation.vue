@@ -105,12 +105,10 @@ const setParentDiaryOptions = async (categoryId?: number) => {
 		setParentDiaries([]);
 		return;
 	}
-	if (Object.keys(diariesByCategory).includes(`${categoryId}`)) {
-		setParentDiaries(diariesByCategory.value[categoryId]);
-		return;
+	if (!Object.keys(diariesByCategory).includes(`${categoryId}`)) {
+		await diaryStore.getDiariesByCategory(categoryId);
 	}
-	await diaryStore.getDiariesByCategory(categoryId);
-	setParentDiaries(diariesByCategory.value[categoryId]);
+	setParentDiaries(diariesByCategory.value[categoryId].filter((diary) => !diary.parentDiaryId));
 };
 
 onMounted(() => {
