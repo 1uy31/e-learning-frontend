@@ -79,9 +79,12 @@ onBeforeMount(async () => {
 				data-te-sidenav-collapse-ref
 				data-te-collapse-show
 			>
-				<li v-for="diary in diariesByCategory[category.id]" :key="diary.id" class="relative">
+				<li
+					v-for="diary in diariesByCategory[category.id]?.filter((_diary) => !_diary.parentDiaryId)"
+					:key="diary.id"
+					class="relative"
+				>
 					<a
-						v-if="!diary.parentDiaryId"
 						:class="
 							'truncate px-6 text-[0.875rem] hover:bg-stone-200 focus:bg-stone-200 active:bg-stone-200 ' +
 							LIST_ITEM_CLASS
