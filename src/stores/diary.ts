@@ -51,6 +51,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 					return successCallback();
 				}
 
+				this.diaries = [...this.diaries, diary];
 				replaceRecordWithAddedElement(this.diariesByCategory, diary.categoryId, diary);
 
 				if (diary.parentDiaryId) {
