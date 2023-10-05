@@ -103,9 +103,9 @@ const setParentDiaryOptions = async (categoryId?: number) => {
 		return;
 	}
 
-	if (!Object.keys(diariesByCategory.value).includes(categoryId.toString())) {
-		await diaryStore.getDiariesByCategory(categoryId);
-	}
+	!Object.keys(diariesByCategory.value).includes(categoryId.toString()) &&
+		(await diaryStore.getDiariesByCategory(categoryId));
+
 	setParentDiaries(diariesByCategory.value[categoryId].filter((diary) => !diary.parentDiaryId));
 };
 

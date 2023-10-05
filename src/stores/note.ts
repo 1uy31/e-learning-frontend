@@ -36,9 +36,7 @@ export const useNoteStore = defineStore("noteStore", {
 		async getNotesByDiaryId(diaryId: number, diaryStore = useDiaryStore()) {
 			const { diaries } = diaryStore;
 			const diary = diaries.find((_diary) => _diary.id === diaryId);
-			if (diary) {
-				await this.getNotesByDiary(diary);
-			}
+			diary && (await this.getNotesByDiary(diary));
 		},
 		async addNote(
 			successCallback: () => void,

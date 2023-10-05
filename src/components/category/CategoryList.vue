@@ -24,9 +24,7 @@ const selectCategory = async (category: Category) => {
 		return categoryStore.selectCategory(undefined);
 	}
 	categoryStore.selectCategory(category);
-	if (category.noParentDiaryCount > 0) {
-		await diaryStore.getDiariesByCategory(category.id);
-	}
+	category.noParentDiaryCount > 0 && (await diaryStore.getDiariesByCategory(category.id));
 };
 
 const selectDiary = async (diary: Diary) => {
