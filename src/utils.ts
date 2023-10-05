@@ -54,3 +54,14 @@ export const dispatchEventForElement = (elementId: string, elementName: string, 
 	const element = alertIfNullUndefined(document.getElementById(elementId), elementName);
 	eventTypes.forEach((eventType) => element.dispatchEvent(new Event(eventType)));
 };
+
+export const replaceRecordWithUpdatedElement = <T>(
+	record: Record<number, Array<T>>,
+	listKey: number,
+	listElement: T
+): Record<number, Array<T>> => {
+	const listElements = [...(record[listKey] || [])];
+	listElements.push(listElement);
+	record = { ...record, [listKey]: listElements };
+	return record;
+};
