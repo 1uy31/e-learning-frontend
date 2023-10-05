@@ -55,13 +55,13 @@ export const dispatchEventForElement = (elementId: string, elementName: string, 
 	eventTypes.forEach((eventType) => element.dispatchEvent(new Event(eventType)));
 };
 
-export const replaceRecordWithUpdatedElement = <T>(
+export const replaceRecordWithAddedElement = <T>(
 	record: Record<number, Array<T>>,
-	listKey: number,
-	listElement: T
+	key: number,
+	element: T
 ): Record<number, Array<T>> => {
-	const listElements = [...(record[listKey] || [])];
-	listElements.push(listElement);
-	record = { ...record, [listKey]: listElements };
+	const elements = [...(record[key] || [])];
+	elements.push(element);
+	record = { ...record, [key]: elements };
 	return record;
 };
