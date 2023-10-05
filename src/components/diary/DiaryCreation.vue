@@ -3,9 +3,9 @@ import { useCategoryStore } from "@stores/category";
 import { useDiaryStore } from "@stores/diary";
 import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
-import { VERY_QUICK_TIMING, MEDIUM_TIMING } from "@src/constants/timing";
+import { MEDIUM_TIMING, QUICK_TIMING } from "@src/constants/timing";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
-import { alertIfNullUndefined, dispatchEventForElement, presetSelectionField } from "@src/utils";
+import { alertIfNullUndefined, presetSelectionField } from "@src/utils";
 import { useState } from "@src/composable/hooks";
 import { MEDIUM_CONTAINER_CLASS } from "@src/constants/classes";
 import { SUCCESS_INFO, ERROR_INFO } from "@src/constants";
@@ -73,9 +73,6 @@ const successfulCreationCallback = () => {
 	resetForm();
 	setFormMessage({ message: "New diary created successfully.", ...SUCCESS_INFO });
 
-	// To load the new option for field parent diary.
-	dispatchEventForElement("id_new_diary_field_category", CATEGORY_SELECTION_ELEMENT, ["change"]);
-
 	setTimeout(() => {
 		setFormMessage({ message: "", class: "" });
 	}, MEDIUM_TIMING);
@@ -105,7 +102,8 @@ const setParentDiaryOptions = async (categoryId?: number) => {
 		setParentDiaries([]);
 		return;
 	}
-	if (!Object.keys(diariesByCategory).includes(`${categoryId}`)) {
+
+	if (!Object.keys(diariesByCategory.value).includes(categoryId.toString())) {
 		await diaryStore.getDiariesByCategory(categoryId);
 	}
 	setParentDiaries(diariesByCategory.value[categoryId].filter((diary) => !diary.parentDiaryId));
@@ -131,7 +129,7 @@ onMounted(() => {
 			setCategoryValue(defaultCategoryId);
 			await setParentDiaryOptions(defaultCategoryId);
 		}
-	}, VERY_QUICK_TIMING);
+	}, QUICK_TIMING);
 });
 </script>
 
