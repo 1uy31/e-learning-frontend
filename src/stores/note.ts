@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import { Diary, Note, NoteInput } from "@appTypes/dataModels";
-import { validateError } from "@src/utils";
+import { replaceRecordWithAddedElement, validateError } from "@src/utils";
 import { useNoteService } from "@services/note";
 import { useDiaryStore } from "@stores/diary";
+import * as R from "ramda";
 
 type NoteStateType = {
 	loadingNote: boolean;
@@ -46,7 +47,11 @@ export const useNoteStore = defineStore("noteStore", {
 			noteService = useNoteService()
 		) {
 			try {
-				await noteService.create(input);
+				const note = await noteService.create(input);
+				if (note.diaryId) {
+					const sortByNotePosition = R.sortBy((_note: Note) => _note.notePosition);
+					replaceRecordWithAddedElement(this.notesByDiary, note.diaryId, note, sortByNotePosition);
+				}
 				successCallback();
 			} catch (error) {
 				const validatedError = validateError(error);

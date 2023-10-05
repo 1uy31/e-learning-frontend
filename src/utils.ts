@@ -58,10 +58,12 @@ export const dispatchEventForElement = (elementId: string, elementName: string, 
 export const replaceRecordWithAddedElement = <T>(
 	record: Record<number, Array<T>>,
 	key: number,
-	element: T
+	element: T,
+	sorter?: (elements: Array<T>) => void
 ): Record<number, Array<T>> => {
 	const elements = [...(record[key] || [])];
 	elements.push(element);
+	sorter && sorter(elements);
 	record = { ...record, [key]: elements };
 	return record;
 };
