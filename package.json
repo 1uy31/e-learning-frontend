@@ -38,12 +38,14 @@
 		"graphql": "^16.6.0",
 		"graphql-tag": "^2.12.6",
 		"pinia": "^2.0.34",
+		"ramda": "^0.29.0",
 		"tw-elements": "^1.0.0",
 		"vee-validate": "^4.11.6",
 		"vue": "^3.3.4",
 		"zod": "^3.22.2"
 	},
 	"devDependencies": {
+		"@types/ramda": "^0.29.6",
 		"@typescript-eslint/eslint-plugin": "^5.57.1",
 		"@typescript-eslint/parser": "^5.57.1",
 		"@vitejs/plugin-vue": "^4.1.0",
