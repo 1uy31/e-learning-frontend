@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
-import { validateError } from "@src/utils";
+import { replaceRecordWithAddedElement, validateError } from "@src/utils";
 import { useDiaryService } from "@services/diary";
 import { useCategoryStore } from "@stores/category";
 
@@ -26,8 +26,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 	}),
 	getters: {},
 	actions: {
-		async getDiariesByCategory(categoryId: number) {
-			const diaryService = useDiaryService();
+		async getDiariesByCategory(categoryId: number, diaryService = useDiaryService()) {
 			try {
 				this.loadingDiaries = true;
 				const diaries = await diaryService.getMatchedObjects(categoryId);
@@ -39,15 +38,28 @@ export const useDiaryStore = defineStore("diaryStore", {
 				this.diariesLoadingError = validatedError;
 			}
 		},
-		async addDiary(successCallback: () => void, failureCallback: (error: Error) => void, input: DiaryInput) {
-			const diaryService = useDiaryService();
+		async addDiary(
+			successCallback: () => void,
+			failureCallback: (error: Error) => void,
+			input: DiaryInput,
+			diaryService = useDiaryService(),
+			categoryStore = useCategoryStore()
+		) {
 			try {
 				const diary = await diaryService.create(input);
-				if (diary.parentDiaryId || !diary.categoryId) {
+				if (!diary.categoryId) {
 					return successCallback();
 				}
-				const categoryStore = useCategoryStore();
-				categoryStore.increaseNoParentDiaryCount(diary.categoryId);
+
+				replaceRecordWithAddedElement(this.diariesByCategory, diary.categoryId, diary);
+
+				if (diary.parentDiaryId) {
+					replaceRecordWithAddedElement(this.childDiariesByDiary, diary.parentDiaryId, diary);
+				} else {
+					categoryStore.increaseNoParentDiaryCount(diary.categoryId);
+					this.childDiariesByDiary = { ...this.childDiariesByDiary, [diary.id]: [] };
+				}
+
 				successCallback();
 			} catch (error) {
 				const validatedError = validateError(error);
@@ -57,8 +69,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 		selectDiary(diary?: Diary) {
 			this.selectedDiary = diary;
 		},
-		async getChildDiariesByDiary(diary: Diary) {
-			const diaryService = useDiaryService();
+		async getChildDiariesByDiary(diary: Diary, diaryService = useDiaryService()) {
 			try {
 				this.loadingChildDiaries = true;
 				const diaries = await diaryService.getMatchedObjects(diary.categoryId, diary.id);
@@ -70,8 +81,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 				this.diariesLoadingError = validatedError;
 			}
 		},
-		async getAllDiaries() {
-			const diaryService = useDiaryService();
+		async getAllDiaries(diaryService = useDiaryService()) {
 			try {
 				this.loadingDiaries = true;
 				const diaries = await diaryService.getMatchedObjects();
@@ -92,7 +102,7 @@ export const useDiaryStore = defineStore("diaryStore", {
 				return childDiaryIndex !== -1;
 			}
 
-			if (!Object.keys(this.childDiariesByDiary).includes(`${diaryId}`)) {
+			if (!Object.keys(this.childDiariesByDiary).includes(diaryId.toString())) {
 				return false;
 			}
 			return this.childDiariesByDiary[diaryId].length > 0;

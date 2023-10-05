@@ -20,8 +20,7 @@ export const useNoteStore = defineStore("noteStore", {
 	}),
 	getters: {},
 	actions: {
-		async getNotesByDiary(diary: Diary) {
-			const noteService = useNoteService();
+		async getNotesByDiary(diary: Diary, noteService = useNoteService()) {
 			try {
 				this.loadingNote = true;
 				const result = await noteService.getMatchedObjects(diary.id);
@@ -33,16 +32,19 @@ export const useNoteStore = defineStore("noteStore", {
 				this.notesLoadingError = validatedError;
 			}
 		},
-		async getNotesByDiaryId(diaryId: number) {
-			const diaryStore = useDiaryStore();
+		async getNotesByDiaryId(diaryId: number, diaryStore = useDiaryStore()) {
 			const { diaries } = diaryStore;
 			const diary = diaries.find((_diary) => _diary.id === diaryId);
 			if (diary) {
 				await this.getNotesByDiary(diary);
 			}
 		},
-		async addNote(successCallback: () => void, failureCallback: (error: Error) => void, input: NoteInput) {
-			const noteService = useNoteService();
+		async addNote(
+			successCallback: () => void,
+			failureCallback: (error: Error) => void,
+			input: NoteInput,
+			noteService = useNoteService()
+		) {
 			try {
 				await noteService.create(input);
 				successCallback();

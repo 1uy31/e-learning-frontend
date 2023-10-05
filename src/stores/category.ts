@@ -17,8 +17,7 @@ export const useCategoryStore = defineStore("categoryStore", {
 	}),
 	getters: {},
 	actions: {
-		async getCategories() {
-			const categoryService = useCategoryService();
+		async getCategories(categoryService = useCategoryService()) {
 			try {
 				const result = await categoryService.getAll();
 				this.categories = result.categories;
@@ -27,8 +26,12 @@ export const useCategoryStore = defineStore("categoryStore", {
 				this.categoriesLoadingError = validatedError;
 			}
 		},
-		async addCategory(successCallback: () => void, failureCallback: (error: Error) => void, name: string) {
-			const categoryService = useCategoryService();
+		async addCategory(
+			successCallback: () => void,
+			failureCallback: (error: Error) => void,
+			name: string,
+			categoryService = useCategoryService()
+		) {
 			try {
 				const category = await categoryService.create(name);
 				this.categories = [...this.categories, category];
