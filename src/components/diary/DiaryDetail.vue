@@ -7,6 +7,9 @@ import IconButton from "@components/share/IconButton.vue";
 import NewNoteIcon from "@assets/icons/heroicons/documentText.svg?component";
 import ReviewCountIcon from "@assets/icons/heroicons/eye.svg?component";
 import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
+import BackIcon from "@assets/icons/heroicons/arrowLeft.svg?component";
+import NextIcon from "@assets/icons/heroicons/arrowRight.svg?component";
+import ListIcon from "@assets/icons/heroicons/listBullet.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import { presetSelectionField, showTabById } from "@src/utils";
 import { useNoteStore } from "@stores/note";
@@ -39,7 +42,7 @@ const showNoteCreationForm = () => {
 		</div>
 
 		<div :class="'my-2 ' + ROW_CENTER_BETWEEN_CLASS">
-			<div class="flex flex-row items-center">
+			<div class="flex flex-row">
 				<span v-if="selectedDiary.sourceUrl" :class="HYPER_LINK_WRAPPER_CLASS">
 					<a :href="selectedDiary.sourceUrl" target="_blank">Source</a>
 				</span>
@@ -47,7 +50,7 @@ const showNoteCreationForm = () => {
 				<span :class="INFO_WRAPPER_CLASS"> Review times: {{ selectedDiary.reviewCount }} </span>
 			</div>
 
-			<div class="flex flex-row items-center">
+			<div class="flex flex-row">
 				<IconButton class="mr-2">
 					<template #icon>
 						<ReviewCountIcon />
@@ -67,6 +70,28 @@ const showNoteCreationForm = () => {
 				</IconButton>
 			</div>
 		</div>
+
+		<div :class="'my-2 ' + ROW_CENTER_BETWEEN_CLASS">
+			<div class="flex flex-row"></div>
+			<div class="flex flex-row">
+				<IconButton class="mr-2">
+					<template #icon>
+						<BackIcon />
+					</template>
+				</IconButton>
+				<IconButton class="mr-2">
+					<template #icon>
+						<ListIcon />
+					</template>
+				</IconButton>
+				<IconButton>
+					<template #icon>
+						<NextIcon />
+					</template>
+				</IconButton>
+			</div>
+		</div>
+
 		<SectionDivider />
 
 		<div v-if="selectedDiary?.id && Object.keys(notesByDiary).includes(`${selectedDiary.id}`)">

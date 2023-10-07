@@ -25,4 +25,4 @@ export const IN_BODY_HYPER_LINK_WRAPPER_CLASS =
 export const INFO_WRAPPER_CLASS =
 	"inline-block whitespace-nowrap bg-stone-300 p-[0.55em] text-center align-baseline text-[0.75em] leading-none text-cyan-800";
 
-export const ROW_CENTER_BETWEEN_CLASS = "flex flex-row items-center justify-between";
+export const ROW_CENTER_BETWEEN_CLASS = "flex flex-row justify-between";
