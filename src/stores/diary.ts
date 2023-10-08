@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Diary, DiaryInput } from "@appTypes/dataModels";
-import { replaceRecordWithAddedElement, validateError } from "@src/utils";
+import { updateRecordWithAddedElement, validateError } from "@src/utils";
 import { useDiaryService } from "@services/diary";
 import { useCategoryStore } from "@stores/category";
 
@@ -52,15 +52,18 @@ export const useDiaryStore = defineStore("diaryStore", {
 				}
 
 				this.diaries = [...this.diaries, diary];
-				replaceRecordWithAddedElement(this.diariesByCategory, diary.categoryId, diary);
+				this.diariesByCategory = updateRecordWithAddedElement(this.diariesByCategory, diary.categoryId, diary);
 
 				if (diary.parentDiaryId) {
-					replaceRecordWithAddedElement(this.childDiariesByDiary, diary.parentDiaryId, diary);
+					this.childDiariesByDiary = updateRecordWithAddedElement(
+						this.childDiariesByDiary,
+						diary.parentDiaryId,
+						diary
+					);
 				} else {
 					categoryStore.increaseNoParentDiaryCount(diary.categoryId);
 					this.childDiariesByDiary = { ...this.childDiariesByDiary, [diary.id]: [] };
 				}
-
 				successCallback();
 			} catch (error) {
 				const validatedError = validateError(error);

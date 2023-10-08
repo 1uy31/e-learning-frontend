@@ -55,7 +55,7 @@ export const dispatchEventForElement = (elementId: string, elementName: string, 
 	eventTypes.forEach((eventType) => element.dispatchEvent(new Event(eventType)));
 };
 
-export const replaceRecordWithAddedElement = <T>(
+export const updateRecordWithAddedElement = <T>(
 	record: Record<number, Array<T>>,
 	key: number,
 	element: T,
