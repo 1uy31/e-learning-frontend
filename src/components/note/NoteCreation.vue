@@ -183,7 +183,7 @@ onMounted(async () => {
 				@change="handleSourceUrlChange"
 			/>
 
-			<!--			TODO-->
+			<!--			TODO: PDF files upload-->
 			<!--			<div class="mb-4">-->
 			<!--				<input-->
 			<!--					id="id_new_note_file"-->

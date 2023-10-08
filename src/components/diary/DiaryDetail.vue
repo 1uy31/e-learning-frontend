@@ -7,8 +7,8 @@ import IconButton from "@components/share/IconButton.vue";
 import NewNoteIcon from "@assets/icons/heroicons/documentText.svg?component";
 import ReviewCountIcon from "@assets/icons/heroicons/eye.svg?component";
 import EditIcon from "@assets/icons/heroicons/pencilSquare.svg?component";
-import BackIcon from "@assets/icons/heroicons/arrowLeft.svg?component";
-import NextIcon from "@assets/icons/heroicons/arrowRight.svg?component";
+// import BackIcon from "@assets/icons/heroicons/arrowLeft.svg?component";
+// import NextIcon from "@assets/icons/heroicons/arrowRight.svg?component";
 import ListIcon from "@assets/icons/heroicons/listBullet.svg?component";
 import SectionDivider from "@components/share/SectionDivider.vue";
 import { presetSelectionField, showTabById } from "@src/utils";
@@ -25,12 +25,19 @@ import {
 
 const diaryStore = useDiaryStore();
 const noteStore = useNoteStore();
-const { selectedDiary } = storeToRefs(diaryStore);
+const { selectedDiary, diaries } = storeToRefs(diaryStore);
 const { notesByDiary } = storeToRefs(noteStore);
 
 const showNoteCreationForm = () => {
 	showTabById("id_main_tab_new_note");
 	presetSelectionField("id_new_note_field_diary", selectedDiary?.value?.id);
+};
+
+const showParentDiary = () => {
+	const parentDiary = selectedDiary?.value?.parentDiaryId
+		? diaries.value.find((_diary) => _diary.id === selectedDiary.value?.parentDiaryId)
+		: undefined;
+	diaryStore.selectDiary(parentDiary);
 };
 </script>
 
@@ -74,21 +81,22 @@ const showNoteCreationForm = () => {
 		<div :class="'my-2 ' + ROW_CENTER_BETWEEN_CLASS">
 			<div class="flex flex-row"></div>
 			<div class="flex flex-row">
-				<IconButton class="mr-2">
-					<template #icon>
-						<BackIcon />
-					</template>
-				</IconButton>
-				<IconButton class="mr-2">
+				<!--        TODO: Diary navigation-->
+				<!--				<IconButton>-->
+				<!--					<template #icon>-->
+				<!--						<BackIcon />-->
+				<!--					</template>-->
+				<!--				</IconButton>-->
+				<IconButton @click="showParentDiary" v-if="selectedDiary?.parentDiaryId">
 					<template #icon>
 						<ListIcon />
 					</template>
 				</IconButton>
-				<IconButton>
-					<template #icon>
-						<NextIcon />
-					</template>
-				</IconButton>
+				<!--				<IconButton>-->
+				<!--					<template #icon>-->
+				<!--						<NextIcon />-->
+				<!--					</template>-->
+				<!--				</IconButton>-->
 			</div>
 		</div>
 
