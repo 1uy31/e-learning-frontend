@@ -87,7 +87,7 @@ const showParentDiary = () => {
 				<!--						<BackIcon />-->
 				<!--					</template>-->
 				<!--				</IconButton>-->
-				<IconButton @click="showParentDiary" v-if="selectedDiary?.parentDiaryId">
+				<IconButton v-if="selectedDiary?.parentDiaryId" @click="showParentDiary">
 					<template #icon>
 						<ListIcon />
 					</template>
